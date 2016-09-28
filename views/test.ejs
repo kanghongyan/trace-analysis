@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>统计报表</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+	<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+	<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<!--script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script-->
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+	<script type="text/javascript" src='javascripts/dep/vue.js'></script>
+	<script type="text/javascript" src='javascripts/dep/vue-router.min.js'></script>
+	<script src='javascripts/dep/echarts.common.min.js'></script>
+
+	<script type="text/javascript" src='javascripts/loading.js'></script>
+	<script type="text/javascript" src='javascripts/pageSize.js'></script>
+	<script type="text/javascript" src='javascripts/performance.js'></script>
+	<script type="text/javascript" src='javascripts/router.js'></script>
+	
+</head>
+<body>
+	<!-- template for the modal component -->
+<script type="x/template" id="modal-template">
+  <div class="modal-mask" v-show="show" transition="modal">
+    <div class="modal-wrapper">
+      <div class="modal-container">
+
+        
+
+        <div class="modal-footer">
+          <slot name="footer">
+            default footer
+            <button class="modal-default-button"
+              @click="show = false">
+              OK
+            </button>
+          </slot>
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+
+<!-- app -->
+<div id="app">
+  <button id="show-modal" @click="showModal = true">Show Modal</button>
+  <!-- use the modal component, pass in the prop -->
+  <modal :show.sync="showModal">
+    <!--
+      you can use custom content here to overwrite
+      default content
+    -->
+    
+  </modal>
+</div>
+</body>
+<script type='text/javascript'>
+	// register modal component
+Vue.component('modal', {
+  template: '#modal-template',
+  props: {
+    show: {
+      type: Boolean
+    }
+  }
+})
+
+// start app
+new Vue({
+  el: '#app',
+  data: {
+    showModal: true
+  }
+})
+</script>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>统计报表</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+	<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+	<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+	<script src="javascripts/util.js"></script>
+
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<!--script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script-->
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+	<script type="text/javascript" src='javascripts/dep/vue.js'></script>
+	<script type="text/javascript" src='javascripts/dep/vue-router.min.js'></script>
+	<script src='javascripts/dep/echarts.common.min.js'></script>
+
+	<script type="text/javascript" src='javascripts/loading.js'></script>
+	<script type="text/javascript" src='javascripts/search.js'></script>
+
+	<script type="text/javascript" src='javascripts/constantChart.js'></script>
+
+	<script type="text/javascript" src='javascripts/performanceChart.js'></script>
+	<script type="text/javascript" src='javascripts/pagesizeChart.js'></script>
+	<script type="text/javascript" src='javascripts/pv.js'></script>
+	<script type="text/javascript" src='javascripts/pageSize.js'></script>
+	<script type="text/javascript" src='javascripts/performance.js'></script>
+
+	<script type="text/javascript" src='javascripts/pointChart.js'></script>
+	<script type='text/javascript' src='javascripts/point.js'></script>
+
+
+	<script type='text/javascript' src='javascripts/platform.js'></script>
+
+	<script type='text/javascript' src='javascripts/byPage.js'></script>
+	<script type='text/javascript' src='javascripts/spec.js'></script>
+	
+	<script type="text/javascript" src='javascripts/constant.js'></script>
+
+	<script type='text/javascript' src='javascripts/browser.js'></script>
+
+	<script type="text/javascript" src='javascripts/perform.js'></script>
+
+	<script type='text/javascript' src='javascripts/custom.js'></script>
+
+	<script type='text/javascript' src='javascripts/uv.js'></script>
+
+
+	<script type="text/javascript" src='javascripts/router.js'></script>
+</head>
+<body>
+	<div class='head'>58金融日志系统</div>
+	<div id='navList'>
+		<div class='page-left' >
+			<ul @click='changeRouter'>
+				<li v-link="{ path: '/performance' }" v-bind:class="{ 'active': $route.performance}"  >网站性能分析(旧)</li>
+				<li v-link="{ path: '/pageSize' }" v-bind:class="{ 'active': $route.pagesize}" >页面大小分析(旧)</li>
+				<li v-link="{ path: '/pv' }" v-bind:class="{ 'active': $route.pv}" >项目pv统计(旧)</li>
+				<li v-link="{ path: '/point' }" v-bind:class="{ 'active': $route.point}" >埋点统计</li>
+				<li v-link="{ path: '/perform' }" v-bind:class="{ 'active': $route.perform}" >基础统计-性能</li>
+				<li v-link="{ path: '/uv' }" v-bind:class="{ 'active': $route.uv}" >基初统计-总访问量</li>
+				<li v-link="{ path: '/byPage' }" v-bind:class="{ 'active': $route.byPage}" >基初统计-页面访问量</li>
+				<li v-link="{ path: '/platform' }" v-bind:class="{ 'active': $route.platform}" >基初统计-平台类型</li>
+				<li v-link="{ path: '/browser' }" v-bind:class="{ 'active': $route.browser}" >基初统计-浏览器类型</li>
+				<li v-link="{ path: '/constant'}" v-bind:class="{ 'active': $route.constant}" >基初统计-实时数据</li>
+				<li v-link="{ path: '/custom'}" v-bind:class="{ 'active': $route.custom}" >基础统计-自定义</li>
+				<li v-link="{ path: '/spec'}" v-bind:class="{ 'active': $route.spec}" >特殊统计-导流portal页</li>
+			</ul>
+		</div>
+		<div class='page-right'>
+			<router-view keep-alive></router-view>
+		</div>
+		<Loading :show.sync="showLoading"></Loading>
+	</div>
+</body>
+<script type="x/template" id="loading-template">
+	<div v-show="show" transition="modal" class="loading-cover">
+		<div>
+			<span class="loading-con">
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+		</div>
+	</div>
+</script>
+<script type="x/template" id='performanceMain-template'>
+	<search v-bind:okfun='okFun' v-bind:url='url'></search>
+	<div id='main'>
+		<performance-chart :show.sync="showChart"></performance-chart>
+	</div>
+</script>
+<script type='x/template' id='perform-template'>
+	<search v-bind:okfun='okFun' v-bind:url='url'></search>
+	<constant-chart :show.sync="showChart" ></constant-chart>
+</script>
+<script type='x/template' id='spec-template'>
+    此页面仅用于 导流 我的贷款 portal首页
+    <search v-bind:okfun='okFun' v-bind:url='url'></search>
+    <div id='spec-chart-main'>
+        
+    </div>
+    <div id='spec-chart-main-2'>
+        
+    </div>
+    <div id='spec-chart-main-3'>
+        
+    </div>
+</script>
+<script type="x/template" id='search-template'>
+	<form class='form-inline'>
+		<div class='form-group'>
+			<label>项目</label>
+			<select class="form-control" v-model='selName' >
+				<option v-for="item in objets">{{item}}<option>
+			</select>
+		</div>
+		<div class='form-group'>
+			<label class="control-label">开始时间：</label>
+			<input class="form-control" v-model='startTime' type='date' />
+			<label class="control-label" v-bind:class="{ 'hide':onetime}" >结束时间：</label>
+			<input class="form-control" v-bind:class="{ 'hide':onetime}" v-model='endTime' type='date' />
+		</div>
+		<div class='form-group'>
+			<input @click="getData" class="btn btn-primary" type='button' value='查询' />
+		</div>
+	</form>
+</script>
+<script type="x/template" id='chart-template'>
+	<div class='chartCon' v-show="show">
+		<div  class='form-group'>
+		<form class='form-inline'>
+			<label class="form-label">页面</label>
+			<select v-model='selPage' class="form-control">
+				<option v-for='page in pages'>{{page}}</option>
+			</select>
+		</form>
+		</div>
+		<div id='chartMian'></div>
+		<div id="countMain"></div>
+	</div>
+</script>
+<script type="x/template" id='pagesize-template'>
+	<div class='chartCon' v-show="show">
+		<div  class='form-group'>
+		<form class='form-inline'>
+			<label class="form-label">页面</label>
+			<select v-model='selPage' class="form-control">
+				<option v-for='page in pages'>{{page}}</option>
+			</select>
+		</form>
+		</div>
+		<div id='chartMian'></div>
+	</div>
+</script>
+<script type="x/template" id='pageSizeMain-template'>
+	<div>
+		<search v-bind:okfun='okFun'></search>
+		<div id='main'>
+			<pagesize-chart :show.sync="showChart"></pagesize-chart>
+		</div>
+	</div>
+</script>
+
+<script type="x/template" id='pvMain-template'>
+	<search v-bind:okfun='okFun'></search>
+	<div id='pvchart-main'>
+		
+	</div>
+</script>
+
+<script type='x/template' id='pointMain-template'>
+	<search v-bind:okfun='okFun' v-bind:url='url'></search>
+	<div>
+		<point-chart :show.sync="showChart"></point-chart>
+	</div>
+</script>
+<script type="x/template" id='pointChart-template'>
+	<div class='chartCon' v-show="show">
+		<div  class='form-group'>
+		<form class='form-inline'>
+			<label class="form-label">页面</label>
+			<select v-model='selPage' class="form-control">
+				<option v-for='page in pages'>{{page}}</option>
+			</select>
+		</form>
+		</div>
+		<div class='people'>PV统计</div>
+		<div id='pointMian'></div>
+		<div class='people'>UV统计</div>
+		<div id='chartMian'></div>
+		<div class='people'>LoginUV统计</div>
+        <div id='loginUVMian'></div>
+	</div>
+</script>
+
+
+<script type='x/template' id='platform-template'>
+	<search v-bind:okfun='okFun' v-bind:url='url'></search>
+	<div id='pvchart-main'>
+		
+	</div>
+
+</script>
+<script type='x/template' id='browser-template'>
+	<search v-bind:okfun='okFun' v-bind:url='url'></search>
+	<div id='pvchart-main'></div>
+	<div>
+		<constant-chart :show.sync="showChart" ></constant-chart>
+	</div>
+</script>
+<script type="text/template" id='constant-template'>
+	<search v-bind:okfun='okFun' v-bind:url='url' v-bind:onetime='oneTime'></search>
+	<div>
+		<div id='allNumber'></div>
+		<constant-chart :show.sync="showChart" ></constant-chart>
+	</div>
+</script>
+<script type='x/template' id='constantChart-template'>
+	<div class='chartCon' v-show="show">
+		<div  class='form-group'>
+		<form class='form-inline'>
+			<label class="form-label">页面</label>
+			<select class="form-control" v-model='currentPage'>
+				<option v-for='page in selPages'>{{page}}</option>
+			</select>
+		</form>
+		</div>
+		<div id='pointMian'></div>
+	</div>
+</script>
+<script type='x/template' id='custom-template'>
+	<search v-bind:okfun='okFun' v-bind:url='url'></search>
+	<form class='form-inline' style='margin-top:20px' v-show='show'>
+		<label class="form-label">页面</label>
+		<select class="form-control" v-model='currentPage'>
+			<option v-for='page in pageList' track-by="$index">{{page}}</option>
+		</select>
+		<input class="form-control" v-model='filterStr' type='text' placeholder='过滤参数 例：from' />
+		<input @click="search" class="btn btn-primary" type='button' value='查询' />
+	</form>
+	<div id='pvchart-main'></div>
+</script>
+<script type="x/template" id='uv-template'>
+	<search v-bind:okfun='okFun' v-bind:url='url'></search>
+	<div id='pvchart-main'></div>
+</script>
+<script type="x/template" id='bypage-template'>
+	<search v-bind:okfun='okFun' v-bind:url='url'></search>
+	<form class='form-inline' style='margin-top:20px' v-show='show'>
+		<label class="form-label">页面</label>
+		<select class="form-control" v-model='currentPage' >
+			<option v-for='page in pageList' track-by="$index">{{page}}</option>
+		</select>
+	</form>
+	<div id='pvchart-main'></div>
+</script>
+<script type="text/javascript" src='javascripts/home.js'></script>
+</html>
