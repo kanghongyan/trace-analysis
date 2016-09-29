@@ -9,11 +9,11 @@ var getData = require('../getData');
 var fs = require('fs');
 
 router.get('/', function(req, res, next) {
-    //throw 'ssss';
+    throw 'no such path';
     //return next();
     //res.status(404).send({ error: 'no such api!' });
     //res.render('error', { error: err });
-    return next();
+    next();
 });
 
 
@@ -253,6 +253,7 @@ router.get('/spec', function(req, res, next) {
             
             var data = getSpecData2(originData);
             if (data) {
+                console.log(dataList);
                 dataList[j].data3 = data;
             }
             
