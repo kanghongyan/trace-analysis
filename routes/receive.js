@@ -2,7 +2,7 @@ var express = require('express');
 var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
-var util = require( path.join(__dirname, '..', 'dep', 'util') );
+// var util = require( path.join(__dirname, '..', 'backend', 'util') );
 
 var router = express.Router();
 

@@ -1,6 +1,5 @@
 var express = require('express');
 var fs = require('fs');
-var isLogin = require('../dep/login');
 var userInfo = require('../config/userConfig');
 
 var router = express.Router();
