@@ -8,7 +8,6 @@ var session = require('express-session');
 
 var route_receive = require('./routes/receive');
 var index = require('./routes/index');
-var users = require('./routes/users');
 var api = require('./routes/api');
 
 var app = express();
@@ -46,7 +45,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use('/users', users);
 app.use('/api', api);
 app.use('/', route_receive);
 app.use('/', index);
