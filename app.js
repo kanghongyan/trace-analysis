@@ -7,8 +7,8 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 var route_receive = require('./routes/receive');
-var index = require('./routes/index');
-var api = require('./routes/api');
+var route_homepage = require('./routes/homepage');
+var route_api = require('./routes/api');
 
 var app = express();
 
@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 app.use(session({
   secret: 'secret',
   resave: true,
-  name: 'log_jinrong_58',
+  name: 'trace_jinrong_58',
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24, //过期时间设置(单位毫秒)
@@ -45,61 +45,42 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use('/api', api);
+app.use('/api', route_api);
 app.use('/', route_receive);
-app.use('/', index);
+app.use('/', route_homepage);
 
 
 
-app.use(function(err,req, res, next) {
-  console.log(err);
-  next(err)
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('RequestPath Not Found');
+  err.status = 404;
+  next(err);
 });
 
 
-//
-//app.use(function(err, req, res, next) {
-//  if(!err) return next(); // you also need this line
-//  console.log("error!!!");
-//  console.log(err);
-//  console.log("error!!!");
-//  //res.send("error!!!");
-//  next(); 
-//});
+// development error handler, will print stacktrace
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    console.log(err.stack);
 
-// catch 404 and forward to error handler
-//app.use(function(err, req, res, next) {
-//console.log("11111111");
-//res.render('error', { error: err });
-//});
+    res.render('error', {
+      message: err.message,
+      error: err
+    });
+  });
+}
+
+// production error handler, no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
+});
 
 
-// error handlers
-
-// development error handler
-// will print stacktrace
-//if (app.get('env') === 'development') {
-//app.use(function(err, req, res, next) {
-//  res.status(err.status || 500);
-//  console.log("error!!!");
-//  res.render('error', {
-//    message: err.message,
-//    error: err
-//  });
-//});
-//}
-//
-//// production error handler
-//// no stacktraces leaked to user
-//app.use(function(err, req, res, next) {
-//res.status(err.status || 500);
-//console.log("error!!!");
-//res.render('error', {
-//  message: err.message,
-//  error: {}
-//});
-//});
-//
-//console.log(app.get('env'));
 
 module.exports = app;

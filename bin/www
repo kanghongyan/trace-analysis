@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('tongji:server');
+var debug = require('debug')('trace_jinrong_58:server');
 var http = require('http');
 
 /**

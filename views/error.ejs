@@ -1,3 +1,20 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
+<h1 style="text-align:center; padding: 50px;">
+    <strong id="countdown">5</strong>秒后将跳入首页，或<a href="/homepage">直接进入</a>
+</h1>
+<h3><%= message %></h3>
+<h3><%= error.status %></h3>
 <pre><%= error.stack %></pre>
+
+
+<script>
+    var n = 5;
+    
+    setTimeout(function(){
+        location.href='/homepage'
+    },1000*n)
+    
+    
+    setInterval(function(){
+        document.getElementById('countdown').innerText = --n;
+    },1000)
+</script>

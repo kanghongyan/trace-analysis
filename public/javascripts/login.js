@@ -19,7 +19,7 @@ var l = new Vue({
 				},
 				success: function(msg) {
 					if (msg.isLogin == true) {
-						location.href = '/home';
+						location.href = '/homepage';
 					} else {
 						alert('密码错误！');
 					}
