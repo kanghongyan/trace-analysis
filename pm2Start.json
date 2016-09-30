@@ -1,6 +1,6 @@
 {
 	"apps": [{
-		"name": "performance",
+		"name": "trace_analysis_jr8",
 		"script": "bin/www",
 		"log_date_format": "YYYY-MM-DD HH:mm:SS",
 		"log_file": "logs/performance.log",
@@ -11,17 +11,19 @@
 		"ignore_watch":	["node_modules"],
 		"merge_logs":true,
 		"watch": true
-	},{
-		"name": "mergeData",
-		"script": "mergeData.js",
-		"args":[1],
-		"log_date_format": "YYYY-MM-DD HH:mm:SS",
-		"log_file": "logs/mergeData.log",
-		"error_file": "logs/mergeData-err.log",
-		"out_file": "logs/mergeData-out.log",
-		"pid_file": "logs/mergeData.pid",
-		"exec_mode": "cluster_mode",
-		"merge_logs":true,
-		"watch": true
-	}]
+	}
+//	,{
+//		"name": "mergeData",
+//		"script": "mergeData.js",
+//		"args":[1],
+//		"log_date_format": "YYYY-MM-DD HH:mm:SS",
+//		"log_file": "logs/mergeData.log",
+//		"error_file": "logs/mergeData-err.log",
+//		"out_file": "logs/mergeData-out.log",
+//		"pid_file": "logs/mergeData.pid",
+//		"exec_mode": "cluster_mode",
+//		"merge_logs":true,
+//		"watch": true
+//	}
+	]
 }

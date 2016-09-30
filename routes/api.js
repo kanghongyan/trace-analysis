@@ -2,11 +2,9 @@ var express = require('express');
 var router = express.Router();
 var isLogin = require('../dep/login');
 var userInfo = require('../config/userConfig');
-
-var getData = require('../getData');
-
-
 var fs = require('fs');
+
+
 
 router.get('/', function(req, res, next) {
     throw 'no such path';
@@ -22,26 +20,9 @@ router.get('/', function(req, res, next) {
 router.get('/getObjet', function(req, res, next) {
     
 		isLogin(req, res);
-		getNameList(req, res, 'allData/');
+		getNameList(req, res, 'infoData/');
 	})
-	/*性能统计数据*/
-router.get('/performanceData', function(req, res, next) {
-		isLogin(req, res);
-		var project = req.query.project;
-		var startTime = req.query.startTime;
-		var endTime = req.query.endTime;
-		var data = [];
-		if (fs.existsSync('allData/' + project + '.txt')) {
-			data = fs.readFileSync('allData/' + project + '.txt', {
-				'encoding': 'utf8'
-			});
-			data = getData.getRangeData(startTime, endTime, data);
-		}
-		res.send({
-			code: 1,
-			data: data
-		});
-	})
+
 	/*打点统计--项目名*/
 router.get('/pointProjectList', function(req, res, next) {
 		isLogin(req, res);

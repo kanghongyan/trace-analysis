@@ -1,3 +1,0 @@
-2016-02-14##{"/":{"fileTime":469.5,"win_time":544,"doc_time":481.5,"jsReadyTime":527.5},"/text1":{"fileTime":651,"win_time":704,"doc_time":652,"jsReadyTime":701},"/text2":{"fileTime":651,"win_time":704,"doc_time":652,"jsReadyTime":701}}
-2016-02-15##{"/":{"fileTime":439.5,"win_time":544,"doc_time":481.5,"jsReadyTime":537.5},"/text1":{"fileTime":251,"win_time":304,"doc_time":652,"jsReadyTime":801}}
-2016-02-16##{"/":{"fileTime":269.5,"win_time":544,"doc_time":451.5,"jsReadyTime":537.5},"/text1":{"fileTime":651,"win_time":404,"doc_time":652,"jsReadyTime":701},"/text2":{"fileTime":551,"win_time":704,"doc_time":652,"jsReadyTime":701}}
