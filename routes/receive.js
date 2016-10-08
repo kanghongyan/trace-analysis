@@ -2,7 +2,8 @@ var express = require('express');
 var fs = require('fs');
 var path = require('path');
 var _ = require('lodash');
-// var util = require( path.join(__dirname, '..', 'backend', 'util') );
+var _util = require('../backend/_util');
+// var _util = require( path.join(__dirname, '..', 'backend', '_util') );
 
 var router = express.Router();
 
@@ -21,14 +22,12 @@ router.get('/spec', function(req, res, next) {
 
 
 
-function saveData(req, res, name) {
+function saveData(req, res, categoryName) {
     var ip = getClientIp(req);
     
     if (!filterIp(ip)) {
         //return;
     }
-    
-    var projectName = req.query.project;
     
     var data = _.chain(req.query)
                 .omit('project')
@@ -39,21 +38,25 @@ function saveData(req, res, name) {
                 .value()
                 .join('|');
     
-    var d = new Date();
-    var year = d.getFullYear();
-    var month = (d.getMonth() + 1).length > 1 ? d.getMonth() + 1 : '0' + parseInt(d.getMonth() + 1);
-    var day = (d.getDate() + '').length > 1 ? d.getDate() : '0' + d.getDate();
-    if (fs.existsSync(name + '/' + projectName)) {
-        write();
-    } else {
-        fs.mkdirSync(name + '/' + projectName);
-        write();
-    }
-
-    function write() {
-        fs.appendFile(name + '/' + projectName + '/' + year + '-' + month + '-' + day + '.txt', data + '\r\n', 'utf8', function() {});
-    }
     
+    var projName = req.query.project,
+        fileName = _util.stringifyDate() + '.txt',
+        full_path = path.join( categoryName, projName ),
+        full_file = path.join( categoryName, projName, fileName );
+    
+    fs.exists(full_path, function(exists){
+        if (exists) {
+            append()
+        } else {
+            fs.mkdir(full_path, function(){
+                append()
+            });
+        }
+    });
+    
+    function append() {
+        fs.appendFile(full_file, data + '\r\n', 'utf8', function() {});
+    }
 }
 
 
