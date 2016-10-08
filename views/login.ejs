@@ -2,31 +2,34 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>统计报表--登录</title>
+	<title>58金融日志系统--登录</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
 	<!-- 新 Bootstrap 核心 CSS 文件 -->
 	<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/login.css">
+	
 	<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-	<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+	<!-- script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script -->
+	
 	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-	<!--script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script-->
-	<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
-	<script src='javascripts/dep/echarts.common.min.js'></script>
-	<script type="text/javascript" src='javascripts/dep/vue.js'></script>
-	<script type="text/javascript" src='javascripts/loading.js'></script>
+	<!-- script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script -->
+	
+	<script type="text/javascript" src='javascripts/login.js'></script>
 </head>
 <body>
 	<form class='form-inline loginCon' id='loginCon'>
 		<div class="form-group">
-			<label>用户名</label><input id='name' v-model="name" class="form-control" type='text'/>
+			<label>用户名</label>
+			<input id='name' v-model="name" class="form-control" type='text'/>
 		</div>
 		<div class="form-group">
-			<label>密&nbsp;&nbsp;码</label><input id='password' v-model="password" class="form-control" type='password'/>
+			<label>密码</label>
+			<input id='password' v-model="password" class="form-control" type='password'/>
 		</div>
 		<div class="form-group">
-			<input class="btn btn-default" id='btn-ok' v-on:click="toLogin" type="button" value='确定' />
+			<input id="btn-submit" class="btn btn-default" v-on:click="submitForm" type="button" value='确定' />
 		</div>
 	</form>
 </body>
-<script type="text/javascript" src='javascripts/login.js'></script>
 </html>

@@ -1,30 +1,34 @@
-var l = new Vue({
-	el: '#loginCon',
-	data: {
-		name: '',
-		password: ''
-	},
-	methods: {
-		toLogin: function() {
-			var that = this;
-			if (!this.name || !this.password) {
-				return;
-			}
-			$.ajax({
-				url: '/login',
-				type: 'post',
-				data: {
-					name: that.name,
-					password: that.password
-				},
-				success: function(msg) {
-					if (msg.isLogin == true) {
-						location.href = '/homepage';
-					} else {
-						alert('密码错误！');
-					}
-				}
-			})
-		}
-	}
+
+document.addEventListener('DOMContentLoaded', function(){
+    document.getElementById('btn-submit').addEventListener('click',function(){
+        
+        
+        fetch('/login', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: document.getElementById('name').value,
+                password: document.getElementById('password').value
+            })
+        }).then(function(response) {
+            return response.json();
+        }).then(function(data){
+            if (data.isLogin == true) {
+                location.href = '/homepage';
+            } else {
+                alert('用户名或密码错误！');
+            }
+        }).catch(function(e){
+            console.log(e);
+            alert('严重错误！');
+        });
+        
+        
+    })
 })
+
+

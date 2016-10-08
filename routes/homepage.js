@@ -1,16 +1,13 @@
 var express = require('express');
+var router = express.Router();
 var fs = require('fs');
 var userInfo = require('../config/userConfig');
 
-var router = express.Router();
 
 
-router.get('/', function(req, res, next) {
-    if (req.xhr) {
-      res.status(404).send({ error: 'Dont use xhr request' });
-    }
-    res.redirect('/homepage');
-});
+router.get('/homepage', function(req, res, next) {
+    res.render('homepage', {});
+})
 
 
 router.get('/login', function(req, res, next) {
@@ -34,9 +31,12 @@ router.post('/login', function(req, res, next) {
 });
 
 
-router.get('/homepage', function(req, res, next) {
-    res.render('homepage', {});
-})
+//router.get('/*', function(req, res, next) {
+//  if (req.xhr) {
+//      res.status(404).send({ error: 'Dont use xhr request' });
+//  }
+//  res.redirect('/homepage');
+//});
 
 
 

@@ -12,6 +12,7 @@ var route_api = require('./routes/api');
 
 var app = express();
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -44,7 +45,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.all('/api/*', function(req, res, next) {
+app.all('/api', function(req, res, next) {
   if (!req.session.user) {
     res.send({code:-1,message:'登录过期'});
   }
@@ -78,6 +79,7 @@ if (app.get('env') === 'development') {
     });
   });
 }
+
 
 // production error handler, no stacktraces leaked to user
 app.use(function(err, req, res, next) {

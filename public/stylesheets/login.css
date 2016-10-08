@@ -1,0 +1,33 @@
+/************reset******************/
+
+
+/******************登录页**********************/
+html, body {
+    height: 100%;
+}
+
+body {
+    display: -webkit-box;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+}
+
+@media screen and (min-width:766px) {
+    .loginCon{
+        position: relative;
+    }
+    .loginCon .form-group{
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        overflow: hidden;
+    }
+    .loginCon .form-group label{
+        margin-right: 10px;
+        width: 60px;
+        text-align: left;
+    }
+    .loginCon .form-group input[type=button]{
+        float: right;
+    }
+}

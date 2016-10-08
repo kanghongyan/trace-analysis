@@ -1,11 +1,11 @@
 var express = require('express');
 var fs = require('fs');
 var path = require('path');
+var router = express.Router();
 var _ = require('lodash');
 var _util = require('../backend/_util');
 // var _util = require( path.join(__dirname, '..', 'backend', '_util') );
 
-var router = express.Router();
 
 router.get('/trace', function(req, res, next) {
     res.send('');
