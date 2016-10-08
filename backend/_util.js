@@ -1,11 +1,9 @@
 function json2query(obj,splitter) {
-    var arr;
-    
-    arr = Object.getOwnPropertyNames(obj).map( function(k){
-        return encode(k) + '=' + encode(obj[k]);
-    } );
-    
-    return arr.join(splitter||'&');
+    return Object.getOwnPropertyNames(obj)
+        .map(function(k){
+            return encode(k) + '=' + encode(obj[k]);
+        })
+        .join(splitter||'&');
 };
 
 
