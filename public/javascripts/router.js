@@ -1,28 +1,16 @@
 var router = new VueRouter();
 router.map({
     '/':{
-        component: performance,
-        performance:true
-    },
-    '/performance': {
-        component: performance,
-        performance:true
-    },
-    '/pageSize': {
-        component: pageSize,
-        pagesize:true
-    },
-    '/pv':{
-    	component: pv,
-        pv:true
-    },
-    '/uv':{
-        component:uv,
-        uv:true
+        component: point,
+        point:true
     },
     '/point':{
         component: point,
         point:true
+    },
+    '/uv':{
+        component:uv,
+        uv:true
     },
     '/browser':{
         component: browser,

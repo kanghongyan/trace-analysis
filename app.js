@@ -45,12 +45,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.all('/api', function(req, res, next) {
-  if (!req.session.user) {
-    res.send({code:-1,message:'登录过期'});
-  }
-  next();
-});
+
 
 app.use('/api', route_api);
 app.use('/', route_receive);

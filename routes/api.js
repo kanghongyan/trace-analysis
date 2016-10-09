@@ -1,149 +1,153 @@
 var express = require('express');
 var router = express.Router();
-var isLogin = require('../backend/login');
 var userInfo = require('../config/userConfig');
 var fs = require('fs');
 
 
 
-router.get('/', function(req, res, next) {
-    throw 'no such path';
-    //return next();
-    //res.status(404).send({ error: 'no such api!' });
-    //res.render('error', { error: err });
-    next();
-});
+
+router.get('/*', function(req, res, next) {
+    if (!req.session.user) {
+       res.send({code:-1, message:'登录过期!'});
+    } else {
+        next();
+    }
+})
 
 
 
 /*性能分析获取项目名*/
 router.get('/getObjet', function(req, res, next) {
-    
-        isLogin(req, res);
-        getNameList(req, res, 'infoData/');
-    })
+    getNameList(req, res, 'infoData/');
+})
 
-    /*打点统计--项目名*/
+
+/*打点统计--项目名*/
 router.get('/pointProjectList', function(req, res, next) {
-        isLogin(req, res);
-        getNameList(req, res, 'traceData/');
-    })
+    getNameList(req, res, 'traceData/');
+})
     /*打点统计--埋点统计*/
 router.get('/pointData', function(req, res, next) {
-        // isLogin(req, res);
-        var project = req.query.project;
-        var startTime = req.query.startTime;
-        var endTime = req.query.endTime;
+    var project = req.query.project;
+    var startTime = req.query.startTime;
+    var endTime = req.query.endTime;
 
-        var startTime_time = getTimeByDate(startTime);
-        var endTime_time = getTimeByDate(endTime);
+    var startTime_time = getTimeByDate(startTime);
+    var endTime_time = getTimeByDate(endTime);
 
-        var dataList = [];
-        if (fs.existsSync('traceData/' + project)) {
-            for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
+    var dataList = [];
+    if (fs.existsSync('traceData/' + project)) {
+        for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
 
-                var o = getTimePathByDate(i)
-                var year = o.year;
-                var mouth = o.mouth;
-                var day = o.day;
+            var o = getTimePathByDate(i)
+            var year = o.year;
+            var mouth = o.mouth;
+            var day = o.day;
 
-                var path = 'traceData/' + project + '/' + year + '-' + mouth + '-' + day + '.txt'
-                if (!fs.existsSync(path)) {
-                    continue;
-                }
-                var data = fs.readFileSync(path, {
-                    'encoding': 'utf8'
-                });
-                data = getBaseData(data);
-                if (data) {
-                    dataList.push({
-                        date: year + '-' + mouth + '-' + day,
-                        data: data
-                    });
-                }
-            }
-        }
-        res.send({
-            code: 1,
-            data: dataList
-        });
-    })
-    /*打点统计--天访问量*/
-router.get('/dayData', function(req, res, next) {
-        var project = req.query.project;
-        var time = req.query.time;
-        if (fs.existsSync('infoData/' + project)) {
-            var d = new Date(time + ' 00:00');
-            var year = d.getFullYear();
-            var mouth = (parseInt(1 + d.getMonth()) + '').length > 1 ? parseInt(1 + d.getMonth()) : '0' + parseInt(1 + d.getMonth());
-            var day = (d.getDate() + '').length > 1 ? d.getDate() : '0' + d.getDate();
-            var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + day + '.txt'
+            var path = 'traceData/' + project + '/' + year + '-' + mouth + '-' + day + '.txt'
             if (!fs.existsSync(path)) {
-                res.send({
-                    code: 0
-                });
-                return;
+                continue;
             }
             var data = fs.readFileSync(path, {
                 'encoding': 'utf8'
             });
-            data = getDayData(data);
-            res.send({
-                code: 1,
-                data: data
-            });
-        } else {
+            data = getBaseData(data);
+            if (data) {
+                dataList.push({
+                    date: year + '-' + mouth + '-' + day,
+                    data: data
+                });
+            }
+        }
+    }
+    res.send({
+        code: 1,
+        data: dataList
+    });
+})
+
+
+/*打点统计--天访问量*/
+router.get('/dayData', function(req, res, next) {
+    var project = req.query.project;
+    var time = req.query.time;
+    if (fs.existsSync('infoData/' + project)) {
+        var d = new Date(time + ' 00:00');
+        var year = d.getFullYear();
+        var mouth = (parseInt(1 + d.getMonth()) + '').length > 1 ? parseInt(1 + d.getMonth()) : '0' + parseInt(1 + d.getMonth());
+        var day = (d.getDate() + '').length > 1 ? d.getDate() : '0' + d.getDate();
+        var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + day + '.txt'
+        if (!fs.existsSync(path)) {
             res.send({
                 code: 0
             });
+            return;
         }
-    })
-    /*基本信息统计--项目名*/
+        var data = fs.readFileSync(path, {
+            'encoding': 'utf8'
+        });
+        data = getDayData(data);
+        res.send({
+            code: 1,
+            data: data
+        });
+    } else {
+        res.send({
+            code: 0
+        });
+    }
+})
+
+
+/*基本信息统计--项目名*/
 router.get('/infoProjectList', function(req, res, next) {
     getNameList(req, res, 'infoData/');
 })
 
+
 /*浏览器数据*/
 router.get('/browser', function(req, res, next) {
-        var project = req.query.project;
-        var startTime = req.query.startTime;
-        var endTime = req.query.endTime;
+    var project = req.query.project;
+    var startTime = req.query.startTime;
+    var endTime = req.query.endTime;
 
-        var startTime_time = getTimeByDate(startTime);
-        var endTime_time = getTimeByDate(endTime);
+    var startTime_time = getTimeByDate(startTime);
+    var endTime_time = getTimeByDate(endTime);
 
-        var dataList = [];
-        if (fs.existsSync('infoData/' + project)) {
-            for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
+    var dataList = [];
+    if (fs.existsSync('infoData/' + project)) {
+        for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
 
-                var o = getTimePathByDate(i)
+            var o = getTimePathByDate(i)
 
-                var year = o.year;
-                var mouth = o.mouth;
-                var day = o.day;
+            var year = o.year;
+            var mouth = o.mouth;
+            var day = o.day;
 
-                var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + day + '.txt'
-                if (!fs.existsSync(path)) {
-                    continue;
-                }
-                var data = fs.readFileSync(path, {
-                    'encoding': 'utf8'
+            var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + day + '.txt'
+            if (!fs.existsSync(path)) {
+                continue;
+            }
+            var data = fs.readFileSync(path, {
+                'encoding': 'utf8'
+            });
+            data = getBrowserData(data);
+            if (data) {
+                dataList.push({
+                    date: year + '-' + mouth + '-' + day,
+                    data: data
                 });
-                data = getBrowserData(data);
-                if (data) {
-                    dataList.push({
-                        date: year + '-' + mouth + '-' + day,
-                        data: data
-                    });
-                }
             }
         }
-        res.send({
-            code: 1,
-            data: dataList
-        });
-    })
-    /*基本信息统计--使用平台统计*/
+    }
+    res.send({
+        code: 1,
+        data: dataList
+    });
+})
+
+
+/*基本信息统计--使用平台统计*/
 router.get('/platform', function(req, res, next) {
     var project = req.query.project;
     var startTime = req.query.startTime;
@@ -180,7 +184,9 @@ router.get('/platform', function(req, res, next) {
         data: dataList
     });
 })
-    /*特殊信息统计--导流我的贷款portal*/
+
+
+/*特殊信息统计--导流我的贷款portal*/
 router.get('/spec', function(req, res, next) {
     var project = req.query.project;
     var startTime = req.query.startTime;
@@ -247,6 +253,9 @@ router.get('/spec', function(req, res, next) {
         data: dataList
     });
 })
+
+
+
 router.get('/performance', function(req, res, next) {
     var project = req.query.project;
     var startTime = req.query.startTime;
@@ -283,6 +292,8 @@ router.get('/performance', function(req, res, next) {
         data: dataList
     });
 })
+
+
 router.get('/pageList', function(req, res, next) {
     var project = req.query.project;
     var startTime = req.query.startTime;
@@ -319,6 +330,9 @@ router.get('/pageList', function(req, res, next) {
         data: pages
     });
 })
+
+
+
 router.get('/customData', function(req, res, next) {
     var project = req.query.project;
     var startTime = req.query.startTime;
@@ -356,6 +370,9 @@ router.get('/customData', function(req, res, next) {
         data: dataList
     });
 })
+
+
+
 router.get('/uv', function(req, res, next) {
     var project = req.query.project;
     var startTime = req.query.startTime;
@@ -391,6 +408,9 @@ router.get('/uv', function(req, res, next) {
         data: dataList
     });
 })
+
+
+
 router.get('/pageInfo', function(req, res, next) {
     var project = req.query.project;
     var page = req.query.page;
@@ -427,6 +447,8 @@ router.get('/pageInfo', function(req, res, next) {
         data: dataList
     });
 })
+
+
 
 function getUvData(data, page) {
     if (!data) {
@@ -481,6 +503,8 @@ function getUvData(data, page) {
     result.lv = lvObj.length;
     return result;
 }
+
+
 
 function getCustomData(data, page, filter) {
     if (!data) {

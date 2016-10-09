@@ -17,10 +17,10 @@ document.addEventListener('DOMContentLoaded', function(){
         }).then(function(response) {
             return response.json();
         }).then(function(data){
-            if (data.isLogin == true) {
+            if (data.isLogin) {
                 location.href = '/homepage';
             } else {
-                alert('用户名或密码错误！');
+                alert(data.msg);
             }
         }).catch(function(e){
             console.log(e);

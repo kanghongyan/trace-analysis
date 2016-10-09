@@ -19,13 +19,12 @@ router.post('/login', function(req, res, next) {
     if (userInfo[req.body.name] && req.body.password == userInfo[req.body.name].password) {
         req.session.user = req.body.name;
         res.send({
-            isLogin: true,
-            msg: ''
+            isLogin: true
         });
     } else {
         res.send({
             isLogin: false,
-            msg: '密码或用户名不正确'
+            msg: '密码或用户名不正确...'
         });
     }
 });
