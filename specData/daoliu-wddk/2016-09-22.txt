@@ -1,6 +1,0 @@
-recommendCount=3|traceIds=21,22,23|agentNames=读秒,拍拍
-recommendCount=3|traceIds=21,22,23|agentNames=读秒,拍拍贷,量化派-信用钱包|page=http://daikuan.58.com/?from=58_m_hy_jiazhen|_=1474522278053|uid=daikuan58com.14745222780320.9879364173393697|loginuid=notlogin
-recommendCount=1|traceIds=21|agentNames=量化派-信用钱包|page=http://daikuan.58.com/?from=58_app&os=ios&showpic=1&pager=1|_=1474522278887|uid=chefenqi58com.14742077111670.3075817294884473|loginuid=33584061072138
-recommendCount=3|traceIds=21,22,23|agentNames=证大,量化派-信用钱包,读秒|page=http://daikuan.58.com/?from=58_app&os=android|_=1474522278693|uid=daikuan58com.14745221939770.5195077210664749|loginuid=23729187529734
-recommendCount=3|traceIds=21,22,23|agentNames=读秒,拍拍贷,量化派-信用钱包|page=http://daikuan.58.com/?from=58_m_hy_jiazhen|_=1474522279602|uid=daikuan58com.14745222795990.8263726332224905|loginuid=notlogin
-recommendCount=3|traceIds=21,22,23|agentNames=广富宝汽车金融,人人聚财,平安普惠|page=http://daikuan.58.com/?from=58_app&os=android|_=1474522277743|uid=qiangui58com.14742275455940.548753029666841|loginuid=40483976263184
