@@ -56,8 +56,10 @@ app.use('/', route_homepage);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  res.redirect('/homepage');
+  return;
   var err = new Error('Request Path Not Found');
-  err.status = 404;
+  err.status = 404; // 不设置200的话就被58改成302到404.58.com了
   next(err);
 });
 
