@@ -4,23 +4,24 @@ function json2query(obj,splitter) {
             return encode(k) + '=' + encode(obj[k]);
         })
         .join(splitter||'&');
-};
+}
 
 
 
-function mixin(obj) {
-    var ret = {};
+/**
+ * Note：引用覆盖和更新
+ */
+function mixin() {
+    var arr = Array.prototype.slice.call(arguments,0);
     
-    var mixins = Array.prototype.slice.call(arguments,0);
-    
-    mixins.forEach(function(o){
-        for(var k in o){
-            ret[k]=o[k];
+    return arr.reduce(function(prev, curr){
+        for(var k in curr){
+            prev[k]=curr[k];
         }
+        return prev;
     });
-    
-    return ret;
-};
+}
+
 
 
 /**
@@ -43,14 +44,41 @@ function stringifyDate(d,f) {
         _f = _DEFAULT_FORMATTER;
     } else {
         var _p1 = arguments[0],
-            _p1HasBrace = _p1.indexOf('{')!=-1;
+            _p1HasBrace = _p1.indexOf && _p1.indexOf('{')!=-1;
         
         _d = _p1HasBrace ? _DEFAULT_DATE : _p1;
         _f = _p1HasBrace ? _p1 : _DEFAULT_FORMATTER;
     }
     
     return _d.format(_f);
-};
+}
+
+
+
+/**
+ * Return string array between date strings.
+ * 如输入 2016-09-28 2016-10-03
+ * 返回 [2016-09-28 2016-09-29 2016-09-30 2016-10-01 2016-10-02 2016-10-03]
+ * @param {string} start
+ * @param {string} end
+ */
+function getDaysBetween(start, end) {
+    
+    var DAY = 1000*60*60*24,
+        date1 = new Date(start),
+        date2 = new Date(end),
+        diff = ( date2.getTime()- date1.getTime() ) / DAY,
+        arr_rtn = [];
+    
+    var _t;
+    
+    for(var i=0; i<=diff; i++) {
+        _t = date1.getTime()+DAY*i;
+        arr_rtn.push( stringifyDate(new Date(_t)) );
+    }
+    
+    return arr_rtn;
+}
 
 
 
@@ -73,9 +101,42 @@ Date.prototype.format=function(){
 }();
 
 
+Date.prototype.ago=function(long,ago){
+    if(!long)return this;
+    ago=!/day|week|month|year/i.test(ago)?"day":ago.toLowerCase();
+    if(ago=="day")return new Date(this.getTime()-long*86400000);
+    if(ago=="week")return new Date(this.getTime()-long*7*86400000);
+    
+    var y=this.getFullYear(),
+        M=this.getMonth()+1,
+        d=this.getDate(),
+        time=this.getHours()+":"+this.getMinutes()+":"+this.getSeconds();
+        
+    if(ago=="month"){
+        M-=long;
+        y+=parseInt(M/12);
+        M=M%12;
+        if(M<=0){
+            M=12+M;
+            y--;
+        }
+    }else if(ago=="year"){
+        y-=long;
+    }
+    var date=new Date(M+"/"+d+"/"+y+" "+time);
+    
+    
+    return date.getDate()!=d ? 
+        new Date((M+1)+"/1/"+y+" "+time).ago(1) : date;
+};
+
+
+
+
 
 module.exports = {
-    json2query   : json2query,
-    mixin        : mixin,
-    stringifyDate: stringifyDate
+    json2query   :  json2query,
+    mixin        :  mixin,
+    stringifyDate:  stringifyDate,
+    getDaysBetween: getDaysBetween
 };

@@ -29,14 +29,15 @@ function saveData(req, res, categoryName) {
         //return;
     }
     
-    var data = _.chain(req.query)
-                .omit('project')
-                .assign({'ip': ip})
-                .map(function(v,k){
-                    return decodeURIComponent(k) + '=' + decodeURIComponent(v);
-                })
-                .value()
-                .join('|');
+    var data = _
+        .chain(req.query)
+        .omit('project')
+        .assign({'ip': ip})
+        .map(function(v,k){
+            return decodeURIComponent(k) + '=' + decodeURIComponent(v);
+        })
+        .value()
+        .join('|');
     
     
     var projName = req.query.project,
