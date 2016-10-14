@@ -16,7 +16,7 @@ function analysis_callback(results) {
         return _
             .chain(data.split('\r\n'))
             .map(function(item){
-                return item.match(/(^|\|)os\=([^|]*)/)
+                return item.match(/(^|\|)browser\=([^|]*)/)
             })
             .filter(function(reArr){
                 return reArr && reArr[2]
@@ -25,7 +25,7 @@ function analysis_callback(results) {
                 return reArr[2]
             })
             .map(function(s){
-                return ['android','iphone'].indexOf(s) == -1 ? 'others' : s
+                return ['58app','uc','qqbrowser','wx'].indexOf(s) == -1 ? 'others' : s
             })
             .countBy(function(s){
                 return s

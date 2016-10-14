@@ -3,6 +3,7 @@ var router = express.Router();
 var userInfo = require('../config/userConfig');
 var _util = require('../backend/_util');
 var route_platform = require('../backend/route_platform');
+var route_browser = require('../backend/route_browser');
 var fs = require('fs');
 
 
@@ -107,49 +108,11 @@ router.get('/infoProjectList', function(req, res, next) {
 })
 
 
-/*浏览器数据*/
-router.get('/browser', function(req, res, next) {
-    var project = req.query.project;
-    var startTime = req.query.startTime;
-    var endTime = req.query.endTime;
 
-    var startTime_time = getTimeByDate(startTime);
-    var endTime_time = getTimeByDate(endTime);
+/*基本信息统计--浏览器统计*/
+router.get('/browser', route_browser)
 
-    var dataList = [];
-    if (fs.existsSync('infoData/' + project)) {
-        for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
-
-            var o = getTimePathByDate(i)
-
-            var year = o.year;
-            var mouth = o.mouth;
-            var day = o.day;
-
-            var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + day + '.txt'
-            if (!fs.existsSync(path)) {
-                continue;
-            }
-            var data = fs.readFileSync(path, {
-                'encoding': 'utf8'
-            });
-            data = getBrowserData(data);
-            if (data) {
-                dataList.push({
-                    date: year + '-' + mouth + '-' + day,
-                    data: data
-                });
-            }
-        }
-    }
-    res.send({
-        code: 1,
-        data: dataList
-    });
-})
-
-
-/*基本信息统计--使用平台统计*/
+/*基本信息统计--平台统计*/
 router.get('/platform', route_platform)
 
 
@@ -587,41 +550,7 @@ function getTimeByDate(dateStr) { //2016-08-09
     return time;
 }
 
-function getBrowserData(data) {
-    if (!data) {
-        return;
-    }
-    var list = data.split('\r\n');
-    var result = {};
-    /*
-        {
-            page:{
-                58app:123,
-                uc:12
-            }
-        }
-    */
-    for (var i = 0; i < list.length - 1; i++) {
-        var name = getParamer(list[i], 'browser');
-        var page = getParamer(list[i], 'page');
-        if (!name || !page) {
-            continue;
-        }
 
-        page = decodeURIComponent(page).replace(/(\/*((\?|#).*|$))/g, '') || '/';
-
-        if (name != '58app' && name != 'uc' && name != 'qqbrowser' && name != 'wx') {
-            name = 'others';
-        }
-        if (result[page]) {
-            result[page][name] ? result[page][name]++ : result[page][name] = 1;
-        } else {
-            result[page] = {};
-            result[page][name] = 1;
-        }
-    }
-    return result;
-}
 
 
 /*特殊信息统计--portal*/

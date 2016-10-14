@@ -15,7 +15,7 @@ function isDir(path) {
 function getCont(filename, day) {
     var promise = Promise.pending();
     fs.readFile(filename, "utf8", function(err, content) {
-        promise.resolve({data: content||[], day: day})
+        promise.resolve({data: content||'', day: day})
     })
     return promise.promise
 }
