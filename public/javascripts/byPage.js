@@ -87,6 +87,7 @@ var byPage = Vue.extend({
 			that.$dispatch('showLoading');
 			$.ajax({
 				url: '/api/pageList',
+				cache: false,
 				data: {
 					startTime: startTime,
 					endTime: endTime,

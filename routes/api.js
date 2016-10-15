@@ -5,6 +5,7 @@ var _util = require('../backend/_util');
 var route_platform = require('../backend/route_platform');
 var route_browser = require('../backend/route_browser');
 var route_totalV = require('../backend/route_totalV');
+var route_pageV = require('../backend/route_pageV');
 var fs = require('fs');
 
 
@@ -115,6 +116,13 @@ router.get('/browser', route_browser)
 
 /*基本信息统计--平台统计*/
 router.get('/platform', route_platform)
+
+/*基本信息统计--总PV UV LV统计*/
+router.get('/totalV', route_totalV);
+
+/*基本信息统计--页面级PV UV LV统计*/
+router.get('/pageInfo', route_pageV);
+
 
 
 /*特殊信息统计--导流我的贷款portal*/
@@ -303,104 +311,8 @@ router.get('/customData', function(req, res, next) {
 })
 
 
-/*基本信息统计--总PV UV LV统计*/
-router.get('/totalV', route_totalV);
 
 
-
-
-router.get('/pageInfo', function(req, res, next) {
-    var project = req.query.project;
-    var page = req.query.page;
-    var startTime = req.query.startTime;
-    var endTime = req.query.endTime;
-    var startTime_time = getTimeByDate(startTime);
-    var endTime_time = getTimeByDate(endTime);
-    var dataList = [];
-    if (fs.existsSync('infoData/' + project)) {
-        for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
-            var o = getTimePathByDate(i)
-            var year = o.year;
-            var mouth = o.mouth;
-            var day = o.day;
-            var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + '' + day + '.txt';
-            if (!fs.existsSync(path)) {
-                continue;
-            }
-            var data = fs.readFileSync(path, {
-                'encoding': 'utf8'
-            });
-
-            var d = getUvData(data, page);
-            if (d) {
-                dataList.push({
-                    date: year + '-' + mouth + '-' + day,
-                    data: d
-                });
-            }
-        }
-    }
-    res.send({
-        code: 1,
-        data: dataList
-    });
-})
-
-
-
-function getUvData(data, page) {
-    if (!data) {
-        return;
-    }
-    var list = data.split('\r\n');
-    var result = {
-        pv: 0,
-        uv: 0,
-        lv: 0
-    };
-    var uvObj = {
-        length: 0
-    };
-    var lvObj = {
-        length: 0
-    };
-
-    for (var j = 0; j < list.length - 1; j++) {
-
-        var uid = getParamer(list[j], 'uid');
-        var loginuid = getParamer(list[j], 'loginuid');
-        var pageName = '';
-        if (page) {
-            pagename = getParamer(list[j], 'page');
-            pagename = decodeURIComponent(pagename).replace(/(\/*((\?|#).*|$))/g, '') || '/';;
-            if (page != pagename) {
-                continue;
-            }
-        }
-        result.pv++;
-        if (uid) {
-            if (uvObj[uid]) {
-                uvObj[uid]++;
-            } else {
-                uvObj[uid] = 1;
-                uvObj.length++;
-            }
-        }
-
-        if (loginuid) {
-            if (lvObj[loginuid]) {
-                lvObj[loginuid]++;
-            } else {
-                lvObj[loginuid] = 1;
-                lvObj.length++;
-            }
-        }
-
-    }
-    result.uv = uvObj.length;
-    result.lv = lvObj.length;
-    return result;
-}
 
 
 
