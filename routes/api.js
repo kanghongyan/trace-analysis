@@ -4,7 +4,7 @@ var userInfo = require('../config/userConfig');
 var _util = require('../backend/_util');
 var route_platform = require('../backend/route_platform');
 var route_browser = require('../backend/route_browser');
-var route_xv = require('../backend/route_xv');
+var route_totalV = require('../backend/route_totalV');
 var fs = require('fs');
 
 
@@ -304,7 +304,7 @@ router.get('/customData', function(req, res, next) {
 
 
 /*基本信息统计--总PV UV LV统计*/
-router.get('/xv', route_xv);
+router.get('/totalV', route_totalV);
 
 
 

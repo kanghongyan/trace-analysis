@@ -1,5 +1,5 @@
-var xv = Vue.extend({
-	template: '#xv-template',
+var totalV = Vue.extend({
+	template: '#totalV-template',
 	components: {
 		'search': search
 	},
@@ -21,7 +21,7 @@ var xv = Vue.extend({
 			}
 			that.$dispatch('showLoading');
 			$.ajax({
-				url: '/api/xv',
+				url: '/api/totalV',
 				data: {
 					startTime: startTime,
 					endTime: endTime,

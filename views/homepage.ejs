@@ -45,7 +45,7 @@
 
     <script type='text/javascript' src='javascripts/custom.js'></script>
 
-    <script type='text/javascript' src='javascripts/xv.js'></script>
+    <script type='text/javascript' src='javascripts/totalV.js'></script>
 
 
     <script type="text/javascript" src='javascripts/router.js'></script>
@@ -57,7 +57,7 @@
             <ul @click='changeRouter'>
                 <li v-link="{ path: '/point' }" v-bind:class="{ 'active': $route.point}" >埋点</li>
                 <li v-link="{ path: '/perform' }" v-bind:class="{ 'active': $route.perform}" >基础-性能</li>
-                <li v-link="{ path: '/xv' }" v-bind:class="{ 'active': $route.xv}" >基初-总访问量</li>
+                <li v-link="{ path: '/totalV' }" v-bind:class="{ 'active': $route.totalV}" >基初-总访问量</li>
                 <li v-link="{ path: '/byPage' }" v-bind:class="{ 'active': $route.byPage}" >基初-页面访问量</li>
                 <li v-link="{ path: '/platform' }" v-bind:class="{ 'active': $route.platform}" >基初-平台类型</li>
                 <li v-link="{ path: '/browser' }" v-bind:class="{ 'active': $route.browser}" >基初-浏览器类型</li>
@@ -197,7 +197,7 @@
     <div id='pvchart-main'></div>
 </script>
 
-<script type="x/template" id='xv-template'>
+<script type="x/template" id='totalV-template'>
     <search v-bind:okfun='okFun' v-bind:url='url'></search>
     <div id='pvchart-main'></div>
 </script>

@@ -8,9 +8,9 @@ router.map({
         component: point,
         point:true
     },
-    '/xv':{
-        component:xv,
-        xv:true
+    '/totalV':{
+        component:totalV,
+        totalV:true
     },
     '/browser':{
         component: browser,
