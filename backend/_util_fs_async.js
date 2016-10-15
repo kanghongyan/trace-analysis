@@ -15,7 +15,7 @@ function isDir(path) {
 function getCont(filename, day) {
     var promise = Promise.pending();
     fs.readFile(filename, "utf8", function(err, content) {
-        promise.resolve({data: content||'', day: day})
+        promise.resolve({data: content||null, day: day})
     })
     return promise.promise
 }
@@ -28,7 +28,7 @@ module.exports = function(category, project, startTime, endTime, analyCB) {
     return isDir(category + '/' + project)
     
     .then(function(yes){
-        if (!yes) return [];
+        if (!yes) return null;
         var days = _util.getDaysBetween(startTime, endTime);
         var proms = days.map(function(day){
             return getCont(category + '/' + project + '/' + day + '.txt', day);
@@ -40,8 +40,9 @@ module.exports = function(category, project, startTime, endTime, analyCB) {
         return analyCB(results);
     })
     
-    .catch(function(e){
-        return resolve([]);
+    .catch(function(err){
+        console.log('_util_fs_async throws', err);
+        return [];
     });
     
     

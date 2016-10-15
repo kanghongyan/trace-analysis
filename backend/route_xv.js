@@ -8,29 +8,35 @@ var _util_fs_async = require('./_util_fs_async');
 
 function analysis_callback(results) {
     
+    function get_key(s, key) {
+        var reg = new RegExp('(^|\|)' + key + '\=([^|]*)'),
+            arr = s.match(reg);
+        return (arr && arr[2]) ? arr[2] : null;
+    }
+    
+    
     function analy_data(data) {
         if (!data) {
-            return [];
+            return {};
         }
         
-        return _
-            .chain(data.split('\r\n'))
-            .map(function(item){
-                return item.match(/(^|\|)os\=([^|]*)/)
-            })
-            .filter(function(reArr){
-                return reArr && reArr[2]
-            })
-            .map(function(reArr){
-                return reArr[2]
-            })
-            .map(function(s){
-                return ['android','iphone'].indexOf(s) == -1 ? 'others' : s
-            })
-            .countBy(function(s){
-                return s
-            })
-            .value();
+        var dataArr = data.split('\r\n'),
+            uvArr = [],
+            lvArr = [];
+        
+        dataArr.forEach(function(data){
+            var uv = get_key(data,'uid');
+            uv && uvArr.push(uv);
+            
+            var lv = get_key(data,'loginuid');
+            lv && lv!=='notlogin' && lvArr.push(lv);
+        });
+        
+        return {
+            pv: dataArr.length,
+            uv: _.uniq(uvArr).length,
+            lv: _.uniq(lvArr).length
+        }
     }
     
     results.forEach(function(result){

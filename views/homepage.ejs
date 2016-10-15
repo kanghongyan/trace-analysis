@@ -45,7 +45,7 @@
 
     <script type='text/javascript' src='javascripts/custom.js'></script>
 
-    <script type='text/javascript' src='javascripts/uv.js'></script>
+    <script type='text/javascript' src='javascripts/xv.js'></script>
 
 
     <script type="text/javascript" src='javascripts/router.js'></script>
@@ -55,15 +55,15 @@
     <div id='navList'>
         <div class='page-left' >
             <ul @click='changeRouter'>
-                <li v-link="{ path: '/point' }" v-bind:class="{ 'active': $route.point}" >埋点统计</li>
-                <li v-link="{ path: '/perform' }" v-bind:class="{ 'active': $route.perform}" >基础统计-性能</li>
-                <li v-link="{ path: '/uv' }" v-bind:class="{ 'active': $route.uv}" >基初统计-总访问量</li>
-                <li v-link="{ path: '/byPage' }" v-bind:class="{ 'active': $route.byPage}" >基初统计-页面访问量</li>
-                <li v-link="{ path: '/platform' }" v-bind:class="{ 'active': $route.platform}" >基初统计-平台类型</li>
-                <li v-link="{ path: '/browser' }" v-bind:class="{ 'active': $route.browser}" >基初统计-浏览器类型</li>
-                <li v-link="{ path: '/constant'}" v-bind:class="{ 'active': $route.constant}" >基初统计-实时数据</li>
-                <li v-link="{ path: '/custom'}" v-bind:class="{ 'active': $route.custom}" >基础统计-自定义</li>
-                <li v-link="{ path: '/spec'}" v-bind:class="{ 'active': $route.spec}" >特殊统计-导流portal页</li>
+                <li v-link="{ path: '/point' }" v-bind:class="{ 'active': $route.point}" >埋点</li>
+                <li v-link="{ path: '/perform' }" v-bind:class="{ 'active': $route.perform}" >基础-性能</li>
+                <li v-link="{ path: '/xv' }" v-bind:class="{ 'active': $route.xv}" >基初-总访问量</li>
+                <li v-link="{ path: '/byPage' }" v-bind:class="{ 'active': $route.byPage}" >基初-页面访问量</li>
+                <li v-link="{ path: '/platform' }" v-bind:class="{ 'active': $route.platform}" >基初-平台类型</li>
+                <li v-link="{ path: '/browser' }" v-bind:class="{ 'active': $route.browser}" >基初-浏览器类型</li>
+                <li v-link="{ path: '/constant'}" v-bind:class="{ 'active': $route.constant}" >基初-实时数据</li>
+                <li v-link="{ path: '/custom'}" v-bind:class="{ 'active': $route.custom}" >基础-自定义</li>
+                <li v-link="{ path: '/spec'}" v-bind:class="{ 'active': $route.spec}" >特殊-导流portal页</li>
             </ul>
         </div>
         <div class='page-right'>
@@ -192,12 +192,35 @@
     <div id='pvchart-main'></div>
 </script>
 
-
-
 <script type='x/template' id='browser-template'>
     <search v-bind:okfun='okFun' v-bind:url='url'></search>
     <div id='pvchart-main'></div>
 </script>
+
+<script type="x/template" id='xv-template'>
+    <search v-bind:okfun='okFun' v-bind:url='url'></search>
+    <div id='pvchart-main'></div>
+</script>
+
+<script type="x/template" id='bypage-template'>
+    <search v-bind:okfun='okFun' v-bind:url='url'></search>
+    <form class='form-inline' style='margin-top:20px' v-show='show'>
+        <label class="form-label">页面</label>
+        <select class="form-control" v-model='currentPage' >
+            <option v-for='page in pageList' track-by="$index">{{page}}</option>
+        </select>
+    </form>
+    <div id='pvchart-main'></div>
+</script>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -242,23 +265,6 @@
 
 
 
-<script type="x/template" id='uv-template'>
-    <search v-bind:okfun='okFun' v-bind:url='url'></search>
-    <div id='pvchart-main'></div>
-</script>
-
-
-
-<script type="x/template" id='bypage-template'>
-    <search v-bind:okfun='okFun' v-bind:url='url'></search>
-    <form class='form-inline' style='margin-top:20px' v-show='show'>
-        <label class="form-label">页面</label>
-        <select class="form-control" v-model='currentPage' >
-            <option v-for='page in pageList' track-by="$index">{{page}}</option>
-        </select>
-    </form>
-    <div id='pvchart-main'></div>
-</script>
 
 
 <script type="text/javascript" src='javascripts/home.js'></script>

@@ -4,6 +4,7 @@ var userInfo = require('../config/userConfig');
 var _util = require('../backend/_util');
 var route_platform = require('../backend/route_platform');
 var route_browser = require('../backend/route_browser');
+var route_xv = require('../backend/route_xv');
 var fs = require('fs');
 
 
@@ -302,42 +303,9 @@ router.get('/customData', function(req, res, next) {
 })
 
 
+/*基本信息统计--总PV UV LV统计*/
+router.get('/xv', route_xv);
 
-router.get('/uv', function(req, res, next) {
-    var project = req.query.project;
-    var startTime = req.query.startTime;
-    var endTime = req.query.endTime;
-    var startTime_time = getTimeByDate(startTime);
-    var endTime_time = getTimeByDate(endTime);
-    var dataList = [];
-    if (fs.existsSync('infoData/' + project)) {
-        for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
-            var o = getTimePathByDate(i)
-            var year = o.year;
-            var mouth = o.mouth;
-            var day = o.day;
-            var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + '' + day + '.txt';
-            if (!fs.existsSync(path)) {
-                continue;
-            }
-            var data = fs.readFileSync(path, {
-                'encoding': 'utf8'
-            });
-
-            var d = getUvData(data);
-            if (d) {
-                dataList.push({
-                    date: year + '-' + mouth + '-' + day,
-                    data: d
-                });
-            }
-        }
-    }
-    res.send({
-        code: 1,
-        data: dataList
-    });
-})
 
 
 
