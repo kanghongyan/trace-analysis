@@ -4,7 +4,6 @@ var userInfo = require('../config/userConfig');
 var _util = require('../backend/_util');
 var route_platform = require('../backend/route_platform');
 var route_browser = require('../backend/route_browser');
-var route_totalV = require('../backend/route_totalV');
 var route_pageV = require('../backend/route_pageV');
 var fs = require('fs');
 
@@ -118,7 +117,7 @@ router.get('/browser', route_browser)
 router.get('/platform', route_platform)
 
 /*基本信息统计--总PV UV LV统计*/
-router.get('/totalV', route_pageV /*route_totalV*/);
+router.get('/totalV', route_pageV);
 
 /*基本信息统计--页面级PV UV LV统计*/
 router.get('/pageInfo', route_pageV);
