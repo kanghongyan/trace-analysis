@@ -118,7 +118,7 @@ router.get('/browser', route_browser)
 router.get('/platform', route_platform)
 
 /*基本信息统计--总PV UV LV统计*/
-router.get('/totalV', route_totalV);
+router.get('/totalV', route_pageV /*route_totalV*/);
 
 /*基本信息统计--页面级PV UV LV统计*/
 router.get('/pageInfo', route_pageV);

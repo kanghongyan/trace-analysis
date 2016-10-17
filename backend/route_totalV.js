@@ -15,6 +15,15 @@ function analysis_callback(results) {
     }
     
     
+    function populate_arrs(dataItem, uvArr, lvArr) {
+        var uv = get_key(dataItem,'uid');
+        uv && uvArr.push(uv);
+        
+        var lv = get_key(dataItem,'loginuid');
+        lv && lv!=='notlogin' && lvArr.push(lv);
+    }
+    
+    
     function analy_data(data) {
         if (!data) {
             return {};
@@ -24,18 +33,14 @@ function analysis_callback(results) {
             uvArr = [],
             lvArr = [];
         
-        dataArr.forEach(function(data){
-            var uv = get_key(data,'uid');
-            uv && uvArr.push(uv);
-            
-            var lv = get_key(data,'loginuid');
-            lv && lv!=='notlogin' && lvArr.push(lv);
+        dataArr.forEach(function(dataItem){
+            populate_arrs(dataItem, uvArr, lvArr);
         });
         
         return {
             pv: dataArr.length,
-            uv: _.uniq(uvArr).length,
-            lv: _.uniq(lvArr).length
+            uv: _.chain(uvArr).compact().uniq().value().length,
+            lv: _.chain(lvArr).compact().uniq().value().length
         }
     }
     

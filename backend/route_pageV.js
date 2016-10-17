@@ -15,6 +15,29 @@ function analysis_callback(results, _PAGE) {
     }
     
     
+    function is_curr_page(dataItem) {
+        var page = get_key(dataItem,'page');
+        if (!page) {
+            return false;
+        }
+        page = decodeURIComponent(page);
+        page = page.replace(/\/*((\?|#).*|$)/g, '');
+        if (page!==_PAGE) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    function populate_arrs(dataItem, uvArr, lvArr) {
+        var uv = get_key(dataItem,'uid');
+        uv && uvArr.push(uv);
+        
+        var lv = get_key(dataItem,'loginuid');
+        lv && lv!=='notlogin' && lvArr.push(lv);
+    }
+    
+    
     function analy_data(data) {
         if (!data) {
             return {};
@@ -24,32 +47,20 @@ function analysis_callback(results, _PAGE) {
             uvArr = [],
             lvArr = [];
         
-        dataArr = dataArr.filter(function(data){
-            if (_PAGE) {
-                var page = get_key(data,'page');
-                if (!page) {
-                    return false;
-                }
-                page = decodeURIComponent(page);
-                page = page.replace(/\/*((\?|#).*|$)/g, '');
-                if (page!==_PAGE) {
-                    return false;
-                }
+        dataArr = dataArr.filter(function(dataItem){
+            // 存在_PAGE的话，则是查询每个页面的xv
+            // 否则则是总xv
+            if( _PAGE && !is_curr_page(dataItem) ) {
+                return false;
             }
-            
-            var uv = get_key(data,'uid');
-            uv && uvArr.push(uv);
-            
-            var lv = get_key(data,'loginuid');
-            lv && lv!=='notlogin' && lvArr.push(lv);
-            
+            populate_arrs(dataItem, uvArr, lvArr);
             return true;
         });
         
         return {
             pv: dataArr.length,
-            uv: _.uniq(uvArr).length,
-            lv: _.uniq(lvArr).length
+            uv: _.chain(uvArr).compact().uniq().value().length,
+            lv: _.chain(lvArr).compact().uniq().value().length
         }
     }
     
@@ -79,7 +90,8 @@ module.exports = function(req, res, next) {
         endTime = req.query.endTime,
         page = req.query.page;
     
-    _util_fs_async( category, project, startTime, endTime, analysis_callback_proxy(page) )
+    _util_fs_async( category, project, startTime, endTime, 
+                    page ? analysis_callback_proxy(page) : analysis_callback )
     
     .then(function(results){
         res.send({
