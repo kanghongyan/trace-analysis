@@ -25,7 +25,7 @@ var byPage = Vue.extend({
 			var pv = [];
 			var lv = [];
 			for (var j = 0; j < this.data.length; j++) {
-				date.push(this.data[j].date);
+				date.push(this.data[j].day);
 				uv.push(this.data[j].data.uv);
 				pv.push(this.data[j].data.pv);
 				lv.push(this.data[j].data.lv);

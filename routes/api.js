@@ -5,6 +5,7 @@ var _util = require('../backend/_util');
 var route_platform = require('../backend/route_platform');
 var route_browser = require('../backend/route_browser');
 var route_pageV = require('../backend/route_pageV');
+var route_performance = require('../backend/route_performance');
 var fs = require('fs');
 
 
@@ -122,7 +123,8 @@ router.get('/totalV', route_pageV);
 /*基本信息统计--页面级PV UV LV统计*/
 router.get('/pageInfo', route_pageV);
 
-
+/*基本信息统计--页面级性能统计*/
+router.get('/performance', route_performance);
 
 /*特殊信息统计--导流我的贷款portal*/
 router.get('/spec', function(req, res, next) {
@@ -194,42 +196,8 @@ router.get('/spec', function(req, res, next) {
 
 
 
-router.get('/performance', function(req, res, next) {
-    var project = req.query.project;
-    var startTime = req.query.startTime;
-    var endTime = req.query.endTime;
 
-    var startTime_time = getTimeByDate(startTime);
-    var endTime_time = getTimeByDate(endTime);
-    var dataList = [];
-    if (fs.existsSync('infoData/' + project)) {
-        for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
-            var o = getTimePathByDate(i)
-            var year = o.year;
-            var mouth = o.mouth;
-            var day = o.day;
-            var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + '' + day + '.txt';
-            if (!fs.existsSync(path)) {
-                continue;
-            }
-            var data = fs.readFileSync(path, {
-                'encoding': 'utf8'
-            });
 
-            data = getPerformance(data);
-            if (data) {
-                dataList.push({
-                    date: year + '-' + mouth + '-' + day,
-                    data: data
-                });
-            }
-        }
-    }
-    res.send({
-        code: 1,
-        data: dataList
-    });
-})
 
 
 router.get('/pageList', function(req, res, next) {
@@ -354,48 +322,6 @@ function getPageList(data) {
         var name = decodeURIComponent(pageName).replace(/(\/*((\?|#).*|$))/g, '') || '/';
         if (result.indexOf(name) == -1) {
             result.push(name);
-        }
-    }
-    return result;
-}
-
-function getPerformance(data) {
-    if (!data) {
-        return;
-    }
-    var list = data.split('\r\n');
-    var result = {};
-    for (var j = 0; j < list.length - 1; j++) {
-        var rowObj = {};
-        var rows = list[j].split('|');
-        for (var h = 0; h < rows.length; h++) {
-            if (rows[h]) {
-                rowObj[rows[h].split('=')[0]] = rows[h].split('=')[1]
-            }
-        }
-
-        if ((rowObj.res + '').length >= 5 || (rowObj.rt + '').length >= 5) {
-            continue;
-        }
-        rowObj.page = decodeURIComponent(rowObj.page).replace(/(\/*((\?|#).*|$))/g, '') || '/';
-        if (result[rowObj.page]) {
-            result[rowObj.page].dns += parseInt(rowObj.dns || 0);
-            result[rowObj.page].conn += parseInt(rowObj.conn || 0);
-            result[rowObj.page].req += parseInt(rowObj.req || 0);
-            result[rowObj.page].res += parseInt(rowObj.res || 0);
-            result[rowObj.page].rt += parseInt(rowObj.rt || 0);
-            result[rowObj.page].intr += parseInt(rowObj.intr || 0);
-            result[rowObj.page].length++;
-        } else {
-            result[rowObj.page] = {
-                dns: parseInt(rowObj.dns || 0),
-                conn: parseInt(rowObj.conn || 0),
-                req: parseInt(rowObj.req || 0),
-                res: parseInt(rowObj.res || 0),
-                rt: parseInt(rowObj.rt || 0),
-                intr: parseInt(rowObj.intr || 0),
-                length: 1
-            }
         }
     }
     return result;
@@ -588,6 +514,13 @@ function getDayData(data) {
 }
 /*获得项目名*/
 function getNameList(req, res, path) {
+    
+    function uniq(array){ 
+        return [].filter.call(array, function(item, idx){ 
+            return array.indexOf(item) == idx 
+        }) 
+    }
+    
     try {
         var list = fs.readdirSync(path);
         var result = [];
@@ -598,6 +531,7 @@ function getNameList(req, res, path) {
                 result.push(l);
             }
         }
+        result = uniq(result);
         res.send({
             projects: result,
             code: 1

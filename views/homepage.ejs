@@ -97,7 +97,13 @@
 
 <script type='x/template' id='perform-template'>
     <search v-bind:okfun='okFun' v-bind:url='url'></search>
-    <constant-chart :show.sync="showChart" ></constant-chart>
+    <form class='form-inline' style='margin-top:20px' v-show='show'>
+        <label class="form-label">页面</label>
+        <select class="form-control" v-model='currentPage' >
+            <option v-for='page in pageList' track-by="$index">{{page}}</option>
+        </select>
+    </form>
+    <div id='pvchart-main'></div>
 </script>
 
 
