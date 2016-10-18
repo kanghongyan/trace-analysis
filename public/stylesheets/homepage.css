@@ -147,7 +147,7 @@ select{
 .chartCon{
     margin-top: 40px;
 }
-#chartMian,#loginUVMian{
+.xv-page-t-chart {
     width: 80%;
     height:400px;
 }

@@ -1,5 +1,5 @@
-var pointChart = Vue.extend({
-	template: '#pointChart-template',
+var pageTChart = Vue.extend({
+	template: '#pageTChart-template',
 	props: {
 		show: {
 			type: Boolean
@@ -90,7 +90,7 @@ var pointChart = Vue.extend({
 					data: d[h]
 				})
 			}
-			var myChart = echarts.init(document.getElementById('chartMian'));
+			var myChart = echarts.init(document.getElementById('uv-chart'));
 			option = {
 				tooltip: {
 					trigger: 'axis'
@@ -155,7 +155,7 @@ var pointChart = Vue.extend({
 					data: d[h]
 				})
 			}
-			var myChart = echarts.init(document.getElementById('pointMian'));
+			var myChart = echarts.init(document.getElementById('pv-chart'));
 			option = {
 				tooltip: {
 					trigger: 'axis'
@@ -222,7 +222,7 @@ var pointChart = Vue.extend({
                     data: d[h]
                 })
             }
-            var myChart = echarts.init(document.getElementById('loginUVMian'));
+            var myChart = echarts.init(document.getElementById('lv-chart'));
             option = {
                 tooltip: {
                     trigger: 'axis'

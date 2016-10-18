@@ -1,8 +1,8 @@
-var point = Vue.extend({
-	template: '#pointMain-template',
+var pageT = Vue.extend({
+	template: '#pageT-template',
 	components: {
 		'search': search,
-		'point-chart': pointChart,
+		'page-t-chart': pageTChart,
 	},
 	data: function() {
 		return {

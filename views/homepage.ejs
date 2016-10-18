@@ -24,20 +24,19 @@
     <script type="text/javascript" src='javascripts/loading.js'></script>
     <script type="text/javascript" src='javascripts/search.js'></script>
 
-    <script type="text/javascript" src='javascripts/constantChart.js'></script>
-
     
+    <script type="text/javascript" src='javascripts/pageTChart.js'></script>
+    <script type='text/javascript' src='javascripts/pageT.js'></script>
 
-    <script type="text/javascript" src='javascripts/pointChart.js'></script>
-    <script type='text/javascript' src='javascripts/point.js'></script>
-
+    <script type="text/javascript" src='javascripts/constantChart.js'></script>
+    <script type="text/javascript" src='javascripts/constant.js'></script>
 
     <script type='text/javascript' src='javascripts/platform.js'></script>
     <script type='text/javascript' src='javascripts/totalV.js'></script>
     <script type='text/javascript' src='javascripts/pageV.js'></script>
     <script type='text/javascript' src='javascripts/spec.js'></script>
     
-    <script type="text/javascript" src='javascripts/constant.js'></script>
+    
 
     <script type='text/javascript' src='javascripts/browser.js'></script>
 
@@ -52,7 +51,7 @@
     <div id='navList'>
         <div class='page-left' >
             <ul @click='changeRouter'>
-                <li v-link="{ path: '/point' }" v-bind:class="{ 'active': $route.point}" >**埋点分析**</li>
+                <li v-link="{ path: '/pageT' }" v-bind:class="{ 'active': $route.pageT}" >**埋点分析**</li>
                 <li v-link="{ path: '/totalV' }" v-bind:class="{ 'active': $route.totalV}" >基初-总访问量</li>
                 <li v-link="{ path: '/pageV' }" v-bind:class="{ 'active': $route.pageV}" >基初-页面访问量</li>
                 <li v-link="{ path: '/performance' }" v-bind:class="{ 'active': $route.performance}" >基础-性能</li>
@@ -160,16 +159,16 @@
 
 
 
-<script type='x/template' id='pointMain-template'>
+<script type='x/template' id='pageT-template'>
     <search v-bind:okfun='okFun' v-bind:url='url'></search>
     <div>
-        <point-chart :show.sync="showChart"></point-chart>
+        <page-t-chart :show.sync="showChart"></page-t-chart>
     </div>
 </script>
 
 
 
-<script type="x/template" id='pointChart-template'>
+<script type="x/template" id='pageTChart-template'>
     <div class='chartCon' v-show="show">
         <div  class='form-group'>
         <form class='form-inline'>
@@ -180,11 +179,11 @@
         </form>
         </div>
         <div class='people'>PV统计</div>
-        <div id='pointMian'></div>
+        <div id='pv-chart' class="xv-page-t-chart"></div>
         <div class='people'>UV统计</div>
-        <div id='chartMian'></div>
+        <div id='uv-chart' class="xv-page-t-chart"></div>
         <div class='people'>LoginUV统计</div>
-        <div id='loginUVMian'></div>
+        <div id='lv-chart' class="xv-page-t-chart"></div>
     </div>
 </script>
 

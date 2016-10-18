@@ -1,12 +1,12 @@
 var router = new VueRouter();
 router.map({
     '/':{
-        component: point,
-        point:true
+        component: pageT,
+        pageT:true
     },
-    '/point':{
-        component: point,
-        point:true
+    '/pageT':{
+        component: pageT,
+        pageT:true
     },
     '/totalV':{
         component:totalV,
