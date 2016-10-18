@@ -26,7 +26,7 @@ var point = Vue.extend({
 			}
 			that.$dispatch('showLoading');
 			$.ajax({
-				url: '/api/pointData',
+				url: '/api/pageT',
 				data: {
 					project: selName,
 					startTime: startTime,

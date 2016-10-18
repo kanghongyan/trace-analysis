@@ -10,11 +10,11 @@ var _util = require('../backend/_util');
 var _util_fs_async = require('../backend/_util_fs_async');
 
 var route_pageList = require('../backend/route_pageList');
+var route_pageV = require('../backend/route_pageV');
+var route_pageT = require('../backend/route_pageT');
+var route_performance = require('../backend/route_performance');
 var route_platform = require('../backend/route_platform');
 var route_browser = require('../backend/route_browser');
-var route_pageV = require('../backend/route_pageV');
-var route_performance = require('../backend/route_performance');
-
 
 
 
@@ -38,11 +38,8 @@ router.get('/projectList', function(req, res, next) {
 /*公用--获取项目页面列表*/
 router.get('/pageList', route_pageList)
 
-/*基本信息统计--浏览器统计*/
-router.get('/browser', route_browser)
-
-/*基本信息统计--平台统计*/
-router.get('/platform', route_platform)
+/*打点数据统计*/
+router.get('/pageT', route_pageT);
 
 /*基本信息统计--总PV UV LV统计*/
 router.get('/totalV', route_pageV);
@@ -50,53 +47,15 @@ router.get('/totalV', route_pageV);
 /*基本信息统计--页面级PV UV LV统计*/
 router.get('/pageV', route_pageV);
 
+/*基本信息统计--浏览器统计*/
+router.get('/browser', route_browser)
+
+/*基本信息统计--平台统计*/
+router.get('/platform', route_platform)
+
 /*基本信息统计--页面级性能统计*/
 router.get('/performance', route_performance);
 
-
-
-
-
-
-/*打点统计--埋点统计*/
-router.get('/pointData', function(req, res, next) {
-    var project = req.query.project;
-    var startTime = req.query.startTime;
-    var endTime = req.query.endTime;
-
-    var startTime_time = getTimeByDate(startTime);
-    var endTime_time = getTimeByDate(endTime);
-
-    var dataList = [];
-    if (fs.existsSync('traceData/' + project)) {
-        for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
-
-            var o = getTimePathByDate(i)
-            var year = o.year;
-            var mouth = o.mouth;
-            var day = o.day;
-
-            var path = 'traceData/' + project + '/' + year + '-' + mouth + '-' + day + '.txt'
-            if (!fs.existsSync(path)) {
-                continue;
-            }
-            var data = fs.readFileSync(path, {
-                'encoding': 'utf8'
-            });
-            data = getBaseData(data);
-            if (data) {
-                dataList.push({
-                    date: year + '-' + mouth + '-' + day,
-                    data: data
-                });
-            }
-        }
-    }
-    res.send({
-        code: 1,
-        data: dataList
-    });
-})
 
 
 /*打点统计--天访问量*/
@@ -471,120 +430,6 @@ function getDayData(data) {
     return result;
 }
 
-/*获得数据*/
-function getBaseData(data) {
-    if (!data) {
-        return;
-    }
-    var list = data.split('\r\n');
-    /*
-    {
-        pagename1: [{
-                tid: 1,
-                user:{
-                    A:1,
-                    B:2,
-                    length:2
-                },
-                number:1
-            },
-            {
-                tid: 2,
-                user:{
-                    A:1,
-                    B:2,
-                    C:3
-                    length:3
-                },
-                number:1
-            }
-        ],
-        pagename2: [{
-                tid: 12,
-                user:{
-                    A:1,
-                    B:2
-                },
-                number:12
-            }
-        ]
-    }
-    */
-    var result = {};
-    for (var j = 0; j < list.length - 1; j++) {
-        var row = list[j].split('|');
-        var rowObj = {};
-        for (var i = 0; i < row.length; i++) {
-            rowObj[row[i].split('=')[0]] = row[i].split('=')[1];
-        }
-        var isHas = false; //标记是否已添加
-        var obj = null;
-        rowObj.page = decodeURIComponent(rowObj.page).replace(/(\/*((\?|#).*|$))/g, '') || '/';;
 
-        if (result[rowObj.page]) {
-            for (var k = 0; k < result[rowObj.page].length; k++) {
-                if (result[rowObj.page][k].tid == rowObj.tid) {
-                    isHas = true;
-                    result[rowObj.page][k].number++;
-                    if (result[rowObj.page][k].user[rowObj.uid]) {
-                        result[rowObj.page][k].user[rowObj.uid]++
-                    } else {
-                        result[rowObj.page][k].user[rowObj.uid] = 1;
-                        result[rowObj.page][k].user.length++;
-                    }
-                    if (result[rowObj.page][k].loginuser[rowObj.loginuid]) {
-                        result[rowObj.page][k].loginuser[rowObj.loginuid]++
-                    } else {
-                        result[rowObj.page][k].loginuser[rowObj.loginuid] = 1;
-                        result[rowObj.page][k].loginuser.length++;
-                    }
-                }
-            }
-            if (!isHas) {
-                obj = {
-                    tid: rowObj.tid,
-                    number: 1,
-                    user: {
-                        length: 1
-                    },
-                    loginuser: {
-                        length: 1
-                    }
-                };
-                obj.user[rowObj.uid] = 1
-                obj.loginuser[rowObj.loginuid] = 1
-                result[rowObj.page].push(obj);
-            }
-        } else {
-            obj = {
-                tid: rowObj.tid,
-                number: 1,
-                user: {
-                    length: 1
-                },
-                loginuser: {
-                    length: 1
-                }
-            };
-            obj.user[rowObj.uid] = 1
-            obj.loginuser[rowObj.loginuid] = 1
-            result[rowObj.page] = [obj];
-        }
-    }
-    for (var h in result) {
-        for (var m = 0; m < result[h].length; m++) {
-            for (var n in result[h][m].user) {
-                if (n != 'length') {
-                    delete result[h][m].user[n];
-                }
-            }
-            for (var n in result[h][m].loginuser) {
-                if (n != 'length') {
-                    delete result[h][m].loginuser[n];
-                }
-            }
-        }
-    }
-    return result;
-}
+
 module.exports = router;

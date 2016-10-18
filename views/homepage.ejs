@@ -52,10 +52,10 @@
     <div id='navList'>
         <div class='page-left' >
             <ul @click='changeRouter'>
-                <li v-link="{ path: '/point' }" v-bind:class="{ 'active': $route.point}" >埋点</li>
-                <li v-link="{ path: '/performance' }" v-bind:class="{ 'active': $route.performance}" >基础-性能</li>
+                <li v-link="{ path: '/point' }" v-bind:class="{ 'active': $route.point}" >**埋点分析**</li>
                 <li v-link="{ path: '/totalV' }" v-bind:class="{ 'active': $route.totalV}" >基初-总访问量</li>
                 <li v-link="{ path: '/pageV' }" v-bind:class="{ 'active': $route.pageV}" >基初-页面访问量</li>
+                <li v-link="{ path: '/performance' }" v-bind:class="{ 'active': $route.performance}" >基础-性能</li>
                 <li v-link="{ path: '/platform' }" v-bind:class="{ 'active': $route.platform}" >基初-平台类型</li>
                 <li v-link="{ path: '/browser' }" v-bind:class="{ 'active': $route.browser}" >基初-浏览器类型</li>
                 <li v-link="{ path: '/constant'}" v-bind:class="{ 'active': $route.constant}" >基初-实时数据</li>
