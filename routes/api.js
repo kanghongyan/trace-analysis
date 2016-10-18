@@ -1,12 +1,19 @@
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
+
+var Promise = require("bluebird");
+var _ = require('lodash');
+
 var userInfo = require('../config/userConfig');
 var _util = require('../backend/_util');
+var _util_fs_async = require('../backend/_util_fs_async');
+
+var route_pageList = require('../backend/route_pageList');
 var route_platform = require('../backend/route_platform');
 var route_browser = require('../backend/route_browser');
 var route_pageV = require('../backend/route_pageV');
 var route_performance = require('../backend/route_performance');
-var fs = require('fs');
 
 
 
@@ -31,7 +38,8 @@ router.get('/getObjet', function(req, res, next) {
 router.get('/pointProjectList', function(req, res, next) {
     getNameList(req, res, 'traceData/');
 })
-    /*打点统计--埋点统计*/
+
+/*打点统计--埋点统计*/
 router.get('/pointData', function(req, res, next) {
     var project = req.query.project;
     var startTime = req.query.startTime;
@@ -109,7 +117,8 @@ router.get('/infoProjectList', function(req, res, next) {
     getNameList(req, res, 'infoData/');
 })
 
-
+/*公用--获取项目页面列表*/
+router.get('/pageList', route_pageList)
 
 /*基本信息统计--浏览器统计*/
 router.get('/browser', route_browser)
@@ -121,10 +130,12 @@ router.get('/platform', route_platform)
 router.get('/totalV', route_pageV);
 
 /*基本信息统计--页面级PV UV LV统计*/
-router.get('/pageInfo', route_pageV);
+router.get('/pageV', route_pageV);
 
 /*基本信息统计--页面级性能统计*/
 router.get('/performance', route_performance);
+
+
 
 /*特殊信息统计--导流我的贷款portal*/
 router.get('/spec', function(req, res, next) {
@@ -200,42 +211,9 @@ router.get('/spec', function(req, res, next) {
 
 
 
-router.get('/pageList', function(req, res, next) {
-    var project = req.query.project;
-    var startTime = req.query.startTime;
-    var endTime = req.query.endTime;
-    var startTime_time = getTimeByDate(startTime);
-    var endTime_time = getTimeByDate(endTime);
-    var dataList = [];
-    if (fs.existsSync('infoData/' + project)) {
-        for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
-            var o = getTimePathByDate(i)
-            var year = o.year;
-            var mouth = o.mouth;
-            var day = o.day;
-            var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + '' + day + '.txt';
-            if (!fs.existsSync(path)) {
-                continue;
-            }
-            var data = fs.readFileSync(path, {
-                'encoding': 'utf8'
-            });
 
-            var d = getPageList(data);
-            dataList = dataList.concat(d);
-        }
-    }
-    var pages = dataList.filter(function(val, index) {
-        if (dataList.indexOf(val) == index) {
-            return true;
-        }
-        return false;
-    })
-    res.send({
-        code: 1,
-        data: pages
-    });
-})
+
+
 
 
 
@@ -308,24 +286,6 @@ function getCustomData(data, page, filter) {
     return count;
 }
 
-function getPageList(data) {
-    if (!data) {
-        return [];
-    }
-    var list = data.split('\r\n');
-    var result = [];
-    for (var j = 0; j < list.length - 1; j++) {
-        var pageName = getParamer(list[j], 'page');
-        if (!pageName) {
-            continue;
-        }
-        var name = decodeURIComponent(pageName).replace(/(\/*((\?|#).*|$))/g, '') || '/';
-        if (result.indexOf(name) == -1) {
-            result.push(name);
-        }
-    }
-    return result;
-}
 
 function getTimePathByDate(date) {
     var d = new Date(date);

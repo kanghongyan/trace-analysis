@@ -40,8 +40,11 @@ function analysis_callback(results, _PAGE) {
     
     
     function average(arr) {
-        var t = _.chain(arr).compact().filter(function(d){return d<10000}).value(),
-            r = t.reduce(function(p,c){return p+c}) / t.length;
+        var t = _.chain(arr).
+                  compact().
+                  filter(function(d){return d<10000}).
+                  value(),
+            r = _.reduce(t, function(p,c){return p+c}) / t.length;
         return Math.floor(r);
     }
     

@@ -24,13 +24,13 @@ router.map({
         component:constant,
         constant:true
     },
-    '/perform':{
-        component:perform,
-        perform:true
+    '/performance':{
+        component:performance,
+        performance:true
     },
-    '/byPage':{
-        component:byPage,
-        byPage:true
+    '/pageV':{
+        component:pageV,
+        pageV:true
     },
     '/spec':{
         component:spec,

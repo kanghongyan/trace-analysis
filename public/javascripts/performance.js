@@ -1,5 +1,5 @@
-var perform = Vue.extend({
-	template: '#perform-template',
+var performance = Vue.extend({
+	template: '#performance-template',
 	components: {
         'search': search
     },
@@ -10,7 +10,7 @@ var perform = Vue.extend({
             okFun: this.getData,
             currentPage: '',
             url: '/api/infoProjectList',
-            pageList: ''
+            pageList: []
 		}
 	},
 	watch: {

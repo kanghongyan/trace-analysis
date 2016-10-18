@@ -1,4 +1,4 @@
-var byPage = Vue.extend({
+var pageV = Vue.extend({
 	template: '#bypage-template',
 	components: {
 		'search': search
@@ -10,7 +10,7 @@ var byPage = Vue.extend({
 			okFun: this.getData,
 			currentPage: '',
 			url: '/api/infoProjectList',
-			pageList: ''
+			pageList: []
 		}
 	},
 	watch: {
@@ -20,12 +20,12 @@ var byPage = Vue.extend({
 	},
 	methods: {
 		chart: function() {
-			var date = [];
+			var days = [];
 			var uv = [];
 			var pv = [];
 			var lv = [];
 			for (var j = 0; j < this.data.length; j++) {
-				date.push(this.data[j].day);
+				days.push(this.data[j].day);
 				uv.push(this.data[j].data.uv);
 				pv.push(this.data[j].data.pv);
 				lv.push(this.data[j].data.lv);
@@ -55,27 +55,29 @@ var byPage = Vue.extend({
 				},
 				xAxis: [{
 					type: 'category',
-					data: date
+					data: days
 				}],
 				yAxis: [{
 					type: 'value'
 				}],
 				series: [{
+                    name: 'pv',
+                    type: 'line',
+                    data: pv
+                }, {
 					name: 'uv',
 					type: 'line',
 					data: uv
 				}, {
-					name: 'pv',
-					type: 'line',
-					data: pv
-				}, {
-					name: '登录数',
+					name: 'loginV',
 					type: 'line',
 					data: lv
 				}]
 			};
 			myChart.setOption(option);
 		},
+		
+		
 		getData: function(startTime, endTime, selName) {
 			var that = this;
 			if (!startTime || !endTime || !selName) {
@@ -113,12 +115,14 @@ var byPage = Vue.extend({
 				}
 			})
 		},
+		
+		
 		urlChange: function() {
 			var that = this;
 			that.$dispatch('showLoading');
 
 			$.ajax({
-				url: '/api/pageInfo',
+				url: '/api/pageV',
 				data: {
 					startTime: that.startTime,
 					endTime: that.endTime,
