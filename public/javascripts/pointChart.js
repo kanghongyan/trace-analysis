@@ -51,10 +51,10 @@ var pointChart = Vue.extend({
 			this.showPeopleChart(this.pages[0],initData);
 		},
 		showPeopleChart:function(val, data){
-			var date = [];
+			var days = [];
 			var tidList = [];
 			for (var i = 0; i < data.length; i++) {
-				date.push(data[i].date);
+				days.push(data[i].day);
 				if(data[i].data[val]){
 					tidList.push(data[i].data[val]);
 				}
@@ -106,7 +106,7 @@ var pointChart = Vue.extend({
 				},
 				xAxis: [{
 					type: 'category',
-					data: date
+					data: days
 				}],
 				yAxis: [{
 					type: 'value'
@@ -116,10 +116,10 @@ var pointChart = Vue.extend({
 			myChart.setOption(option);
 		},
 		showChartFun: function(val, data) {
-			var date = [];
+			var days = [];
 			var tidList = [];
 			for (var i = 0; i < data.length; i++) {
-				date.push(data[i].date);
+				days.push(data[i].day);
 				if(data[i].data[val]){
 					tidList.push(data[i].data[val]);
 				}
@@ -171,7 +171,7 @@ var pointChart = Vue.extend({
 				},
 				xAxis: [{
 					type: 'category',
-					data: date
+					data: days
 				}],
 				yAxis: [{
 					type: 'value'
@@ -183,10 +183,10 @@ var pointChart = Vue.extend({
 		
 		
 		showLoginPeopleChart:function(val, data){
-            var date = [];
+            var days = [];
             var tidList = [];
             for (var i = 0; i < data.length; i++) {
-                date.push(data[i].date);
+                days.push(data[i].day);
                 if(data[i].data[val]){
                     tidList.push(data[i].data[val]);
                 }
@@ -238,7 +238,7 @@ var pointChart = Vue.extend({
                 },
                 xAxis: [{
                     type: 'category',
-                    data: date
+                    data: days
                 }],
                 yAxis: [{
                     type: 'value'

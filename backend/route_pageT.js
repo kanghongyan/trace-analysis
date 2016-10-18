@@ -6,36 +6,6 @@ var _util_fs_async = require('./_util_fs_async');
 
 
 
-function analysis_callback(results) {
-    
-    function get_key(s, key) {
-        var reg = new RegExp('(^|\|)' + key + '\=([^|]*)'),
-            arr = s.match(reg);
-        return (arr && arr[2]) ? arr[2] : null;
-    }
-    
-    
-    function analy_data(data) {
-        if (!data) {
-            return {};
-        }
-        
-        var dataArr = data.split('\r\n');
-        
-        return {
-        }
-    }
-    
-    
-    results.forEach(function(result){
-        result.data = analy_data(result.data);
-    });
-    
-    return results;
-}
-
-
-
 
 module.exports = function(req, res, next) {
     
@@ -45,7 +15,7 @@ module.exports = function(req, res, next) {
         endTime = req.query.endTime,
         page = req.query.page;
     
-    _util_fs_async( category, project, startTime, endTime, new_analysis_callback )
+    _util_fs_async( category, project, startTime, endTime, analysis_callback )
     
     .then(function(results){
         res.send({
@@ -59,15 +29,20 @@ module.exports = function(req, res, next) {
             data: []
         })
     });
-    
 }
 
 
 
 
-function new_analysis_callback(results) {
+function analysis_callback(results) {
+    results = results.filter(function(result){
+        return result && result.data
+    })
+    
     results.forEach(function(result){
-        result.data = getBaseData(result.data);
+        if (result.data) {
+            result.data = getBaseData(result.data);
+        }
     });
     
     return results;
