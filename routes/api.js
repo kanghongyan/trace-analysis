@@ -20,53 +20,18 @@ var route_performance = require('../backend/route_performance');
 
 router.get('/*', function(req, res, next) {
     if (!req.session.user) {
-       res.send({code:-1, message:'登录过期!'});
+        res.send({code:-1, message:'登录过期!'});
     } else {
         next();
     }
 })
 
-
-/*获得项目名*/
-function getNameList(req, res, path) {
-    
-    function uniq(array){ 
-        return [].filter.call(array, function(item, idx){ 
-            return array.indexOf(item) == idx 
-        }) 
-    }
-    
-    try {
-        var list = fs.readdirSync(path);
-        var result = [];
-        var projectsList = userInfo[req.session.user] ? userInfo[req.session.user].project : [];
-        for (var j = 0; j < list.length; j++) {
-            var l = list[j].replace(/(\..*$)/, '')
-            if (projectsList.indexOf(l) != -1) {
-                result.push(l);
-            }
-        }
-        result = uniq(result);
-        res.send({
-            projects: projectsList,
-            code: 1
-        });
-    } catch (ex) {
-        res.send({
-            message: ex.message,
-            code: 0
-        });
-    }
-}
-
-/*基本信息统计--项目名*/
-router.get('/infoProjectList', function(req, res, next) {
-    getNameList(req, res, 'infoData/');
-})
-
-/*打点统计--项目名*/
-router.get('/pointProjectList', function(req, res, next) {
-    getNameList(req, res, 'traceData/');
+/*公用--获取项目列表*/
+router.get('/projectList', function(req, res, next) {
+    res.send({
+        code: 1,
+        data: userInfo[req.session.user] ? userInfo[req.session.user].project : []
+    });
 })
 
 

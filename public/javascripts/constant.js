@@ -10,7 +10,7 @@ var constant = Vue.extend({
 			showChart: false,
 			okFun: this.getData,
 			oneTime: true,
-			url: '/api/infoProjectList'
+			url: '/api/projectList'
 		}
 	},
 	events: {

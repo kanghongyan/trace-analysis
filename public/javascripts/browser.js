@@ -7,7 +7,7 @@ var browser = Vue.extend({
 		return {
 			data: '',
 			okFun: this.getData,
-			url: '/api/infoProjectList'
+			url: '/api/projectList'
 		}
 	},
 	events: {

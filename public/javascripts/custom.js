@@ -4,7 +4,7 @@ var custom = Vue.extend({
 		return {
 			data: '',
 			okFun: this.getData,
-			url: '/api/infoProjectList',
+			url: '/api/projectList',
 			show: false,
 			pageList: [],
 			currentPage: '',

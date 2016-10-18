@@ -9,7 +9,7 @@ var pageV = Vue.extend({
 			show: false,
 			okFun: this.getData,
 			currentPage: '',
-			url: '/api/infoProjectList',
+			url: '/api/projectList',
 			pageList: []
 		}
 	},

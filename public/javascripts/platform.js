@@ -8,7 +8,7 @@ var platform = Vue.extend({
 			data: '',
 			showChart: false,
 			okFun: this.getData,
-			url: '/api/infoProjectList'
+			url: '/api/projectList'
 		}
 	},
 	events: {

@@ -56,7 +56,7 @@ var search = Vue.extend({
 				},
 				success: function(msg) {
 					if (msg.code == 1) {
-						that.objets = msg.projects;
+						that.objets = msg.data;
 						that.selName = that.objets[0];
 					} else {
 						alert('查找失败');

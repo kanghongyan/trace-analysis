@@ -6,7 +6,7 @@ var totalV = Vue.extend({
 	data: function() {
 		return {
 			data: '',
-			url: '/api/infoProjectList',
+			url: '/api/projectList',
 			okFun: this.getData
 		}
 	},
