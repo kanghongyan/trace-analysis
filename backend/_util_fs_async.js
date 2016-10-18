@@ -6,7 +6,7 @@ var _util = require('./_util');
 function isDir(path) {
     return new Promise(function(resolve, reject){
         fs.lstat(path, function(err, stats){
-            resolve(stats.isDirectory())
+            resolve( err ? false : stats.isDirectory() )
         })
     });
 }
@@ -28,7 +28,7 @@ module.exports = function(category, project, startTime, endTime, analyCB) {
     return isDir(category + '/' + project)
     
     .then(function(yes){
-        if (!yes) return null;
+        if (!yes) return [];
         var days = _util.getDaysBetween(startTime, endTime);
         var proms = days.map(function(day){
             return getCont(category + '/' + project + '/' + day + '.txt', day);

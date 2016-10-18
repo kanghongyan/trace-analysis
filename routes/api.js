@@ -27,17 +27,71 @@ router.get('/*', function(req, res, next) {
 })
 
 
+/*获得项目名*/
+function getNameList(req, res, path) {
+    
+    function uniq(array){ 
+        return [].filter.call(array, function(item, idx){ 
+            return array.indexOf(item) == idx 
+        }) 
+    }
+    
+    try {
+        var list = fs.readdirSync(path);
+        var result = [];
+        var projectsList = userInfo[req.session.user] ? userInfo[req.session.user].project : [];
+        for (var j = 0; j < list.length; j++) {
+            var l = list[j].replace(/(\..*$)/, '')
+            if (projectsList.indexOf(l) != -1) {
+                result.push(l);
+            }
+        }
+        result = uniq(result);
+        res.send({
+            projects: projectsList,
+            code: 1
+        });
+    } catch (ex) {
+        res.send({
+            message: ex.message,
+            code: 0
+        });
+    }
+}
 
-/*性能分析获取项目名*/
-router.get('/getObjet', function(req, res, next) {
+/*基本信息统计--项目名*/
+router.get('/infoProjectList', function(req, res, next) {
     getNameList(req, res, 'infoData/');
 })
-
 
 /*打点统计--项目名*/
 router.get('/pointProjectList', function(req, res, next) {
     getNameList(req, res, 'traceData/');
 })
+
+
+/*公用--获取项目页面列表*/
+router.get('/pageList', route_pageList)
+
+/*基本信息统计--浏览器统计*/
+router.get('/browser', route_browser)
+
+/*基本信息统计--平台统计*/
+router.get('/platform', route_platform)
+
+/*基本信息统计--总PV UV LV统计*/
+router.get('/totalV', route_pageV);
+
+/*基本信息统计--页面级PV UV LV统计*/
+router.get('/pageV', route_pageV);
+
+/*基本信息统计--页面级性能统计*/
+router.get('/performance', route_performance);
+
+
+
+
+
 
 /*打点统计--埋点统计*/
 router.get('/pointData', function(req, res, next) {
@@ -112,28 +166,7 @@ router.get('/dayData', function(req, res, next) {
 })
 
 
-/*基本信息统计--项目名*/
-router.get('/infoProjectList', function(req, res, next) {
-    getNameList(req, res, 'infoData/');
-})
 
-/*公用--获取项目页面列表*/
-router.get('/pageList', route_pageList)
-
-/*基本信息统计--浏览器统计*/
-router.get('/browser', route_browser)
-
-/*基本信息统计--平台统计*/
-router.get('/platform', route_platform)
-
-/*基本信息统计--总PV UV LV统计*/
-router.get('/totalV', route_pageV);
-
-/*基本信息统计--页面级PV UV LV统计*/
-router.get('/pageV', route_pageV);
-
-/*基本信息统计--页面级性能统计*/
-router.get('/performance', route_performance);
 
 
 
@@ -472,37 +505,7 @@ function getDayData(data) {
     }
     return result;
 }
-/*获得项目名*/
-function getNameList(req, res, path) {
-    
-    function uniq(array){ 
-        return [].filter.call(array, function(item, idx){ 
-            return array.indexOf(item) == idx 
-        }) 
-    }
-    
-    try {
-        var list = fs.readdirSync(path);
-        var result = [];
-        var projectsList = userInfo[req.session.user] ? userInfo[req.session.user].project : [];
-        for (var j = 0; j < list.length; j++) {
-            var l = list[j].replace(/(\..*$)/, '')
-            if (projectsList.indexOf(l) != -1) {
-                result.push(l);
-            }
-        }
-        result = uniq(result);
-        res.send({
-            projects: result,
-            code: 1
-        });
-    } catch (ex) {
-        res.send({
-            message: ex.message,
-            code: 0
-        });
-    }
-}
+
 /*获得数据*/
 function getBaseData(data) {
     if (!data) {

@@ -50,7 +50,7 @@ var search = Vue.extend({
 			this.$dispatch('showLoading');
 			var that = this;
 			$.ajax({
-				url: that.url || '/api/getObjet',
+				url: that.url,
 				complete: function() {
 					that.$dispatch('hideLoading');
 				},
