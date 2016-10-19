@@ -70,7 +70,7 @@ router.get('/urlFilter', route_urlFilter);
 
 
 /*特殊信息统计--导流我的贷款portal*/
-router.get('/spec', function(req, res, next) {
+router.get('/specDaoliuPortal', function(req, res, next) {
     var project = req.query.project;
     var startTime = req.query.startTime;
     var endTime = req.query.endTime;

@@ -1,9 +1,9 @@
 var router = new VueRouter();
 router.map({
-    '/':{
-        component: pageT,
-        pageT:true
-    },
+//  '/':{
+//      component: pageT,
+//      pageT:true
+//  },
     '/pageT':{
         component: pageT,
         pageT:true
@@ -32,9 +32,9 @@ router.map({
         component:pageV,
         pageV:true
     },
-    '/spec':{
-        component:spec,
-        spec:true
+    '/specDaoliuPortal':{
+        component:specDaoliuPortal,
+        specDaoliuPortal:true
     },
     '/urlFilter':{
         component:urlFilter,

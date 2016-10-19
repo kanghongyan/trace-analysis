@@ -1,5 +1,5 @@
-var spec = Vue.extend({
-	template: '#spec-template',
+var specDaoliuPortal = Vue.extend({
+	template: '#specDaoliuPortal-template',
 	data: function() {
 		return {
 			data: '',
@@ -21,7 +21,7 @@ var spec = Vue.extend({
 			}
 			that.$dispatch('showLoading');
 			$.ajax({
-				url: '/api/spec',
+				url: '/api/specDaoliuPortal',
 				data: {
 					project: selName,
 					startTime: startTime,

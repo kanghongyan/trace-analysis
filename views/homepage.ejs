@@ -34,11 +34,14 @@
     <script type='text/javascript' src='javascripts/platform.js'></script>
     <script type="text/javascript" src='javascripts/hourPeak.js'></script>
     
-    <script type='text/javascript' src='javascripts/spec.js'></script>
+    <script type='text/javascript' src='javascripts/specDaoliuPortal.js'></script>
     <script type='text/javascript' src='javascripts/urlFilter.js'></script>
     
     <script type="text/javascript" src='javascripts/router.js'></script>
 </head>
+
+
+
 <body>
     <div class='head'>58金融日志系统</div>
     <div id='navList'>
@@ -52,7 +55,7 @@
                 <li v-link="{ path: '/browser' }" v-bind:class="{ 'active': $route.browser}" >基初-浏览器类型</li>
                 <li v-link="{ path: '/hourPeak'}" v-bind:class="{ 'active': $route.hourPeak}" >基初-时峰值</li>
                 <li v-link="{ path: '/urlFilter'}" v-bind:class="{ 'active': $route.urlFilter}" >*特殊*-URL参数过滤</li>
-                <li v-link="{ path: '/spec'}" v-bind:class="{ 'active': $route.spec}" >*特殊*-导流-portal</li>
+                <li v-link="{ path: '/specDaoliuPortal'}" v-bind:class="{ 'active': $route.specDaoliuPortal}" >*特殊*-导流-portal</li>
             </ul>
         </div>
         <div class='page-right'>
@@ -64,6 +67,10 @@
 
 
 
+
+<!--
+    描述：loading / search
+-->
 
 <script type="x/template" id="loading-template">
     <div v-show="show" transition="modal" class="loading-cover">
@@ -80,18 +87,6 @@
             </span>
         </div>
     </div>
-</script>
-
-
-
-
-<script type='x/template' id='spec-template'>
-    此页面仅用于 导流 我的贷款 portal首页
-    <br />
-    <search v-bind:okfun='okFun' v-bind:url='url'></search>
-    <div id='spec-chart-main'></div>
-    <div id='spec-chart-main-2'></div>
-    <div id='spec-chart-main-3'></div>
 </script>
 
 
@@ -120,10 +115,7 @@
 
 
 
-
-
 <!--
-    时间：2016-10-19
     描述：埋点统计
 -->
 
@@ -157,8 +149,8 @@
 
 
 
+
 <!--
-    时间：2016-10-19
     描述：总访问量、页面访问量
 -->
 
@@ -182,8 +174,8 @@
 
 
 
+
 <!--
-	时间：2016-10-19
 	描述：性能、平台类型、浏览器类型
 -->
 
@@ -215,7 +207,6 @@
 
 
 <!--
-    时间：2016-10-19
     描述：时峰值、URL参数过滤
 -->
 
@@ -241,6 +232,22 @@
     <div id='pvchart-main'></div>
 </script>
 
+
+
+
+
+<!--
+    描述：特殊统计 - 导流portal页
+-->
+
+<script type='x/template' id='specDaoliuPortal-template'>
+    此页面仅用于 导流 我的贷款 portal首页
+    <br />
+    <search v-bind:okfun='okFun' v-bind:url='url'></search>
+    <div id='spec-chart-main'></div>
+    <div id='spec-chart-main-2'></div>
+    <div id='spec-chart-main-3'></div>
+</script>
 
 
 
