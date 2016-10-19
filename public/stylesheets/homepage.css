@@ -147,22 +147,10 @@ select{
 .chartCon{
     margin-top: 40px;
 }
-.pageTChart-chart {
+#countMain, #pointMian, .pageTChart-chart, #pvchart-main, #allNumber, #browser-main, .spec-chart-main-x{
+    padding-top: 20px;
     width: 80%;
-    height:400px;
-}
-#countMain{
-    width: 80%;
-    height:400px;
-}
-#pvchart-main,#allNumber,#browser-main,.spec-chart-main-x{
-    width: 80%;
-    height:450px;
-    margin-top: 20px;
-}
-#pointMian{
-    width: 80%;
-    height:400px;
+    height:500px;
 }
 .hide{
     display: none;

@@ -53,8 +53,6 @@ var specDaoliuPortal = Vue.extend({
                 return;
             }
             that.$dispatch('showLoading');
-            that.$dispatch('hideLoading');
-            
             that.showChart = true;
             
 //          that.showCountChart(_AJAX_RET_.data, document.getElementById('spec-chart-main-1'), 'data');
@@ -66,7 +64,7 @@ var specDaoliuPortal = Vue.extend({
                     var dataItem = source.data[0].data;
                     var dataItemNew = {};
                     for(var k in dataItem) {
-                        dataItemNew['推荐条数为'+k+'的总量：'] = dataItem[k]
+                        dataItemNew['推荐条数为'+k+'的总展示量：'] = dataItem[k]
                     }
                     source.data[0].data = dataItemNew
                 }
@@ -85,6 +83,7 @@ var specDaoliuPortal = Vue.extend({
                 success: function(msg) {
                     if (msg.code == 1) {
                         that.showChart = true;
+                        that.$dispatch('hideLoading');
                         
                         format(msg)
                         
