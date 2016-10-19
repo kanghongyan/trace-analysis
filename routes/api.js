@@ -62,6 +62,78 @@ router.get('/hourPeak', route_hourPeak);
 
 
 
+
+router.get('/urlFilter', function(req, res, next) {
+    var project = req.query.project;
+    var startTime = req.query.startTime;
+    var endTime = req.query.endTime;
+    var startTime_time = getTimeByDate(startTime);
+    var endTime_time = getTimeByDate(endTime);
+    var page = req.query.page;
+    var filter = req.query.filter;
+    var dataList = [];
+    if (fs.existsSync('infoData/' + project)) {
+        for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
+            var o = getTimePathByDate(i)
+            var year = o.year;
+            var mouth = o.mouth;
+            var day = o.day;
+            var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + '' + day + '.txt';
+            if (!fs.existsSync(path)) {
+                continue;
+            }
+            var data = fs.readFileSync(path, {
+                'encoding': 'utf8'
+            });
+
+            var d = getCustomData(data, page, filter);
+            if (d) {
+                dataList.push({
+                    date: year + '-' + mouth + '-' + day,
+                    data: d
+                });
+            }
+        }
+    }
+    res.send({
+        code: 1,
+        data: dataList
+    });
+})
+
+
+function getCustomData(data, page, filter) {
+    if (!data) {
+        return;
+    }
+    var list = data.split('\r\n');
+    var count = {};
+    for (var j = 0; j < list.length - 1; j++) {
+
+        var pageName = getParamer(list[j], 'page');
+        if (!pageName) {
+            continue;
+        }
+        var name = decodeURIComponent(pageName).replace(/(\/*((\?|#).*|$))/g, '') || '/';
+        var paramer = decodeURIComponent(pageName).split('?');
+        var tamp = paramer[1] ? paramer[1].split('&') : [];
+        for (var m = 0; m < tamp.length; m++) {
+            var a = tamp[m].split('=');
+            if (a.length > 1 && a[0] == filter && page == name) {
+                count[a[1]] ? count[a[1]]++ : count[a[1]] = 1;
+            }
+        }
+    }
+    return count;
+}
+
+
+
+
+
+
+
+
 /*特殊信息统计--导流我的贷款portal*/
 router.get('/spec', function(req, res, next) {
     var project = req.query.project;
@@ -142,74 +214,6 @@ router.get('/spec', function(req, res, next) {
 
 
 
-router.get('/customData', function(req, res, next) {
-    var project = req.query.project;
-    var startTime = req.query.startTime;
-    var endTime = req.query.endTime;
-    var startTime_time = getTimeByDate(startTime);
-    var endTime_time = getTimeByDate(endTime);
-    var page = req.query.page;
-    var filter = req.query.filter;
-    var dataList = [];
-    if (fs.existsSync('infoData/' + project)) {
-        for (var i = startTime_time; i <= endTime_time; i += 1000 * 60 * 60 * 24) {
-            var o = getTimePathByDate(i)
-            var year = o.year;
-            var mouth = o.mouth;
-            var day = o.day;
-            var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + '' + day + '.txt';
-            if (!fs.existsSync(path)) {
-                continue;
-            }
-            var data = fs.readFileSync(path, {
-                'encoding': 'utf8'
-            });
-
-            var d = getCustomData(data, page, filter);
-            if (d) {
-                dataList.push({
-                    date: year + '-' + mouth + '-' + day,
-                    data: d
-                });
-            }
-        }
-    }
-    res.send({
-        code: 1,
-        data: dataList
-    });
-})
-
-
-
-
-
-
-
-function getCustomData(data, page, filter) {
-    if (!data) {
-        return;
-    }
-    var list = data.split('\r\n');
-    var count = {};
-    for (var j = 0; j < list.length - 1; j++) {
-
-        var pageName = getParamer(list[j], 'page');
-        if (!pageName) {
-            continue;
-        }
-        var name = decodeURIComponent(pageName).replace(/(\/*((\?|#).*|$))/g, '') || '/';
-        var paramer = decodeURIComponent(pageName).split('?');
-        var tamp = paramer[1] ? paramer[1].split('&') : [];
-        for (var m = 0; m < tamp.length; m++) {
-            var a = tamp[m].split('=');
-            if (a.length > 1 && a[0] == filter && page == name) {
-                count[a[1]] ? count[a[1]]++ : count[a[1]] = 1;
-            }
-        }
-    }
-    return count;
-}
 
 
 function getTimePathByDate(date) {

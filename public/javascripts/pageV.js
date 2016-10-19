@@ -1,5 +1,5 @@
 var pageV = Vue.extend({
-	template: '#bypage-template',
+	template: '#pageV-template',
 	components: {
 		'search': search
 	},

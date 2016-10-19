@@ -1,5 +1,5 @@
-var custom = Vue.extend({
-	template: '#custom-template',
+var urlFilter = Vue.extend({
+	template: '#urlFilter-template',
 	data: function() {
 		return {
 			data: '',
@@ -76,7 +76,7 @@ var custom = Vue.extend({
 			var that = this;
 			that.$dispatch('showLoading');
 			$.ajax({
-				url: '/api/customData',
+				url: '/api/urlFilter',
 				data: {
 					project: that.selName,
 					startTime: that.startTime,

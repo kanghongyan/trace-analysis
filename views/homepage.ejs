@@ -35,7 +35,7 @@
     <script type="text/javascript" src='javascripts/hourPeak.js'></script>
     
     <script type='text/javascript' src='javascripts/spec.js'></script>
-    <script type='text/javascript' src='javascripts/custom.js'></script>
+    <script type='text/javascript' src='javascripts/urlFilter.js'></script>
     
     <script type="text/javascript" src='javascripts/router.js'></script>
 </head>
@@ -46,13 +46,13 @@
             <ul @click='changeRouter'>
                 <li v-link="{ path: '/pageT' }" v-bind:class="{ 'active': $route.pageT}" >**埋点分析**</li>
                 <li v-link="{ path: '/totalV' }" v-bind:class="{ 'active': $route.totalV}" >基初-总访问量</li>
-                <li v-link="{ path: '/pageV' }" v-bind:class="{ 'active': $route.pageV}" >基初-页面访问量</li>
+                <li v-link="{ path: '/pageV' }" v-bind:class="{ 'active': $route.pageV}" >基初-页访问量</li>
                 <li v-link="{ path: '/performance' }" v-bind:class="{ 'active': $route.performance}" >基础-性能</li>
                 <li v-link="{ path: '/platform' }" v-bind:class="{ 'active': $route.platform}" >基初-平台类型</li>
                 <li v-link="{ path: '/browser' }" v-bind:class="{ 'active': $route.browser}" >基初-浏览器类型</li>
                 <li v-link="{ path: '/hourPeak'}" v-bind:class="{ 'active': $route.hourPeak}" >基初-时峰值</li>
-                <li v-link="{ path: '/custom'}" v-bind:class="{ 'active': $route.custom}" >基础-自定义</li>
-                <li v-link="{ path: '/spec'}" v-bind:class="{ 'active': $route.spec}" >特殊-导流portal页</li>
+                <li v-link="{ path: '/urlFilter'}" v-bind:class="{ 'active': $route.urlFilter}" >基础-URL参数过滤</li>
+                <li v-link="{ path: '/spec'}" v-bind:class="{ 'active': $route.spec}" >特殊-导流-portal</li>
             </ul>
         </div>
         <div class='page-right'>
@@ -197,7 +197,7 @@
     <div id='pvchart-main'></div>
 </script>
 
-<script type="x/template" id='bypage-template'>
+<script type="x/template" id='pageV-template'>
     <search v-bind:okfun='okFun' v-bind:url='url'></search>
     <form class='form-inline' style='margin-top:20px' v-show='show'>
         <label class="form-label">页面</label>
@@ -222,7 +222,7 @@
 
 
 
-<script type='x/template' id='custom-template'>
+<script type='x/template' id='urlFilter-template'>
     <search v-bind:okfun='okFun' v-bind:url='url'></search>
     <form class='form-inline' style='margin-top:20px' v-show='show'>
         <label class="form-label">页面</label>

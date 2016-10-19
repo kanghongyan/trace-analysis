@@ -36,8 +36,8 @@ router.map({
         component:spec,
         spec:true
     },
-    '/custom':{
-        component:custom,
-        custom:true
+    '/urlFilter':{
+        component:urlFilter,
+        urlFilter:true
     }
 })
