@@ -15,6 +15,7 @@ var route_pageT = require('../backend/route_pageT');
 var route_performance = require('../backend/route_performance');
 var route_platform = require('../backend/route_platform');
 var route_browser = require('../backend/route_browser');
+var route_hourPeak = require('../backend/route_hourPeak');
 
 
 
@@ -56,41 +57,8 @@ router.get('/platform', route_platform)
 /*基本信息统计--页面级性能统计*/
 router.get('/performance', route_performance);
 
-
-
-/*打点统计--天访问量*/
-router.get('/dayData', function(req, res, next) {
-    var project = req.query.project;
-    var time = req.query.time;
-    if (fs.existsSync('infoData/' + project)) {
-        var d = new Date(time + ' 00:00');
-        var year = d.getFullYear();
-        var mouth = (parseInt(1 + d.getMonth()) + '').length > 1 ? parseInt(1 + d.getMonth()) : '0' + parseInt(1 + d.getMonth());
-        var day = (d.getDate() + '').length > 1 ? d.getDate() : '0' + d.getDate();
-        var path = 'infoData/' + project + '/' + year + '-' + mouth + '-' + day + '.txt'
-        if (!fs.existsSync(path)) {
-            res.send({
-                code: 0
-            });
-            return;
-        }
-        var data = fs.readFileSync(path, {
-            'encoding': 'utf8'
-        });
-        data = getDayData(data);
-        res.send({
-            code: 1,
-            data: data
-        });
-    } else {
-        res.send({
-            code: 0
-        });
-    }
-})
-
-
-
+/*基本信息统计--时峰值统计*/
+router.get('/hourPeak', route_hourPeak);
 
 
 
@@ -388,47 +356,6 @@ function getSpecData2(data) {
 
 
 
-
-/*按小时数据*/
-function getDayData(data) {
-    /*
-        {
-            pagename:{
-                1:1,
-                2:3,
-                3:2
-            }
-        }
-    */
-    if (!data) {
-        return;
-    }
-    var list = data.split('\r\n');
-    var result = {};
-    for (var i = 0; i < list.length - 1; i++) {
-        var pageName = getParamer(list[i], 'page');
-        var time = getParamer(list[i], '_');
-        if (!pageName || !time) {
-            continue;
-        }
-
-        var hour = null;
-        pageName = decodeURIComponent(pageName).replace(/(\/*((\?|#).*|$))/g, '') || '/';;
-        var d = new Date(parseInt(time));
-        hour = d.getHours();
-        if (result[pageName]) {
-            if (result[pageName][hour]) {
-                result[pageName][hour]++;
-            } else {
-                result[pageName][hour] = 1;
-            }
-        } else {
-            result[pageName] = {};
-            result[pageName][hour] = 1;
-        }
-    }
-    return result;
-}
 
 
 

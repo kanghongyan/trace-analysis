@@ -9,7 +9,6 @@ var spec = Vue.extend({
 		}
 	},
 	components: {
-		'constant-chart': constantChart,
 		'search': search
 	},
 	events: {},

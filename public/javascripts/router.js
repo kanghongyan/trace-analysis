@@ -20,9 +20,9 @@ router.map({
         component:platform,
         platform:true
     },
-    '/constant':{
-        component:constant,
-        constant:true
+    '/hourPeak':{
+        component:hourPeak,
+        hourPeak:true
     },
     '/performance':{
         component:performance,

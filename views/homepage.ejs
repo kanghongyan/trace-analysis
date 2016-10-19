@@ -23,25 +23,18 @@
 
     <script type="text/javascript" src='javascripts/loading.js'></script>
     <script type="text/javascript" src='javascripts/search.js'></script>
-
     
     <script type="text/javascript" src='javascripts/pageTChart.js'></script>
     <script type='text/javascript' src='javascripts/pageT.js'></script>
-
-    <script type="text/javascript" src='javascripts/constantChart.js'></script>
-    <script type="text/javascript" src='javascripts/constant.js'></script>
-
-    <script type='text/javascript' src='javascripts/platform.js'></script>
+    
     <script type='text/javascript' src='javascripts/totalV.js'></script>
     <script type='text/javascript' src='javascripts/pageV.js'></script>
-    <script type='text/javascript' src='javascripts/spec.js'></script>
-    
-    
-
     <script type='text/javascript' src='javascripts/browser.js'></script>
-
     <script type="text/javascript" src='javascripts/performance.js'></script>
-
+    <script type='text/javascript' src='javascripts/platform.js'></script>
+    <script type="text/javascript" src='javascripts/hourPeak.js'></script>
+    
+    <script type='text/javascript' src='javascripts/spec.js'></script>
     <script type='text/javascript' src='javascripts/custom.js'></script>
     
     <script type="text/javascript" src='javascripts/router.js'></script>
@@ -57,7 +50,7 @@
                 <li v-link="{ path: '/performance' }" v-bind:class="{ 'active': $route.performance}" >基础-性能</li>
                 <li v-link="{ path: '/platform' }" v-bind:class="{ 'active': $route.platform}" >基初-平台类型</li>
                 <li v-link="{ path: '/browser' }" v-bind:class="{ 'active': $route.browser}" >基初-浏览器类型</li>
-                <li v-link="{ path: '/constant'}" v-bind:class="{ 'active': $route.constant}" >基初-实时数据</li>
+                <li v-link="{ path: '/hourPeak'}" v-bind:class="{ 'active': $route.hourPeak}" >基初-时峰值</li>
                 <li v-link="{ path: '/custom'}" v-bind:class="{ 'active': $route.custom}" >基础-自定义</li>
                 <li v-link="{ path: '/spec'}" v-bind:class="{ 'active': $route.spec}" >特殊-导流portal页</li>
             </ul>
@@ -179,11 +172,11 @@
         </form>
         </div>
         <div class='people'>PV统计</div>
-        <div id='pv-chart' class="xv-page-t-chart"></div>
+        <div id='pv-chart' class="pageTChart-chart"></div>
         <div class='people'>UV统计</div>
-        <div id='uv-chart' class="xv-page-t-chart"></div>
+        <div id='uv-chart' class="pageTChart-chart"></div>
         <div class='people'>LoginUV统计</div>
-        <div id='lv-chart' class="xv-page-t-chart"></div>
+        <div id='lv-chart' class="pageTChart-chart"></div>
     </div>
 </script>
 
@@ -215,40 +208,17 @@
     <div id='pvchart-main'></div>
 </script>
 
-
-
-
-
-
-
-
-
-
-
-
-<script type="text/template" id='constant-template'>
+<script type="x/template" id='hourPeak-template'>
     <search v-bind:okfun='okFun' v-bind:url='url' v-bind:onetime='oneTime'></search>
     <div>
         <div id='allNumber'></div>
-        <constant-chart :show.sync="showChart" ></constant-chart>
+        <hourPeak-chart :show.sync="showChart" ></hourPeak-chart>
     </div>
 </script>
 
 
 
-<script type='x/template' id='constantChart-template'>
-    <div class='chartCon' v-show="show">
-        <div  class='form-group'>
-        <form class='form-inline'>
-            <label class="form-label">页面</label>
-            <select class="form-control" v-model='currentPage'>
-                <option v-for='page in selPages'>{{page}}</option>
-            </select>
-        </form>
-        </div>
-        <div id='pointMian'></div>
-    </div>
-</script>
+
 
 
 
