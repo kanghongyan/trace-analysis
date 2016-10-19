@@ -155,9 +155,9 @@ select{
     width: 80%;
     height:400px;
 }
-#pvchart-main,#allNumber,#browser-main,#spec-chart-main,#spec-chart-main-2,#spec-chart-main-3{
+#pvchart-main,#allNumber,#browser-main,.spec-chart-main-x{
     width: 80%;
-    height:400px;
+    height:450px;
     margin-top: 20px;
 }
 #pointMian{
