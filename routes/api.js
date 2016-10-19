@@ -143,14 +143,6 @@ router.get('/spec', function(req, res, next) {
 
 
 
-
-
-
-
-
-
-
-
 function getTimePathByDate(date) {
     var d = new Date(date);
     var year = d.getFullYear();
@@ -163,15 +155,7 @@ function getTimePathByDate(date) {
     };
 }
 
-function getParamer(listStr, paramer) {
-    var reg = new RegExp('(?:^|\|)' + paramer + '\=([^|]*)');
-    var name = listStr.match(reg);
-    if (!name || !name[1]) {
-        return '';
-    } else {
-        return name[1];
-    }
-}
+
 
 function getTimeByDate(dateStr) { //2016-08-09
     var date = new Date(dateStr + ' 00:00');
@@ -229,11 +213,15 @@ function getSpecData(data) {
     return result;
 }
 
+
+
 function uniq(array){ 
     return [].filter.call(array, function(item, idx){ 
         return array.indexOf(item) == idx 
     })
 }
+
+
 
 function formatSpecData(data) {
     if (!data) {
@@ -250,8 +238,6 @@ function formatSpecData(data) {
     }
     return result;
 }
-
-
 
 
 
