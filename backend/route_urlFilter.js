@@ -6,7 +6,7 @@ var _util_fs_async = require('./_util_fs_async');
 
 
 
-function analysis_callback(results, _PAGE) {
+function analysis_callback(results, _PAGE, _FILTER) {
     
     function get_key(s, key) {
         var reg = new RegExp('(^|\|)' + key + '\=([^|]*)'),
@@ -15,8 +15,15 @@ function analysis_callback(results, _PAGE) {
     }
     
     
-    function is_curr_page(dataItem) {
-        var page = get_key(dataItem,  'page');
+    function get_url_param_key(s, key) {
+        var reg = new RegExp('(&|\\?)' + key + '\=([^#&]*)'),
+            arr = s.match(reg);
+        return (arr && arr[2]) ? arr[2] : '无参数';
+    }
+    
+    
+    function is_curr_page(item) {
+        var page = get_key(item, 'page');
         if (!page) {
             return false;
         }
@@ -29,41 +36,25 @@ function analysis_callback(results, _PAGE) {
     }
     
     
-    function populate_arrs(dataItem, uvArr, lvArr) {
-        var uv = get_key(dataItem,'uid');
-        uv && uvArr.push(uv);
-        
-        var lv = get_key(dataItem,'loginuid');
-        lv && lv!=='notlogin' && lvArr.push(lv);
-    }
-    
-    
     function analy_data(data) {
         if (!data) {
-            return {};
+            return;
         }
         
-        var dataArr = data.split('\r\n'),
-            uvArr = [],
-            lvArr = [];
-        
-        dataArr = dataArr.filter(function(dataItem){
-            // 存在_PAGE的话，则是查询每个页面的xv
-            // 否则则是总xv
-            if( _PAGE && !is_curr_page(dataItem) ) {
-                return false;
-            }
-            populate_arrs(dataItem, uvArr, lvArr);
-            return true;
-        });
-        
-        return {
-            pv: dataArr.length,
-            uv: _.chain(uvArr).compact().uniq().value().length,
-            lv: _.chain(lvArr).compact().uniq().value().length
-        }
+        return _
+            .chain(data.split('\r\n'))
+            .filter(is_curr_page)
+            .map(function(item){
+                return get_key(item, 'page')
+            })
+            .map(function(s){
+                return get_url_param_key(s, _FILTER)
+            })
+            .countBy(function(s){
+                return s
+            })
+            .value();
     }
-    
     
     results.forEach(function(result){
         result.data = analy_data(result.data);
@@ -74,9 +65,9 @@ function analysis_callback(results, _PAGE) {
 
 
 
-function analysis_callback_proxy(page) {
+function analysis_callback_proxy(page, filter) {
     return function(results) {
-        return analysis_callback(results, page);
+        return analysis_callback(results, page, filter);
     }
 }
 
@@ -88,10 +79,10 @@ module.exports = function(req, res, next) {
         project = req.query.project,
         startTime = req.query.startTime,
         endTime = req.query.endTime,
-        page = req.query.page;
+        page = req.query.page,
+        filter = req.query.filter;
     
-    _util_fs_async( category, project, startTime, endTime, 
-                    page ? analysis_callback_proxy(page) : analysis_callback )
+    _util_fs_async( category, project, startTime, endTime, analysis_callback_proxy(page, filter) )
     
     .then(function(results){
         res.send({

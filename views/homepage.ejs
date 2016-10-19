@@ -51,8 +51,8 @@
                 <li v-link="{ path: '/platform' }" v-bind:class="{ 'active': $route.platform}" >基初-平台类型</li>
                 <li v-link="{ path: '/browser' }" v-bind:class="{ 'active': $route.browser}" >基初-浏览器类型</li>
                 <li v-link="{ path: '/hourPeak'}" v-bind:class="{ 'active': $route.hourPeak}" >基初-时峰值</li>
-                <li v-link="{ path: '/urlFilter'}" v-bind:class="{ 'active': $route.urlFilter}" >基础-URL参数过滤</li>
-                <li v-link="{ path: '/spec'}" v-bind:class="{ 'active': $route.spec}" >特殊-导流-portal</li>
+                <li v-link="{ path: '/urlFilter'}" v-bind:class="{ 'active': $route.urlFilter}" >*特殊*-URL参数过滤</li>
+                <li v-link="{ path: '/spec'}" v-bind:class="{ 'active': $route.spec}" >*特殊*-导流-portal</li>
             </ul>
         </div>
         <div class='page-right'>
@@ -84,31 +84,14 @@
 
 
 
-<script type='x/template' id='performance-template'>
-    <search v-bind:okfun='okFun' v-bind:url='url'></search>
-    <form class='form-inline' style='margin-top:20px' v-show='show'>
-        <label class="form-label">页面</label>
-        <select class="form-control" v-model='currentPage' >
-            <option v-for='page in pageList' track-by="$index">{{page}}</option>
-        </select>
-    </form>
-    <div id='pvchart-main'></div>
-</script>
-
-
 
 <script type='x/template' id='spec-template'>
     此页面仅用于 导流 我的贷款 portal首页
+    <br />
     <search v-bind:okfun='okFun' v-bind:url='url'></search>
-    <div id='spec-chart-main'>
-        
-    </div>
-    <div id='spec-chart-main-2'>
-        
-    </div>
-    <div id='spec-chart-main-3'>
-        
-    </div>
+    <div id='spec-chart-main'></div>
+    <div id='spec-chart-main-2'></div>
+    <div id='spec-chart-main-3'></div>
 </script>
 
 
@@ -135,22 +118,14 @@
 
 
 
-<script type="x/template" id='chart-template'>
-    <div class='chartCon' v-show="show">
-        <div  class='form-group'>
-        <form class='form-inline'>
-            <label class="form-label">页面</label>
-            <select v-model='selPage' class="form-control">
-                <option v-for='page in pages'>{{page}}</option>
-            </select>
-        </form>
-        </div>
-        <div id='chartMian'></div>
-        <div id="countMain"></div>
-    </div>
-</script>
 
 
+
+
+<!--
+    时间：2016-10-19
+    描述：埋点统计
+-->
 
 <script type='x/template' id='pageT-template'>
     <search v-bind:okfun='okFun' v-bind:url='url'></search>
@@ -158,7 +133,6 @@
         <page-t-chart :show.sync="showChart"></page-t-chart>
     </div>
 </script>
-
 
 
 <script type="x/template" id='pageTChart-template'>
@@ -182,20 +156,17 @@
 
 
 
-<script type='x/template' id='platform-template'>
-    <search v-bind:okfun='okFun' v-bind:url='url'></search>
-    <div id='pvchart-main'></div>
-</script>
 
-<script type='x/template' id='browser-template'>
-    <search v-bind:okfun='okFun' v-bind:url='url'></search>
-    <div id='pvchart-main'></div>
-</script>
+<!--
+    时间：2016-10-19
+    描述：总访问量、页面访问量
+-->
 
 <script type="x/template" id='totalV-template'>
     <search v-bind:okfun='okFun' v-bind:url='url'></search>
     <div id='pvchart-main'></div>
 </script>
+
 
 <script type="x/template" id='pageV-template'>
     <search v-bind:okfun='okFun' v-bind:url='url'></search>
@@ -208,6 +179,46 @@
     <div id='pvchart-main'></div>
 </script>
 
+
+
+
+<!--
+	时间：2016-10-19
+	描述：性能、平台类型、浏览器类型
+-->
+
+<script type='x/template' id='performance-template'>
+    <search v-bind:okfun='okFun' v-bind:url='url'></search>
+    <form class='form-inline' style='margin-top:20px' v-show='show'>
+        <label class="form-label">页面</label>
+        <select class="form-control" v-model='currentPage' >
+            <option v-for='page in pageList' track-by="$index">{{page}}</option>
+        </select>
+    </form>
+    <div id='pvchart-main'></div>
+</script>
+
+
+<script type='x/template' id='platform-template'>
+    <search v-bind:okfun='okFun' v-bind:url='url'></search>
+    <div id='pvchart-main'></div>
+</script>
+
+
+<script type='x/template' id='browser-template'>
+    <search v-bind:okfun='okFun' v-bind:url='url'></search>
+    <div id='pvchart-main'></div>
+</script>
+
+
+
+
+
+<!--
+    时间：2016-10-19
+    描述：时峰值、URL参数过滤
+-->
+
 <script type="x/template" id='hourPeak-template'>
     <search v-bind:okfun='okFun' v-bind:url='url' v-bind:onetime='oneTime'></search>
     <div>
@@ -215,11 +226,6 @@
         <hourPeak-chart :show.sync="showChart" ></hourPeak-chart>
     </div>
 </script>
-
-
-
-
-
 
 
 <script type='x/template' id='urlFilter-template'>

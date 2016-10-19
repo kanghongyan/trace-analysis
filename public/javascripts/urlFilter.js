@@ -44,11 +44,6 @@ var urlFilter = Vue.extend({
 					value: data[k]
 				});
 			}
-			legend.push('其他');
-				series.push({
-					name: '其他',
-					value: data.total-other
-				});
 			var myChart = echarts.init($('#pvchart-main').get(0));
 
 			var option = {
