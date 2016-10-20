@@ -59,16 +59,6 @@ var specDaoliuPortal = Vue.extend({
 //          that.showCountChart(_AJAX_RET_.data, document.getElementById('spec-chart-main-2'), 'data2');
 //          that.showCountChart(_AJAX_RET_.data, document.getElementById('spec-chart-main-3'), 'data3');
             
-            function format(source) {
-                for (var i=0;i<source.data.length;i++) {
-                    var dataItem = source.data[0].data;
-                    var dataItemNew = {};
-                    for(var k in dataItem) {
-                        dataItemNew['推荐条数为'+k+'的总展示量：'] = dataItem[k]
-                    }
-                    source.data[0].data = dataItemNew
-                }
-            }
             
             $.ajax({
                 url: '/api/specDaoliuPortal',
@@ -85,8 +75,6 @@ var specDaoliuPortal = Vue.extend({
                         that.showChart = true;
                         that.$dispatch('hideLoading');
                         
-                        format(msg)
-                        
                         that.showCountChart(msg.data, document.getElementById('spec-chart-main-1'), 'data1');
                         that.showCountChart(msg.data, document.getElementById('spec-chart-main-2'), 'data2');
                         that.showCountChart(msg.data, document.getElementById('spec-chart-main-3'), 'data3');
@@ -102,19 +90,11 @@ var specDaoliuPortal = Vue.extend({
         
         
         showCountChart: function(initData, domEl, dataK) {
-            var data = {};
-            for (var j = 0; j < initData.length; j++) {
-                for (var n in initData[j][dataK]) {
-                    data[n] = data[n] ? data[n] + initData[j][dataK][n] : initData[j][dataK][n];
-                }
-            }
-            var r=[];
-            for(var m in data){
-                r.push({name:m+data[m],value:data[m]});
-            }
+
+            var r = initData[0][dataK]
             
             var myChart = echarts.init(domEl);
-            option = {
+            var option = {
                 tooltip: {
                     trigger: 'item',
                     formatter: "{a} <br/>{b} : {c} ({d}%)"

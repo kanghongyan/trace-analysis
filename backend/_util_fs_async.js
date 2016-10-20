@@ -42,6 +42,7 @@ module.exports = function(category, project, startTime, endTime, analyCB) {
     
     .catch(function(err){
         console.log('_util_fs_async throws', err);
+        console.log(err.stack);
         return [];
     });
     
