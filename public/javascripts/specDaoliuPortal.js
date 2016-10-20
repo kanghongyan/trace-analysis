@@ -87,7 +87,7 @@ var specDaoliuPortal = Vue.extend({
                         
                         format(msg)
                         
-                        that.showCountChart(msg.data, document.getElementById('spec-chart-main-1'), 'data');
+                        that.showCountChart(msg.data, document.getElementById('spec-chart-main-1'), 'data1');
                         that.showCountChart(msg.data, document.getElementById('spec-chart-main-2'), 'data2');
                         that.showCountChart(msg.data, document.getElementById('spec-chart-main-3'), 'data3');
                     } else {

@@ -99,7 +99,7 @@ router.get('/specDaoliuPortal', function(req, res, next) {
             if (data) {
                 dataList.push({
                     date: year + '-' + mouth + '-' + day,
-                    data: data.data1,
+                    data1: data.data1,
                     data2: data.data2
                 });
             }
@@ -174,8 +174,7 @@ function getSpecData(data) {
     var list = data.split('\r\n');
     var result = {
         data1: {},
-        data2: {},
-        data3: {}
+        data2: {}
     };
     for (var i = 0; i < list.length - 1; i++) {
         try{
