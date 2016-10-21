@@ -12,6 +12,17 @@ router.map({
         component:totalV,
         totalV:true
     },
+    '/pageV':{
+        component:pageV,
+        pageV:true
+    },
+    
+    
+    
+    '/performance':{
+        component:performance,
+        performance:true
+    },
     '/browser':{
         component: browser,
         browser:true
@@ -20,24 +31,26 @@ router.map({
         component:platform,
         platform:true
     },
+    '/screenSize':{
+        component:screenSize,
+        screenSize:true
+    },
+    
+    
+    
     '/hourPeak':{
         component:hourPeak,
         hourPeak:true
     },
-    '/performance':{
-        component:performance,
-        performance:true
-    },
-    '/pageV':{
-        component:pageV,
-        pageV:true
-    },
-    '/specDaoliuPortal':{
-        component:specDaoliuPortal,
-        specDaoliuPortal:true
-    },
     '/urlFilter':{
         component:urlFilter,
         urlFilter:true
+    },
+    
+    
+    
+    '/specDaoliuPortal':{
+        component:specDaoliuPortal,
+        specDaoliuPortal:true
     }
 })

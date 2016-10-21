@@ -29,13 +29,16 @@
     
     <script type='text/javascript' src='javascripts/totalV.js'></script>
     <script type='text/javascript' src='javascripts/pageV.js'></script>
+    
     <script type='text/javascript' src='javascripts/browser.js'></script>
     <script type="text/javascript" src='javascripts/performance.js'></script>
     <script type='text/javascript' src='javascripts/platform.js'></script>
+    <script type="text/javascript" src='javascripts/screenSize.js'></script>
+    
     <script type="text/javascript" src='javascripts/hourPeak.js'></script>
+    <script type='text/javascript' src='javascripts/urlFilter.js'></script>
     
     <script type='text/javascript' src='javascripts/specDaoliuPortal.js'></script>
-    <script type='text/javascript' src='javascripts/urlFilter.js'></script>
     
     <script type="text/javascript" src='javascripts/router.js'></script>
 </head>
@@ -53,6 +56,7 @@
                 <li v-link="{ path: '/performance' }" v-bind:class="{ 'active': $route.performance}" >基础-性能</li>
                 <li v-link="{ path: '/platform' }" v-bind:class="{ 'active': $route.platform}" >基初-平台类型</li>
                 <li v-link="{ path: '/browser' }" v-bind:class="{ 'active': $route.browser}" >基初-浏览器类型</li>
+                <li v-link="{ path: '/screenSize'}" v-bind:class="{ 'active': $route.screenSize}">基础－屏幕尺寸</li>
                 <li v-link="{ path: '/hourPeak'}" v-bind:class="{ 'active': $route.hourPeak}" >基初-时峰值</li>
                 <li v-link="{ path: '/urlFilter'}" v-bind:class="{ 'active': $route.urlFilter}" >*特殊*-URL参数过滤</li>
                 <li v-link="{ path: '/specDaoliuPortal'}" v-bind:class="{ 'active': $route.specDaoliuPortal}" >*特殊*-导流-portal</li>
@@ -200,6 +204,13 @@
 <script type='x/template' id='browser-template'>
     <search v-bind:okfun='okFun' v-bind:url='url'></search>
     <div id='pvchart-main'></div>
+</script>
+
+
+<script type="x/template" id='screenSize-template'>
+  <search v-bind:okfun='okFun' v-bind:url='url'></search>
+    <div id='screenChart-main'></div>
+    <div id='screenCake-main'></div>
 </script>
 
 

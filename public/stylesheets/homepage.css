@@ -147,7 +147,9 @@ select{
 .chartCon{
     margin-top: 40px;
 }
-#countMain, #pointMian, .pageTChart-chart, #pvchart-main, #allNumber, #browser-main, .spec-chart-main-x{
+#countMain, #pointMian, .pageTChart-chart, #pvchart-main, 
+#allNumber, #browser-main, .spec-chart-main-x, 
+#screenChart-main, #screenCake-main{
     padding-top: 20px;
     width: 80%;
     height:500px;
