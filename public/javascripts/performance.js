@@ -9,7 +9,6 @@ var performance = Vue.extend({
             show: false,
             okFun: this.getData,
             currentPage: '',
-            url: '/api/projectList',
             pageList: []
 		}
 	},

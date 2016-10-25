@@ -7,9 +7,7 @@ var hourPeak = Vue.extend({
 		return {
 			data: '',
 			showChart: false,
-			okFun: this.getData,
-			oneTime: false,
-			url: '/api/projectList'
+			okFun: this.getData
 		}
 	},
 	events: {

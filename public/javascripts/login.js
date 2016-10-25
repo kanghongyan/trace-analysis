@@ -5,10 +5,11 @@ document.addEventListener('DOMContentLoaded', function(){
         
         fetch('/login', {
             method: 'POST',
-            credentials: 'include',
+            credentials: 'same-origin',
             headers: {
                 'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache'
             },
             body: JSON.stringify({
                 name: document.getElementById('name').value,

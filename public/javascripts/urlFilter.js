@@ -4,7 +4,6 @@ var urlFilter = Vue.extend({
 		return {
 			data: '',
 			okFun: this.getData,
-			url: '/api/projectList',
 			show: false,
 			pageList: [],
 			currentPage: '',

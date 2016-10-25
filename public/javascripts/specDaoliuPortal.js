@@ -36,8 +36,7 @@ var specDaoliuPortal = Vue.extend({
         return {
             data: '',
             showChart: false,
-            okFun: this.getData,
-            url: '/api/projectList'
+            okFun: this.getData
         }
     },
     components: {
@@ -73,7 +72,6 @@ var specDaoliuPortal = Vue.extend({
                 success: function(msg) {
                     if (msg.code == 1) {
                         that.showChart = true;
-                        that.$dispatch('hideLoading');
                         
                         that.showCountChart(msg.data, document.getElementById('spec-chart-main-1'), 'data1');
                         that.showCountChart(msg.data, document.getElementById('spec-chart-main-2'), 'data2');
