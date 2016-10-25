@@ -2,45 +2,45 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>58金融日志系统--首页</title>
+    <title>58金融日志系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <!-- 新 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="stylesheets/homepage.css">
     
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="javascripts/dep/jquery-2.1.4.js"></script>
     <script src="javascripts/util.js"></script>
 
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <!--script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script-->
     
-    <script type="text/javascript" src='javascripts/dep/vue.js'></script>
-    <script type="text/javascript" src='javascripts/dep/vue-router.js'></script>
+    <script src='javascripts/dep/vue.js'></script>
+    <script src='javascripts/dep/vue-router.js'></script>
     
     <script src='javascripts/dep/echarts.js'></script>
 
-    <script type="text/javascript" src='javascripts/loading.js'></script>
-    <script type="text/javascript" src='javascripts/search.js'></script>
+    <script src='javascripts/loading.js'></script>
+    <script src='javascripts/search.js'></script>
     
-    <script type="text/javascript" src='javascripts/pageTChart.js'></script>
-    <script type='text/javascript' src='javascripts/pageT.js'></script>
+    <script src='javascripts/pageTChart.js'></script>
+    <script src='javascripts/pageT.js'></script>
     
-    <script type='text/javascript' src='javascripts/totalV.js'></script>
-    <script type='text/javascript' src='javascripts/pageV.js'></script>
+    <script src='javascripts/totalV.js'></script>
+    <script src='javascripts/pageV.js'></script>
     
-    <script type='text/javascript' src='javascripts/browser.js'></script>
-    <script type="text/javascript" src='javascripts/performance.js'></script>
-    <script type='text/javascript' src='javascripts/platform.js'></script>
-    <script type="text/javascript" src='javascripts/screenSize.js'></script>
+    <script src='javascripts/browser.js'></script>
+    <script src='javascripts/performance.js'></script>
+    <script src='javascripts/platform.js'></script>
+    <script src='javascripts/screenSize.js'></script>
     
-    <script type="text/javascript" src='javascripts/hourPeak.js'></script>
-    <script type='text/javascript' src='javascripts/urlFilter.js'></script>
+    <script src='javascripts/hourPeak.js'></script>
+    <script src='javascripts/urlFilter.js'></script>
     
-    <script type='text/javascript' src='javascripts/specDaoliuPortal.js'></script>
+    <script src='javascripts/specDaoliuPortal.js'></script>
     
-    <script type="text/javascript" src='javascripts/router.js'></script>
+    <script src='javascripts/router.js'></script>
 </head>
 
 
@@ -56,7 +56,7 @@
                 <li v-link="{ path: '/performance' }" v-bind:class="{ 'active': $route.performance}" >基础-性能</li>
                 <li v-link="{ path: '/platform' }" v-bind:class="{ 'active': $route.platform}" >基初-平台类型</li>
                 <li v-link="{ path: '/browser' }" v-bind:class="{ 'active': $route.browser}" >基初-浏览器类型</li>
-                <li v-link="{ path: '/screenSize'}" v-bind:class="{ 'active': $route.screenSize}">基础－屏幕尺寸</li>
+                <li v-link="{ path: '/screenSize'}" v-bind:class="{ 'active': $route.screenSize}">基础－屏幕尺寸与DPR</li>
                 <li v-link="{ path: '/hourPeak'}" v-bind:class="{ 'active': $route.hourPeak}" >基初-时峰值</li>
                 <li v-link="{ path: '/urlFilter'}" v-bind:class="{ 'active': $route.urlFilter}" >*特殊*-URL参数过滤</li>
                 <li v-link="{ path: '/specDaoliuPortal'}" v-bind:class="{ 'active': $route.specDaoliuPortal}" >*特殊*-导流-portal</li>
@@ -265,5 +265,5 @@
 
 
 
-<script type="text/javascript" src='javascripts/home.js'></script>
+<script src='javascripts/home.js'></script>
 </html>
