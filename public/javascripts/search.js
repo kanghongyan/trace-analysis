@@ -21,9 +21,9 @@ var search = Vue.extend({
     methods: {
         populateSelect: function() {
             fetch_json('/api/projectList')
-            .then((data)=>{
-                if (data.code == 1) {
-                    this.projects = data.data;
+            .then( res => {
+                if (res.code == 1) {
+                    this.projects = res.data;
                     this.projectSelected = this.projects[0];
                 } else {
                     alert('查找失败');

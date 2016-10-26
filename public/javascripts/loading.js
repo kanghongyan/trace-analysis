@@ -1,9 +1,7 @@
 var Loading = Vue.extend({
 	template: '#loading-template',
 	props: {
-		show: {
-			type:Boolean
-		}
+		show: Boolean
 	}
 })
 Vue.component('Loading', Loading);

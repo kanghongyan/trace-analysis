@@ -99,7 +99,20 @@ Date.prototype.ago=function(long,ago){
 
 
 
-function fetch_json(url) {
+function fetch_json(url, params) {
+    
+    function _format_url() {
+        var a = document.createElement('a');
+        a.href = url;
+        url = new URL(a.href);
+        Object.keys(params).forEach( key => url.searchParams.append(key, params[key]) );
+    }
+    
+    // get请求包含参数?
+    if (typeof url === 'string' && params) {
+        _format_url();
+    }
+    // 展示loading模态
     this.$dispatch && this.$dispatch('showLoading');
     
     return fetch(url, {
@@ -110,18 +123,17 @@ function fetch_json(url) {
             'Content-Type': 'application/json',
             'Cache-Control': 'no-cache'
         }
-    
-    }).then(function(response) {
-        return response.json();
-    
-    }).then(function(data){
+    })
+    .then( response => response.json() )
+    .then( res => {
+        // 关闭loading模态
         this.$dispatch && this.$dispatch('hideLoading');
         
-        if (data.code == -1) {
+        if (res.code == -1) {
             location.href = '/login';
             throw 'Session expires!'
         } else {
-            return data;
+            return res;
         }
     })
 }

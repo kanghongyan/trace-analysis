@@ -68,7 +68,7 @@ var pageV = Vue.extend({
 					type: 'line',
 					data: uv
 				}, {
-					name: 'loginV',
+					name: '登录数',
 					type: 'line',
 					data: lv
 				}]

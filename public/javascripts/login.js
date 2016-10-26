@@ -15,15 +15,18 @@ document.addEventListener('DOMContentLoaded', function(){
                 name: document.getElementById('name').value,
                 password: document.getElementById('password').value
             })
-        }).then(function(response) {
+        })
+        .then(function(response) {
             return response.json();
-        }).then(function(data){
-            if (data.isLogin) {
+        })
+        .then(function(res){
+            if (res.isLogin) {
                 location.href = '/homepage';
             } else {
-                alert(data.msg);
+                alert(res.msg);
             }
-        }).catch(function(e){
+        })
+        .catch(function(e){
             console.log(e);
             alert('严重错误！');
         });
