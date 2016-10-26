@@ -1,49 +1,49 @@
 var screenSize = Vue.extend({
-	template: '#screenSize-template',
-	components: {
-		'search': search
-	},
-	data: function() {
-		return {
-			data: '',
-			showChart: false,
-			okFun: this.getData
-		}
-	},
-	methods: {
-		getData: function(startTime, endTime, selName) {
-			var that = this;
-			if (!startTime || !endTime || !selName) {
-				return;
-			}
-			that.$dispatch('showLoading');
-			$.ajax({
-				url: '/api/screenSize',
-				data: {
-					project: selName,
-					startTime: startTime,
-					endTime: endTime
-				},
-				complete: function() {
-					that.$dispatch('hideLoading');
-				},
-				success: function(msg) {
-					if (msg.code == 1) {
-						that.showScrSizeChart(msg.data[0].data1);
-						that.showDprChart(msg.data[0].data2);
-					} else {
-						alert('查找失败');
-					}
-				},
-				error: function() {
-					alert('查找失败');
-				}
-			})
-		},
-		
-		
-		showScrSizeChart: function(data) {
-		    var screenChart = echarts.init(document.getElementById('screenChart-main')),
+    template: '#screenSize-template',
+    components: {
+        'search': search
+    },
+    data: function() {
+        return {
+            data: '',
+            showChart: false,
+            okFun: this.getData
+        }
+    },
+    methods: {
+        getData: function(startTime, endTime, selName) {
+            var that = this;
+            if (!startTime || !endTime || !selName) {
+                return;
+            }
+            that.$dispatch('showLoading');
+            $.ajax({
+                url: '/api/screenSize',
+                data: {
+                    project: selName,
+                    startTime: startTime,
+                    endTime: endTime
+                },
+                complete: function() {
+                    that.$dispatch('hideLoading');
+                },
+                success: function(msg) {
+                    if (msg.code == 1) {
+                        that.showScrSizeChart(msg.data[0].data1);
+                        that.showDprChart(msg.data[0].data2);
+                    } else {
+                        alert('查找失败');
+                    }
+                },
+                error: function() {
+                    alert('查找失败');
+                }
+            })
+        },
+        
+        
+        showScrSizeChart: function(data) {
+            var screenChart = echarts.init(document.getElementById('screenChart-main')),
                 dataArray = Object.keys(data),
                 
                 legendArray = dataArray.map(function(item){
@@ -91,8 +91,8 @@ var screenSize = Vue.extend({
             
             
             screenChart.setOption(option);
-		},
-		
+        },
+        
         
         
         showDprChart: function(data) {
@@ -134,5 +134,5 @@ var screenSize = Vue.extend({
             
             cakeChart.setOption(cakeOption);
         }
-	}
+    }
 })

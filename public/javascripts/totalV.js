@@ -1,21 +1,21 @@
 var totalV = Vue.extend({
-	template: '#totalV-template',
-	components: {
-		'search': search
-	},
-	data: function() {
-		return {
-			okFun: this.getData
-		}
-	},
-	methods: {
-		getData: function(startTime, endTime, project) {
-			
-			if (!startTime || !endTime || !project) {
-				return;
-			}
-			
-			fetch_json.bind(this)('/api/totalV', {
+    template: '#totalV-template',
+    components: {
+        'search': search
+    },
+    data: function() {
+        return {
+            okFun: this.getData
+        }
+    },
+    methods: {
+        getData: function(startTime, endTime, project) {
+            
+            if (!startTime || !endTime || !project) {
+                return;
+            }
+            
+            fetch_json.bind(this)('/api/totalV', {
                 project: project,
                 startTime: startTime,
                 endTime: endTime
@@ -30,6 +30,6 @@ var totalV = Vue.extend({
             .catch(function(e){
                 console.log(e);
             });
-		}
-	}
+        }
+    }
 })

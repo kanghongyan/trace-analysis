@@ -1,10 +1,10 @@
 var performance = Vue.extend({
-	template: '#performance-template',
-	components: {
+    template: '#performance-template',
+    components: {
         'search': search
     },
-	data: function() {
-		return {
+    data: function() {
+        return {
             showForm: false,
             okFun: this.getData,
             
@@ -13,9 +13,9 @@ var performance = Vue.extend({
             startTime: String,
             endTime: String,
             project: String
-		}
-	},
-	watch: {
+        }
+    },
+    watch: {
         currentPage: function() {
             fetch_json.bind(this)('/api/performance', {
                 project: this.project,
@@ -35,8 +35,8 @@ var performance = Vue.extend({
             });
         }
     },
-	methods: {
-	    getData: function(startTime, endTime, project) {
+    methods: {
+        getData: function(startTime, endTime, project) {
             if (!startTime || !endTime || !project) {
                 return;
             }
@@ -66,7 +66,7 @@ var performance = Vue.extend({
             });
             
         }
-	    
-	    
-	}
+        
+        
+    }
 })

@@ -1,25 +1,25 @@
 var hourPeak = Vue.extend({
-	template: '#hourPeak-template',
-	components: {
-		'search': search
-	},
-	data: function() {
-		return {
-			data: '',
-			showChart: false,
-			okFun: this.getData
-		}
-	},
-	events: {
-	},
-	methods: {
-		showAll: function(initData) {
-		    // {"code":1,"data":[{"data":{"0":146,"23":4},"day":"2016-10-12"},
-		    //                   {"day":"2016-10-13"},
-		    //                   {"data":{"0":11,"23":4},"day":"2016-10-14"}]}
-		    if(!initData)
-		        return;
-		    
+    template: '#hourPeak-template',
+    components: {
+        'search': search
+    },
+    data: function() {
+        return {
+            data: '',
+            showChart: false,
+            okFun: this.getData
+        }
+    },
+    events: {
+    },
+    methods: {
+        showAll: function(initData) {
+            // {"code":1,"data":[{"data":{"0":146,"23":4},"day":"2016-10-12"},
+            //                   {"day":"2016-10-13"},
+            //                   {"data":{"0":11,"23":4},"day":"2016-10-14"}]}
+            if(!initData)
+                return;
+            
             var myChart = echarts.init(document.getElementById('allNumber'));
             
             function genHourMap() {
@@ -89,37 +89,37 @@ var hourPeak = Vue.extend({
             };
             myChart.setOption(option);
         },
-		
-		
-		getData: function(startTime, endTime, selName) {
-			var that = this;
-			if (!startTime ||!endTime || !selName) {
-				return;
-			}
-			that.$dispatch('showLoading');
-			$.ajax({
-				url: '/api/hourPeak',
-				data: {
-					project: selName,
-					startTime: startTime,
-					endTime, endTime
-				},
-				complete: function() {
-					that.$dispatch('hideLoading');
-				},
-				success: function(msg) {
-					if (msg.code == 1) {
-						that.showChart = true;
-						that.showAll(msg.data);
+        
+        
+        getData: function(startTime, endTime, selName) {
+            var that = this;
+            if (!startTime ||!endTime || !selName) {
+                return;
+            }
+            that.$dispatch('showLoading');
+            $.ajax({
+                url: '/api/hourPeak',
+                data: {
+                    project: selName,
+                    startTime: startTime,
+                    endTime, endTime
+                },
+                complete: function() {
+                    that.$dispatch('hideLoading');
+                },
+                success: function(msg) {
+                    if (msg.code == 1) {
+                        that.showChart = true;
+                        that.showAll(msg.data);
 
-					} else {
-						alert('查找失败');
-					}
-				},
-				error: function() {
-					alert('查找失败');
-				}
-			})
-		}
-	}
+                    } else {
+                        alert('查找失败');
+                    }
+                },
+                error: function() {
+                    alert('查找失败');
+                }
+            })
+        }
+    }
 })
