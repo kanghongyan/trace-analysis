@@ -5,23 +5,38 @@ var performance = Vue.extend({
     },
 	data: function() {
 		return {
-			data: '',
-            show: false,
+            showForm: false,
             okFun: this.getData,
-            currentPage: '',
-            pageList: []
+            
+            pageList: [],
+            currentPage: String,
+            startTime: String,
+            endTime: String,
+            project: String
 		}
 	},
 	watch: {
         currentPage: function() {
-            this.urlChange();
+            fetch_json.bind(this)('/api/performance', {
+                project: this.project,
+                startTime: this.startTime,
+                endTime: this.endTime,
+                page: this.currentPage
+            })
+            .then( res => {
+                if (res.code == 1) {
+                    this.renderChart(res.data);
+                } else {
+                    alert('查找失败');
+                }
+            })
+            .catch(function(e){
+                console.log(e);
+            });
         }
     },
-	
-	events: {
-	},
 	methods: {
-	    chart: function() {
+	    renderChart: function(data) {
             var days = [];
             var dns = [];
             var conn = [];
@@ -30,14 +45,14 @@ var performance = Vue.extend({
             var rt = [];
             var intr = [];
             
-            for (var j = 0; j < this.data.length; j++) {
-                days.push(this.data[j].day);
-                dns.push(this.data[j].data.dns);
-                conn.push(this.data[j].data.conn);
-                req.push(this.data[j].data.req);
-                res.push(this.data[j].data.res);
-                rt.push(this.data[j].data.rt);
-                intr.push(this.data[j].data.intr);
+            for (var j = 0; j < data.length; j++) {
+                days.push(data[j].day);
+                dns.push(data[j].data.dns);
+                conn.push(data[j].data.conn);
+                req.push(data[j].data.req);
+                res.push(data[j].data.res);
+                rt.push(data[j].data.rt);
+                intr.push(data[j].data.intr);
             }
             var myChart = echarts.init(document.getElementById('pvchart-main'));
             var option = {
@@ -100,74 +115,36 @@ var performance = Vue.extend({
         },
         
         
-	    getData: function(startTime, endTime, selName) {
-            var that = this;
-            if (!startTime || !endTime || !selName) {
+	    getData: function(startTime, endTime, project) {
+            if (!startTime || !endTime || !project) {
                 return;
             }
+            
             this.startTime = startTime;
             this.endTime = endTime;
-            this.selName = selName;
-            that.$dispatch('showLoading');
-            $.ajax({
-                url: '/api/pageList',
-                cache: false,
-                data: {
-                    startTime: startTime,
-                    endTime: endTime,
-                    project: selName
-                },
-                complete: function() {
-                    that.$dispatch('hideLoading');
-                },
-                success: function(msg) {
-                    if (msg.code == 1) {
-                        that.show = true;
-                        that.pageList = msg.data;
-                        setTimeout(function(){
-                            that.currentPage = msg.data[0] || '';
-                        },300)
-                    } else {
-                        alert('查找失败');
-                    }
-
-                },
-                error: function() {
+            this.project = project;
+            
+            fetch_json.bind(this)('/api/pageList', {
+                project: project,
+                startTime: startTime,
+                endTime: endTime
+            })
+            .then( res => {
+                if (res.code == 1) {
+                    this.showForm = true;
+                    this.pageList = res.data;
+                    setTimeout( () => {
+                        //this.currentPage = res.data[0] || '';
+                    },300)
+                } else {
                     alert('查找失败');
                 }
             })
-        },
-        
-        
-	    urlChange: function() {
-            var that = this;
-            that.$dispatch('showLoading');
-
-            $.ajax({
-                url: '/api/performance',
-                data: {
-                    startTime: that.startTime,
-                    endTime: that.endTime,
-                    project: that.selName,
-                    page: that.currentPage
-                },
-                complete: function() {
-                    that.$dispatch('hideLoading');
-                },
-                success: function(msg) {
-                    if (msg.code == 1) {
-                        that.data = msg.data;
-                        that.chart();
-                    } else {
-                        alert('查找失败');
-                    }
-                },
-                error: function() {
-                    alert('查找失败');
-                }
-            })
-	    }
-	    
+            .catch(function(e){
+                console.log(e);
+            });
+            
+        }
 	    
 	    
 	}

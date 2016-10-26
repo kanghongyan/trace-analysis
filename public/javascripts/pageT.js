@@ -6,7 +6,6 @@ var pageT = Vue.extend({
     },
     data: function() {
         return {
-            data: '',
             showChart: false,
             okFun: this.getData
         }
@@ -17,19 +16,19 @@ var pageT = Vue.extend({
         }
     },
     methods: {
-        getData: function(startTime, endTime, selName) {
+        getData: function(startTime, endTime, project) {
             
-            if (!startTime || !endTime || !selName) {
+            if (!startTime || !endTime || !project) {
                 alert('选择开始结束日期');
                 return;
             }
             
             fetch_json.bind(this)('/api/pageT', {
-                project: selName,
+                project: project,
                 startTime: startTime,
                 endTime: endTime
             })
-            .then((res)=>{
+            .then( res => {
                 if (res.code == 1) {
                     this.$broadcast('showChartCon', res.data);
                 } else {

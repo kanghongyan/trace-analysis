@@ -154,14 +154,14 @@
 -->
 
 <script type="x/template" id='totalV-template'>
-    <search v-bind:okfun='okFun'></search>
+    <search :okfun='okFun'></search>
     <div id='pvchart-main'></div>
 </script>
 
 
 <script type="x/template" id='pageV-template'>
-    <search v-bind:okfun='okFun'></search>
-    <form class='form-inline' style='margin-top:20px' v-show='show'>
+    <search :okfun='okFun'></search>
+    <form class='form-inline' style='margin-top:20px' v-show='showForm'>
         <label class="form-label">页面</label>
         <select class="form-control" v-model='currentPage' >
             <option v-for='page in pageList' track-by="$index">{{page}}</option>
@@ -179,8 +179,8 @@
 -->
 
 <script type='x/template' id='performance-template'>
-    <search v-bind:okfun='okFun'></search>
-    <form class='form-inline' style='margin-top:20px' v-show='show'>
+    <search :okfun='okFun'></search>
+    <form class='form-inline' style='margin-top:20px' v-show='showForm'>
         <label class="form-label">页面</label>
         <select class="form-control" v-model='currentPage' >
             <option v-for='page in pageList' track-by="$index">{{page}}</option>
