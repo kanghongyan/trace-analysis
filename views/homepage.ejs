@@ -185,6 +185,7 @@
         <select class="form-control" v-model='currentPage' >
             <option v-for='page in pageList' track-by="$index">{{page}}</option>
         </select>
+        ['DNS查找时间', '建立链接时间', '发送请求时间', '接受请求时间','加载完成时间','可响应时间']
     </form>
     <div id='pvchart-main'></div>
 </script>

@@ -137,3 +137,71 @@ function fetch_json(url, params) {
         }
     })
 }
+
+
+
+
+
+function renderLineStack(data, el) {
+    var days = data.map( o => o.day );
+    
+    var legendArr = _
+        .chain(data)
+        .map('data')
+        .map( v => Object.keys(v) )
+        .flatten()
+        .uniq()
+        .value();
+    
+    var serieMap = legendArr.map( legend => {return {
+        name: legend,
+        type: 'line',
+        data: []
+    }} );
+    
+    for (var j=0; j<data.length; j++) {
+        for(var i=0; i<legendArr.length; i++) {
+            var legendName = legendArr[i];
+            serieMap[i].data.push( data[j]['data'][legendName] );
+        }
+    }
+    
+    _renderLineStack(el,legendArr,days,serieMap);
+}
+
+
+function _renderLineStack(el,legendArr,xArr,yArr ) {
+    var myChart = echarts.init(el);
+    var option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: {
+                    show: true
+                },
+                dataView: {
+                    show: true,
+                    readOnly: false
+                },
+                saveAsImage: {
+                    show: true
+                }
+            }
+        },
+        legend: {
+            data: legendArr
+        },
+        xAxis: [{
+            type: 'category',
+            data: xArr
+        }],
+        yAxis: [{
+            type: 'value'
+        }],
+        series: yArr
+    };
+    myChart.setOption(option);
+}
