@@ -9,7 +9,7 @@ var pageTChart = Vue.extend({
         return {
             currentData: '',
             pages: [],
-            selPage: ''
+            currentPage: ''
         }
     },
     events: {
@@ -23,7 +23,7 @@ var pageTChart = Vue.extend({
         }
     },
     watch: {
-        selPage: function(val) {
+        currentPage: function(val) {
             this.showChartFun(val, this.currentData);
             this.showPeopleChart(val,this.currentData);
             this.showLoginPeopleChart(val,this.currentData);
@@ -46,7 +46,7 @@ var pageTChart = Vue.extend({
                 a.push(n);
             }
             this.pages = a;
-            this.selPage = this.pages[0];
+            this.currentPage = this.pages[0];
             this.showChartFun(this.pages[0], initData);
             this.showPeopleChart(this.pages[0],initData);
         },

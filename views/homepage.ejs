@@ -10,9 +10,9 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/homepage.css">
     
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-    <script src="javascripts/dep/jquery-2.1.4.js"></script>
-    <script src="javascripts/util.js"></script>
+    <!--script src="javascripts/dep/jquery-2.1.4.js"></script-->
     <script src="javascripts/dep/lodash.js"></script>
+    <script src="javascripts/util.js"></script>
 
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <!--script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script-->
@@ -131,7 +131,7 @@
         <div  class='form-group'>
         <form class='form-inline'>
             <label class="form-label">页面</label>
-            <select v-model='selPage' class="form-control">
+            <select v-model='currentPage' class="form-control">
                 <option v-for='page in pages'>{{page}}</option>
             </select>
         </form>
