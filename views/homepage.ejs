@@ -204,7 +204,7 @@
 
 
 <script type="x/template" id='screenSize-template'>
-  <search v-bind:okfun='okFun'></search>
+    <search :okfun='okFun' single-mode='true'></search>
     <div id='screenChart-main'></div>
     <div id='screenCake-main'></div>
 </script>
@@ -218,22 +218,20 @@
 -->
 
 <script type="x/template" id='hourPeak-template'>
-    <search v-bind:okfun='okFun'></search>
-    <div>
-        <div id='allNumber'></div>
-    </div>
+    <search :okfun='okFun'></search>
+    <div id='pvchart-main'></div>
 </script>
 
 
 <script type='x/template' id='urlFilter-template'>
-    <search v-bind:okfun='okFun'></search>
-    <form class='form-inline' style='margin-top:20px' v-show='show'>
+    <search :okfun='okFun'></search>
+    <form class='form-inline' style='margin-top:20px' v-show='showForm'>
         <label class="form-label">页面</label>
         <select class="form-control" v-model='currentPage'>
             <option v-for='page in pageList' track-by="$index">{{page}}</option>
         </select>
         <input class="form-control" v-model='filterStr' type='text' placeholder='过滤参数 例：from' />
-        <input @click="search" class="btn btn-primary" type='button' value='查询' />
+        <input @click="clickSearchBtn" class="btn btn-primary" type='button' value='查询' />
     </form>
     <div id='pvchart-main'></div>
 </script>

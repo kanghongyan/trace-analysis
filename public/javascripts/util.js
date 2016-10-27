@@ -142,37 +142,159 @@ function fetch_json(url, params) {
 
 
 
-function renderLineStack(data, el) {
-    var days = data.map( o => o.day );
+function renderLineStack(strippedData, el, KEY='data') {
+    var days = strippedData.map( o => o.day );
     
     var legendArr = _
-        .chain(data)
-        .map('data')
+        .chain(strippedData)
+        .map(KEY)
         .compact()
         .map( v => Object.keys(v) )
         .flatten()
         .uniq()
         .value();
     
-    var serieMap = legendArr.map( legend => {return {
+    var seriesArr = legendArr.map( legend => {return {
         name: legend,
         type: 'line',
         data: []
     }} );
     
-    for (var j=0; j<data.length; j++) {
-        if (data[j]['data']) {
+    for (var j=0; j<strippedData.length; j++) {
+        if (strippedData[j][KEY]) {
             for(var i=0; i<legendArr.length; i++) {
                 var legendName = legendArr[i];
-                serieMap[i].data.push( data[j]['data'][legendName] );
+                seriesArr[i].data.push( strippedData[j][KEY][legendName] );
             }
         }
     }
     
-    _renderLineStack(el,legendArr,days,serieMap);
+    _renderLineStack(el,legendArr,days,seriesArr);
 }
 
 
+
+function renderPieLine(strippedData, el, KEY='data') {
+    
+    var legendArr = _
+        .chain(strippedData)
+        .map(KEY)
+        .compact()
+        .map( v => Object.keys(v) )
+        .flatten()
+        .uniq()
+        .value();
+    
+    var countMap = legendArr.reduce( (map, legend) => {
+        map[legend] = 0
+        return map
+    }, {} );
+    
+    var seriesArr = _
+        .chain(strippedData)
+        .map(KEY)
+        .reduce(function(map,c){
+            for(k in c) {
+                if (c[k])
+                    map[k] = c[k] + map[k]
+            }
+            return map
+        }, countMap)
+        .map( (v,k) => v )
+        .value();
+    
+    _renderLineStack(el,[],legendArr,[{
+        name: '',
+        type: 'line',
+        data: seriesArr
+    }])
+}
+
+
+
+
+function renderPie(strippedData, el, KEY='data') {
+    
+    var legendArr = _
+        .chain(strippedData)
+        .map(KEY)
+        .compact()
+        .map( v => Object.keys(v) )
+        .flatten()
+        .uniq()
+        .value();
+    
+    var countMap = legendArr.reduce( (map, legend) => {
+        map[legend] = 0
+        return map
+    }, {} );
+    
+    var seriesArr = _
+        .chain(strippedData)
+        .map(KEY)
+        .reduce(function(map,c){
+            for(k in c) {
+                if (c[k])
+                    map[k] = c[k] + map[k]
+            }
+            return map
+        }, countMap)
+        .map(function(v,k){
+            return {
+                name: k,
+                value: v
+            }
+        })
+        .value();
+    
+    _renderPie(el,legendArr,seriesArr)
+}
+
+
+
+
+
+/**
+ * 
+ * @param {Object} el
+ * @param {Object} legendArr
+ * ['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
+ * @param {Object} xArr
+ * ['周一','周二','周三','周四','周五','周六','周日']
+ * @param {Object} yArr
+ * [
+        {
+            name:'邮件营销',
+            type:'line',
+            stack: '总量',
+            data:[120, 132, 101, 134, 90, 230, 210]
+        },
+        {
+            name:'联盟广告',
+            type:'line',
+            stack: '总量',
+            data:[220, 182, 191, 234, 290, 330, 310]
+        },
+        {
+            name:'视频广告',
+            type:'line',
+            stack: '总量',
+            data:[150, 232, 201, 154, 190, 330, 410]
+        },
+        {
+            name:'直接访问',
+            type:'line',
+            stack: '总量',
+            data:[320, 332, 301, 334, 390, 330, 320]
+        },
+        {
+            name:'搜索引擎',
+            type:'line',
+            stack: '总量',
+            data:[820, 932, 901, 934, 1290, 1330, 1320]
+        }
+    ]
+ */
 function _renderLineStack(el,legendArr,xArr,yArr) {
     var myChart = echarts.init(el);
     var option = {
@@ -196,52 +318,32 @@ function _renderLineStack(el,legendArr,xArr,yArr) {
 
 
 
-
-
-
-function renderPie(initData, el) {
-    
-    var legendArr = _
-        .chain(initData)
-        .map('data')
-        .compact()
-        .map( v => Object.keys(v) )
-        .flatten()
-        .uniq()
-        .value();
-    
-    var countMap = legendArr.reduce( (map, legend) => {
-        map[legend] = 0
-        return map
-    }, {} );
-    
-    var seriesArr = _
-        .chain(initData)
-        .map('data')
-        .reduce(function(map,c){
-            for(k in c) {
-                 map[k] = c[k] + map[k]
-            }
-            return map
-        }, countMap)
-        .map(function(v,k){
-            return {
-                name: k,
-                value: v
-            }
-        })
-        .value();
-    
-    _renderPie(el,seriesArr)
-}
-
-
-function _renderPie(el,serieArr) {
+/**
+ * 
+ * @param {Object} el
+ * @param {Object} legendArr
+ * ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+ * @param {Object} serieArr
+ * [
+        {value:335, name:'直接访问'},
+        {value:310, name:'邮件营销'},
+        {value:234, name:'联盟广告'},
+        {value:135, name:'视频广告'},
+        {value:1548, name:'搜索引擎'}
+    ]
+ */
+function _renderPie(el,legendArr,serieArr) {
     var myChart = echarts.init(el);
     option = {
         tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            bottom: 50,
+            data: legendArr
         },
         series: [{
             name: '来源',

@@ -9,10 +9,10 @@ var pageV = Vue.extend({
             okFun: this.getData,
             
             pageList: [],
+            project: String,
             currentPage: String,
             startTime: String,
-            endTime: String,
-            project: String
+            endTime: String
         }
     },
     watch: {
@@ -64,7 +64,10 @@ var pageV = Vue.extend({
             .catch(function(e){
                 console.log(e);
             });
-            
         }
     }
+    
+    
+    
+    
 })

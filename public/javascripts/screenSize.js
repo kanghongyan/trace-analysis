@@ -5,45 +5,39 @@ var screenSize = Vue.extend({
     },
     data: function() {
         return {
-            data: '',
-            showChart: false,
             okFun: this.getData
         }
     },
     methods: {
-        getData: function(startTime, endTime, selName) {
-            var that = this;
-            if (!startTime || !endTime || !selName) {
+        getData: function(startTime, endTime, project) {
+            
+            if (!startTime || !endTime || !project) {
                 return;
             }
-            that.$dispatch('showLoading');
-            $.ajax({
-                url: '/api/screenSize',
-                data: {
-                    project: selName,
-                    startTime: startTime,
-                    endTime: endTime
-                },
-                complete: function() {
-                    that.$dispatch('hideLoading');
-                },
-                success: function(msg) {
-                    if (msg.code == 1) {
-                        that.showScrSizeChart(msg.data[0].data1);
-                        that.showDprChart(msg.data[0].data2);
-                    } else {
-                        alert('查找失败');
-                    }
-                },
-                error: function() {
+            
+            fetch_json.bind(this)('/api/screenSize', {
+                project: project,
+                startTime: startTime,
+                endTime: endTime
+            })
+            .then( res => {
+                if (res.code == 1) {
+                    // 屏幕尺寸气泡图
+                    this.showScrSizeChart(res.data[0].data1, document.getElementById('screenChart-main'));
+                    // dpr饼图
+                    renderPie(res.data, document.getElementById('screenCake-main'), 'data2')
+                } else {
                     alert('查找失败');
                 }
             })
+            .catch(function(e){
+                console.log(e);
+            });
         },
         
         
-        showScrSizeChart: function(data) {
-            var screenChart = echarts.init(document.getElementById('screenChart-main')),
+        showScrSizeChart: function(data,el) {
+            var screenChart = echarts.init(el),
                 dataArray = Object.keys(data),
                 
                 legendArray = dataArray.map(function(item){
@@ -91,48 +85,6 @@ var screenSize = Vue.extend({
             
             
             screenChart.setOption(option);
-        },
-        
-        
-        
-        showDprChart: function(data) {
-            var cakeChart = echarts.init(document.getElementById('screenCake-main')),
-                keyArray = Object.keys(data),
-                cakeData = keyArray.map(function(k){
-                    return { name: k, value: data[k] }
-                });
-            
-            var cakeOption = {
-                    title : {
-                        text: 'DPR',
-                        x:'center'
-                    },
-                    tooltip : {
-                        trigger: 'item',
-                        formatter: "{a} <br/>{b} : {c} ({d}%)"
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        left: 'left',
-                        data: keyArray
-                    },
-                    series : [{
-                        name: 'DPR',
-                        type: 'pie',
-                        radius : '55%',
-                        center: ['50%', '60%'],
-                        data: cakeData,
-                        itemStyle: {
-                            emphasis: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
-                        }
-                    }]
-            };
-            
-            cakeChart.setOption(cakeOption);
         }
     }
 })

@@ -27,6 +27,9 @@ function analysis_callback(results) {
             .countBy(function(s){
                 return (new Date(+s)).getHours()
             })
+            .mapKeys(function(v,k){
+                return k + '-' + (+k+1)
+            })
             .value();
     }
     

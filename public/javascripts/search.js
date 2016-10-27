@@ -10,12 +10,26 @@ var search = Vue.extend({
         }
     },
     
-    props: {
-        okfun: Function
-    },
-    
     ready: function() {
         this.populateSelect();
+    },
+    
+    props: {
+        okfun: Function,
+        singleMode: false
+    },
+    
+    watch: {
+        startTime: function() {
+            if (this.singleMode) {
+                this.endTime = this.startTime;
+            }
+        },
+        endTime: function() {
+            if (this.singleMode) {
+                this.startTime = this.endTime;
+            }
+        }
     },
     
     methods: {
