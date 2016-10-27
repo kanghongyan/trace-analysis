@@ -2,6 +2,11 @@
 document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('btn-submit').addEventListener('click',function(){
         
+//      var form = document.querySelector('form')
+//      fetch('/login', {
+//        method: 'POST',
+//        body: new FormData(form)
+//      })
         
         fetch('/login', {
             method: 'POST',
