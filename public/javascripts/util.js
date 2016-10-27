@@ -148,6 +148,7 @@ function renderLineStack(data, el) {
     var legendArr = _
         .chain(data)
         .map('data')
+        .compact()
         .map( v => Object.keys(v) )
         .flatten()
         .uniq()
@@ -172,26 +173,11 @@ function renderLineStack(data, el) {
 }
 
 
-function _renderLineStack(el,legendArr,xArr,yArr ) {
+function _renderLineStack(el,legendArr,xArr,yArr) {
     var myChart = echarts.init(el);
     var option = {
         tooltip: {
             trigger: 'axis'
-        },
-        toolbox: {
-            show: true,
-            feature: {
-                mark: {
-                    show: true
-                },
-                dataView: {
-                    show: true,
-                    readOnly: false
-                },
-                saveAsImage: {
-                    show: true
-                }
-            }
         },
         legend: {
             data: legendArr
@@ -204,6 +190,66 @@ function _renderLineStack(el,legendArr,xArr,yArr ) {
             type: 'value'
         }],
         series: yArr
+    };
+    myChart.setOption(option);
+}
+
+
+
+
+
+
+function renderPie(initData, el) {
+    
+    var legendArr = _
+        .chain(initData)
+        .map('data')
+        .compact()
+        .map( v => Object.keys(v) )
+        .flatten()
+        .uniq()
+        .value();
+    
+    var countMap = legendArr.reduce( (map, legend) => {
+        map[legend] = 0
+        return map
+    }, {} );
+    
+    var seriesArr = _
+        .chain(initData)
+        .map('data')
+        .reduce(function(map,c){
+            for(k in c) {
+                 map[k] = c[k] + map[k]
+            }
+            return map
+        }, countMap)
+        .map(function(v,k){
+            return {
+                name: k,
+                value: v
+            }
+        })
+        .value();
+    
+    _renderPie(el,seriesArr)
+}
+
+
+function _renderPie(el,serieArr) {
+    var myChart = echarts.init(el);
+    option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        series: [{
+            name: '来源',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: serieArr
+        }]
     };
     myChart.setOption(option);
 }
