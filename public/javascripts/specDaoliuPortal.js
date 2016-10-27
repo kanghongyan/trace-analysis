@@ -1,142 +1,89 @@
-//var _AJAX_RET_ = {
-//  "code" : 1,
-//  "data" : [{
-//          "date" : "2016-10-17",
-//          "data" : {
-//              "2" : 2978,
-//              "4" : 1,
-//              "5" : 3979,
-//              "7" : 3060
-//          },
-//          "data2" : {
-//              "借点钱" : 6043,
-//              "钱站" : 6043,
-//              "拍拍贷" : 7039,
-//              "量化派-信用钱包" : 7040,
-//              "读秒" : 7040,
-//              "卡卡贷" : 7039,
-//              "我来贷" : 7039
-//          },
-//          "data3" : {
-//              "量化派-信用钱包" : 681,
-//              "借点钱" : 1140,
-//              "卡卡贷" : 479,
-//              "拍拍贷" : 1024,
-//              "我来贷" : 580,
-//              "读秒" : 818,
-//              "钱站" : 317
-//          }
-//      }
-//  ]
-//}
+/*
+{
+    "code" : 1,
+    "data" : [{
+            "data1" : {
+                "推荐条数为5的总展示量(登录用户)" : 7384,
+                "推荐条数为11的总展示量(登录用户)" : 1,
+                "推荐条数为12的总展示量(登录用户)" : 263,
+                "推荐条数为13的总展示量(登录用户)" : 1465,
+                "推荐条数为14的总展示量(登录用户)" : 3538
+            },
+            "data2" : {
+                "量化派-信用钱包" : 12651,
+                "读秒" : 12651,
+                "拍拍贷" : 12651,
+                "卡卡贷" : 12651,
+                "我来贷" : 12651,
+                "借点钱" : 5267,
+                "平安普惠宅e贷" : 5267,
+                "钱站" : 5267,
+                "功夫贷" : 3655,
+                "平安普惠i贷" : 4893,
+                "你我金融-极速借" : 5267,
+                "维信-星星贷" : 5267,
+                "你我贷-嘉英贷" : 5263,
+                "你我贷-嘉卡贷" : 5263
+            },
+            "data3" : {
+                "卡卡贷" : 648,
+                "量化派-信用钱包" : 1359,
+                "拍拍贷" : 855,
+                "维信-星星贷" : 98,
+                "借点钱" : 471,
+                "读秒" : 1385,
+                "你我金融-极速借" : 120,
+                "你我贷-嘉卡贷" : 99,
+                "我来贷" : 752,
+                "平安普惠i贷" : 58,
+                "功夫贷" : 61,
+                "平安普惠宅e贷" : 101,
+                "你我贷-嘉英贷" : 73,
+                "钱站" : 101
+            }
+        }
+    ]
+}
+ */
 
 var specDaoliuPortal = Vue.extend({
     template: '#specDaoliuPortal-template',
     data: function() {
         return {
-            data: '',
-            showChart: false,
             okFun: this.getData
         }
     },
     components: {
         'search': search
     },
-    events: {
-    },
     methods: {
-        
-        getData: function(startTime, endTime, selName) {
-            var that = this;
-            if (!startTime || !endTime || !selName) {
+        getData: function(startTime, endTime, project) {
+            
+            if (!startTime || !endTime || !project) {
                 return;
             }
-            that.$dispatch('showLoading');
-            that.showChart = true;
             
-//          that.showCountChart(_AJAX_RET_.data, document.getElementById('spec-chart-main-1'), 'data');
-//          that.showCountChart(_AJAX_RET_.data, document.getElementById('spec-chart-main-2'), 'data2');
-//          that.showCountChart(_AJAX_RET_.data, document.getElementById('spec-chart-main-3'), 'data3');
-            
-            
-            $.ajax({
-                url: '/api/specDaoliuPortal',
-                data: {
-                    project: selName,
-                    startTime: startTime,
-                    endTime: endTime
-                },
-                complete: function() {
-                    that.$dispatch('hideLoading');
-                },
-                success: function(msg) {
-                    if (msg.code == 1) {
-                        that.showChart = true;
-                        
-                        that.showCountChart(msg.data, document.getElementById('spec-chart-main-1'), 'data1');
-                        that.showCountChart(msg.data, document.getElementById('spec-chart-main-2'), 'data2');
-                        that.showCountChart(msg.data, document.getElementById('spec-chart-main-3'), 'data3');
-                    } else {
-                        alert('查找失败');
-                    }
-                },
-                error: function() {
+            fetch_json.bind(this)('/api/specDaoliuPortal', {
+                project: project,
+                startTime: startTime,
+                endTime: endTime
+            })
+            .then( res => {
+                if (res.code == 1) {
+                    renderPie(res.data, document.getElementById('spec-chart-main-1'), 'data1');
+                    renderPie(res.data, document.getElementById('spec-chart-main-2'), 'data2');
+                    renderPie(res.data, document.getElementById('spec-chart-main-3'), 'data3');
+                } else {
                     alert('查找失败');
                 }
             })
-        },
-        
-        
-        showCountChart: function(initData, domEl, dataK) {
-
-            var r = initData[0][dataK]
-            
-            var myChart = echarts.init(domEl);
-            var option = {
-                tooltip: {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                toolbox: {
-                    show: true,
-                    feature: {
-                        mark: {
-                            show: true
-                        },
-                        dataView: {
-                            show: true,
-                            readOnly: false
-                        },
-                        magicType: {
-                            show: true,
-                            type: ['pie', 'funnel'],
-                            option: {
-                                funnel: {
-                                    x: '25%',
-                                    width: '50%',
-                                    funnelAlign: 'left',
-                                    max: 1548
-                                }
-                            }
-                        },
-                        restore: {
-                            show: true
-                        },
-                        saveAsImage: {
-                            show: true
-                        }
-                    }
-                },
-                calculable: true,
-                series: [{
-                    name: '展示量',
-                    type: 'pie',
-                    radius: '55%',
-                    center: ['50%', '60%'],
-                    data: r
-                }]
-            };
-            myChart.setOption(option);
+            .catch(function(e){
+                console.log(e);
+            });
         }
     }
+    
+    
+    
+    
 })

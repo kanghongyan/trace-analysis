@@ -47,9 +47,9 @@ function analysis_callback(results) {
             .mapKeys(function(v,k){
                 return '推荐条数为'+k+'的总展示量(登录用户)'
             })
-            .transform(function(r,v,k){
-                r.push({name:k,value:v})
-            }, [])
+//          .transform(function(r,v,k){
+//              r.push({name:k,value:v})
+//          }, [])
             .value();
         
         var data2_temp/*lid:[agent1,agent2...]*/ = _
@@ -75,12 +75,15 @@ function analysis_callback(results) {
             })
         })
         
-        result.data2 = _.map(data2_rtn_obj, function(v,k){
-            return {name: k, value: _.uniq(v).length}
+//      result.data2 = _.map(data2_rtn_obj, function(v,k){
+//          return {name: k, value: _.uniq(v).length}
+//      })
+        
+        result.data2 = _.mapValues(data2_rtn_obj, function(v,k){
+            return _.uniq(v).length
         })
-     
-     
-     
+        
+        
 // 下面代码在大量数据下 效率特别差
 //      result.data2 = _
 //          .chain(all)
@@ -146,9 +149,9 @@ function analysis_callback_2(results) {
             .countBy(function(arr){
                 return arr[1]
             })
-            .transform(function(r,v,k){
-                r.push({name:k,value:v})
-            }, [])
+//          .transform(function(r,v,k){
+//              r.push({name:k,value:v})
+//          }, [])
             .value();
         
         delete result.data;
@@ -173,20 +176,20 @@ module.exports = function(req, res, next) {
         cb_2 = _util_fs_async( 'traceData', project, startTime, endTime, analysis_callback_2 );
     
     
-    Promise.all([ cb, cb_2 ])
-    
-   .then(function(resultsArr){
-       var rtn = {};
-       rtn.data1 = resultsArr[0][0].data1;
-       rtn.data2 = resultsArr[0][0].data2;
-       rtn.data3 = resultsArr[1][0].data3;
+    Promise
+        .all([ cb, cb_2 ])
+        .then(function(resultsArr){
+            var rtn = {};
+            rtn.data1 = resultsArr[0][0].data1;
+            rtn.data2 = resultsArr[0][0].data2;
+            rtn.data3 = resultsArr[1][0].data3;
+            
+            res.send({
+                code: 1,
+                data: [rtn]
+            })
+        })
        
-       res.send({
-           code: 1,
-           data: [rtn]
-       })
-   })
-   
    .catch(function(e){
         res.send({
             code: 1,
