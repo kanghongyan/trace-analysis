@@ -117,19 +117,7 @@ function getBaseData(data) {
     }
     for (var h in result) {
         for (var m = 0; m < result[h].length; m++) {
-//          for (var n in result[h][m].uv) {
-//              if (n != 'length') {
-//                  delete result[h][m].uv[n];
-//              }
-//              
-//          }
             result[h][m].uv = result[h][m].uv.length;
-//          for (var n in result[h][m].lv) {
-//              if (n != 'length') {
-//                  delete result[h][m].lv[n];
-//              }
-//              
-//          }
             result[h][m].lv = result[h][m].lv.length;
         }
     }

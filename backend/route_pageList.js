@@ -28,6 +28,7 @@ function analysis_callback(results) {
                 return decodeURIComponent(s).replace(/\/*((\?|#).*|$)/g, '') || '/'
             })
             .uniq()
+            .sortBy()
             .value();
 }
     
