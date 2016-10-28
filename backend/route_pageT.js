@@ -69,65 +69,71 @@ function getBaseData(data) {
             for (var k = 0; k < result[rowObj.page].length; k++) {
                 if (result[rowObj.page][k].tid == rowObj.tid) {
                     isHas = true;
-                    result[rowObj.page][k].number++;
-                    if (result[rowObj.page][k].user[rowObj.uid]) {
-                        result[rowObj.page][k].user[rowObj.uid]++
+                    result[rowObj.page][k].pv++;
+                    if (result[rowObj.page][k].uv[rowObj.uid]) {
+                        result[rowObj.page][k].uv[rowObj.uid]++
                     } else {
-                        result[rowObj.page][k].user[rowObj.uid] = 1;
-                        result[rowObj.page][k].user.length++;
+                        result[rowObj.page][k].uv[rowObj.uid] = 1;
+                        result[rowObj.page][k].uv.length++;
                     }
-                    if (result[rowObj.page][k].loginuser[rowObj.loginuid]) {
-                        result[rowObj.page][k].loginuser[rowObj.loginuid]++
+                    if (result[rowObj.page][k].lv[rowObj.loginuid]) {
+                        result[rowObj.page][k].lv[rowObj.loginuid]++
                     } else {
-                        result[rowObj.page][k].loginuser[rowObj.loginuid] = 1;
-                        result[rowObj.page][k].loginuser.length++;
+                        result[rowObj.page][k].lv[rowObj.loginuid] = 1;
+                        result[rowObj.page][k].lv.length++;
                     }
                 }
             }
             if (!isHas) {
                 obj = {
                     tid: rowObj.tid,
-                    number: 1,
-                    user: {
+                    pv: 1,
+                    uv: {
                         length: 1
                     },
-                    loginuser: {
+                    lv: {
                         length: 1
                     }
                 };
-                obj.user[rowObj.uid] = 1
-                obj.loginuser[rowObj.loginuid] = 1
+                obj.uv[rowObj.uid] = 1
+                obj.lv[rowObj.loginuid] = 1
                 result[rowObj.page].push(obj);
             }
         } else {
             obj = {
                 tid: rowObj.tid,
-                number: 1,
-                user: {
+                pv: 1,
+                uv: {
                     length: 1
                 },
-                loginuser: {
+                lv: {
                     length: 1
                 }
             };
-            obj.user[rowObj.uid] = 1
-            obj.loginuser[rowObj.loginuid] = 1
+            obj.uv[rowObj.uid] = 1
+            obj.lv[rowObj.loginuid] = 1
             result[rowObj.page] = [obj];
         }
     }
     for (var h in result) {
         for (var m = 0; m < result[h].length; m++) {
-            for (var n in result[h][m].user) {
-                if (n != 'length') {
-                    delete result[h][m].user[n];
-                }
-            }
-            for (var n in result[h][m].loginuser) {
-                if (n != 'length') {
-                    delete result[h][m].loginuser[n];
-                }
-            }
+//          for (var n in result[h][m].uv) {
+//              if (n != 'length') {
+//                  delete result[h][m].uv[n];
+//              }
+//              
+//          }
+            result[h][m].uv = result[h][m].uv.length;
+//          for (var n in result[h][m].lv) {
+//              if (n != 'length') {
+//                  delete result[h][m].lv[n];
+//              }
+//              
+//          }
+            result[h][m].lv = result[h][m].lv.length;
         }
     }
+    
+    
     return result;
 }
