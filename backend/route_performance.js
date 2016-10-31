@@ -108,8 +108,12 @@ module.exports = function(req, res, next) {
         endTime = req.query.endTime,
         page = req.query.page;
     
-    _util_fs_async( category, project, startTime, endTime, 
-                    page ? analysis_callback_proxy(page) : analysis_callback )
+    _util_fs_async( category, project, startTime, endTime )
+    
+    .then(function(results){
+        var f = analysis_callback_proxy(page);
+        return f(results);
+    })
     
     .then(function(results){
         res.send({

@@ -104,7 +104,11 @@ module.exports = function(req, res, next) {
         startTime = req.query.startTime,
         endTime = req.query.endTime;
     
-    _util_fs_async( category, project, startTime, endTime, analysis_callback )
+    _util_fs_async( category, project, startTime, endTime )
+    
+    .then(function(results){
+        return analysis_callback(results);
+    })
     
     .then(function(results){
         res.send({

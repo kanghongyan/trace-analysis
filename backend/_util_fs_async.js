@@ -23,7 +23,7 @@ function getCont(filename, day) {
 
 
 
-module.exports = function(category, project, startTime, endTime, analyCB) {
+module.exports = function(category, project, startTime, endTime) {
     
     return isDir(category + '/' + project)
     
@@ -36,14 +36,10 @@ module.exports = function(category, project, startTime, endTime, analyCB) {
         return Promise.all(proms)
     })
     
-    .then(function(results){
-        return analyCB(results);
-    })
-    
     .catch(function(err){
         console.log('_util_fs_async throws', err);
         console.log(err.stack);
-        return [];
+        return '';
     });
     
     

@@ -1,10 +1,22 @@
 var fs = require('fs');
 var Promise = require("bluebird");
 var _ = require('lodash');
-var _util = require('./_util');
-var _util_fs_async = require('./_util_fs_async');
 
+var i = 0;
 
+    process.on('message', function(d){
+        console.log('child receive, ', arguments)
+    })
+    
+
+//  setInterval(function(){
+//      process.send(i++)
+//  },1000)
+    
+    
+    
+    
+    
 
 function analysis_callback(results) {
     
@@ -42,30 +54,26 @@ function analysis_callback(results) {
 
 
 
-module.exports = function(req, res, next) {
-    
-    var category = 'infoData',
-        project = req.query.project,
-        startTime = req.query.startTime,
-        endTime = req.query.endTime;
-    
-    _util_fs_async( category, project, startTime, endTime )
-    
-    .then(function(results){
-        return analysis_callback(results);
-    })
-    
-    .then(function(results){
-        res.send({
-            code: 1,
-            data: results
-        })
-        
-    }).catch(function(e){
-        res.send({
-            code: 1,
-            data: []
-        })
-    });
-    
-}
+//module.exports = function(req, res, next) {
+//  
+//  var category = 'infoData',
+//      project = req.query.project,
+//      startTime = req.query.startTime,
+//      endTime = req.query.endTime;
+//  
+//  _util_fs_async( category, project, startTime, endTime, analysis_callback )
+//  
+//  .then(function(results){
+//      res.send({
+//          code: 1,
+//          data: results
+//      })
+//      
+//  }).catch(function(e){
+//      res.send({
+//          code: 1,
+//          data: []
+//      })
+//  });
+//  
+//}

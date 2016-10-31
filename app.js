@@ -88,5 +88,14 @@ app.use(function(err, req, res, next) {
 });
 
 
+//var childProcess = require('child_process');
+//var c = global.c = childProcess.fork('./bin/child_computer.js');
+//
+//c.on('message', function(d){
+//  console.log('parent receive, ', d)
+//})
+//
+//c.send('i am parent')
+
 
 module.exports = app;

@@ -172,8 +172,12 @@ module.exports = function(req, res, next) {
         startTime = req.query.startTime,
         endTime = req.query.endTime;
     
-    var cb   = _util_fs_async( 'specData', project, startTime, endTime, analysis_callback ),
-        cb_2 = _util_fs_async( 'traceData', project, startTime, endTime, analysis_callback_2 );
+    var cb   = _util_fs_async( 'specData', project, startTime, endTime ).then(function(results){
+                   return analysis_callback(results);
+               }),
+        cb_2 = _util_fs_async( 'traceData', project, startTime, endTime ).then(function(results){
+                   return analysis_callback_2(results);
+               });
     
     
     Promise
