@@ -31,11 +31,8 @@ router.get('/projectList', function(req, res, next) {
 })
 
 
-router.get('/:route?', function(req, res, next) {
-    if (!req.params.route) {
-        next();
-    }
-    
+
+function composeParamObj(req, res) {
     var totalParams = {
         category:  'infoData',
         project:   req.query.project,
@@ -46,12 +43,19 @@ router.get('/:route?', function(req, res, next) {
         route:     req.params.route
     }
     
-    
     if (req.params.route==='totalV')
         totalParams.route = 'pageV'
     else if (req.params.route==='pageT')
         totalParams.category = 'traceData'
     
+    return totalParams
+}
+
+router.get('/:route?', function(req, res, next) {
+    
+    if (!req.params.route) {
+        next();
+    }
     
     var child_process = global.child_computer;
     
@@ -65,16 +69,16 @@ router.get('/:route?', function(req, res, next) {
     
     child_process.isUsing = true;
     
-    var callback_listener = function(d){
-        child_process.removeListener('message', callback_listener);
+    var _callback = function(d){
+        child_process.removeListener('message', _callback);
         child_process.isUsing = false;
         res.send({
             code: 1,
             data: d
         })
     }
-    child_process.on('message', callback_listener);
-    child_process.send(totalParams);
+    child_process.on('message', _callback);
+    child_process.send(composeParamObj(req, res));
     
 })
 
