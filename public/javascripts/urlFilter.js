@@ -29,7 +29,7 @@ var urlFilter = Vue.extend({
                 if (res.code == 1) {
                     renderPie(res.data, document.getElementById('pvchart-main'))
                 } else {
-                    alert('查找失败');
+                    alert(res.msg);
                 }
             })
             .catch(function(e){
@@ -60,7 +60,7 @@ var urlFilter = Vue.extend({
                     //    this.currentPage = res.data[0] || '';
                     //},300)
                 } else {
-                    alert('查找失败');
+                    alert(res.msg);
                 }
             })
             .catch(function(e){

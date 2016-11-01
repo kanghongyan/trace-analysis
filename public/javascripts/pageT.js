@@ -32,7 +32,7 @@ var pageT = Vue.extend({
                 if (res.code == 1) {
                     this.$broadcast('showChartCon', res.data);
                 } else {
-                    alert('查找失败');
+                    alert(res.msg);
                 }
             })
             .catch(function(e){

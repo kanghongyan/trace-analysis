@@ -27,7 +27,7 @@ var pageV = Vue.extend({
                 if (res.code == 1) {
                     renderLineStack(res.data, document.getElementById('pvchart-main'))
                 } else {
-                    alert('查找失败');
+                    alert(res.msg);
                 }
             })
             .catch(function(e){
@@ -58,7 +58,7 @@ var pageV = Vue.extend({
                     //    this.currentPage = res.data[0] || '';
                     //},300)
                 } else {
-                    alert('查找失败');
+                    alert(res.msg);
                 }
             })
             .catch(function(e){

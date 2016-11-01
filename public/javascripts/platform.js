@@ -24,7 +24,7 @@ var platform = Vue.extend({
                 if (res.code == 1) {
                     renderPie(res.data, document.getElementById('pvchart-main'))
                 } else {
-                    alert('查找失败');
+                    alert(res.msg);
                 }
             })
             .catch(function(e){

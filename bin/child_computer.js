@@ -19,8 +19,7 @@ var computeMap = {
 
 
 process.on('message', function(settings) {
-    
-    var type = settings.type
+    var route = settings.route
     var category = settings.category
     var project = settings.project
     var startTime = settings.startTime
@@ -29,16 +28,16 @@ process.on('message', function(settings) {
     var filter = settings.filter
     
     
-    var compute_logic_callback = computeMap[type];
+    var compute_logic_callback = computeMap[route];
     
     
-    if (type==='pageV' || type==='performance')
+    if (route==='pageV' || route==='performance')
         compute_logic_callback = compute_logic_callback(page);
     
-    else if (type==='urlFilter')
+    else if (route==='urlFilter')
         compute_logic_callback = compute_logic_callback(page, filter);
     
-    else if (type==='specDaoliuPortal') {
+    else if (route==='specDaoliuPortal') {
         var analysis_callback_1 = compute_logic_callback.analysis_callback_1;
         var analysis_callback_2 = compute_logic_callback.analysis_callback_2;
         
@@ -58,6 +57,8 @@ process.on('message', function(settings) {
                 rtn.data3 = resultsArr[1][0].data3;
                 
                 process.send([rtn])
+            }).catch(function(e){
+                process.send([])
             });
         
         return;

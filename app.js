@@ -96,12 +96,7 @@ app.use(function(err, req, res, next) {
  * 增加子进程
  */
 var child_process = require('child_process');
-global.child_computer_1 = child_process.fork('./bin/child_computer.js');
-//child_computer_1.on('message', function(d){
-//  console.log('parent receive, ', d)
-//})
-//
-//child_computer_1.send('i am parent')
+global.child_computer = child_process.fork('./bin/child_computer.js');
 
 
 module.exports = app;

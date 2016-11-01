@@ -74,7 +74,7 @@ var specDaoliuPortal = Vue.extend({
                     renderPie(res.data, document.getElementById('spec-chart-main-2'), 'data2');
                     renderPie(res.data, document.getElementById('spec-chart-main-3'), 'data3');
                 } else {
-                    alert('查找失败');
+                    alert(res.msg);
                 }
             })
             .catch(function(e){

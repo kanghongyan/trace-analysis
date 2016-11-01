@@ -27,7 +27,7 @@ var screenSize = Vue.extend({
                     // dpr饼图
                     renderPie(res.data, document.getElementById('screenCake-main'), 'data2')
                 } else {
-                    alert('查找失败');
+                    alert(res.msg);
                 }
             })
             .catch(function(e){
