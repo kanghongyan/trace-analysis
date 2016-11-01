@@ -6,34 +6,6 @@ var _util_fs_async = require('./_util_fs_async');
 
 
 
-function analysis_callback(results) {
-    
-    return _.chain(results)
-            .map('data')
-            .compact()
-            .map(function(data){
-                return data.split('\r\n')
-            })
-            .flatten()
-            .map(function(item){
-                return item.match(/(^|\|)page\=([^|]*)/)
-            })
-            .filter(function(reArr){
-                return reArr && reArr[2]
-            })
-            .map(function(reArr){
-                return reArr[2]
-            })
-            .map(function(s){
-                return decodeURIComponent(s).replace(/\/*((\?|#).*|$)/g, '') || '/'
-            })
-            .uniq()
-            .sortBy()
-            .value();
-}
-    
-
-
 
 module.exports = function(req, res, next) {
     
@@ -42,24 +14,21 @@ module.exports = function(req, res, next) {
         startTime = req.query.startTime,
         endTime = req.query.endTime;
     
-    
-    _util_fs_async( category, project, startTime, endTime )
-    
-    .then(function(results){
-        return analysis_callback(results);
-    })
-    
-    .then(function(results){
+    var child_process = global.child_computer_1;
+    var cb = function(d){
+        child_process.removeListener('message',cb);
         res.send({
             code: 1,
-            data: results
+            data: d
         })
-        
-    }).catch(function(e){
-        res.send({
-            code: 1,
-            data: []
-        })
+    }
+    child_process.send({
+        category:category,
+        project:project,
+        startTime:startTime,
+        endTime:endTime,
+        type:'pageList'
     });
+    child_process.on('message',cb);
     
 }

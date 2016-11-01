@@ -6,41 +6,6 @@ var _util_fs_async = require('./_util_fs_async');
 
 
 
-function analysis_callback(results) {
-    
-    function analy_data(data) {
-        if (!data) {
-            return;
-        }
-        
-        return _
-            .chain(data.split('\r\n'))
-            .map(function(item){
-                return item.match(/(^|\|)_\=([^|]*)/)
-            })
-            .filter(function(reArr){
-                return reArr && reArr[2]
-            })
-            .map(function(reArr){
-                return reArr[2]
-            })
-            .countBy(function(s){
-                return (new Date(+s)).getHours()
-            })
-            .mapKeys(function(v,k){
-                return k + '-' + (+k+1)
-            })
-            .value();
-    }
-    
-    results.forEach(function(result){
-        result.data = analy_data(result.data);
-    });
-    
-    return results;
-}
-
-
 
 module.exports = function(req, res, next) {
     
@@ -49,23 +14,21 @@ module.exports = function(req, res, next) {
         startTime = req.query.startTime,
         endTime = req.query.endTime;
     
-    _util_fs_async( category, project, startTime, endTime )
-    
-    .then(function(results){
-        return analysis_callback(results);
-    })
-    
-    .then(function(results){
+    var child_process = global.child_computer_1;
+    var cb = function(d){
+        child_process.removeListener('message',cb);
         res.send({
             code: 1,
-            data: results
+            data: d
         })
-        
-    }).catch(function(e){
-        res.send({
-            code: 1,
-            data: []
-        })
+    }
+    child_process.send({
+        category:category,
+        project:project,
+        startTime:startTime,
+        endTime:endTime,
+        type:'hourPeak'
     });
+    child_process.on('message',cb);
     
 }

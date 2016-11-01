@@ -88,14 +88,20 @@ app.use(function(err, req, res, next) {
 });
 
 
-//var childProcess = require('child_process');
-//var c = global.c = childProcess.fork('./bin/child_computer.js');
-//
-//c.on('message', function(d){
+
+
+
+/**
+ * 2016-10-31
+ * 增加子进程
+ */
+var child_process = require('child_process');
+global.child_computer_1 = child_process.fork('./bin/child_computer.js');
+//child_computer_1.on('message', function(d){
 //  console.log('parent receive, ', d)
 //})
 //
-//c.send('i am parent')
+//child_computer_1.send('i am parent')
 
 
 module.exports = app;

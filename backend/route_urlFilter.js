@@ -6,72 +6,6 @@ var _util_fs_async = require('./_util_fs_async');
 
 
 
-function analysis_callback(results, _PAGE, _FILTER) {
-    
-    function get_key(s, key) {
-        var reg = new RegExp('(^|\|)' + key + '\=([^|]*)'),
-            arr = s.match(reg);
-        return (arr && arr[2]) ? arr[2] : null;
-    }
-    
-    
-    function get_url_param_key(s, key) {
-        var reg = new RegExp('(&|\\?)' + key + '\=([^#&]*)'),
-            arr = s.match(reg);
-        return (arr && arr[2]) ? arr[2] : '无参数';
-    }
-    
-    
-    function is_curr_page(item) {
-        var page = get_key(item, 'page');
-        if (!page) {
-            return false;
-        }
-        page = decodeURIComponent(page);
-        page = page.replace(/\/*((\?|#).*|$)/g, '');
-        if (page!==_PAGE) {
-            return false;
-        }
-        return true;
-    }
-    
-    
-    function analy_data(data) {
-        if (!data) {
-            return;
-        }
-        
-        return _
-            .chain(data.split('\r\n'))
-            .filter(is_curr_page)
-            .map(function(item){
-                return get_key(item, 'page')
-            })
-            .map(function(s){
-                return get_url_param_key(s, _FILTER)
-            })
-            .countBy(function(s){
-                return s
-            })
-            .value();
-    }
-    
-    results.forEach(function(result){
-        result.data = analy_data(result.data);
-    });
-    
-    return results;
-}
-
-
-
-function analysis_callback_proxy(page, filter) {
-    return function(results) {
-        return analysis_callback(results, page, filter);
-    }
-}
-
-
 
 module.exports = function(req, res, next) {
     
@@ -82,24 +16,23 @@ module.exports = function(req, res, next) {
         page = req.query.page,
         filter = req.query.filter;
     
-    _util_fs_async( category, project, startTime, endTime )
-    
-    .then(function(results){
-        var f = analysis_callback_proxy(page, filter);
-        return f(results);
-    })
-    
-    .then(function(results){
+    var child_process = global.child_computer_1;
+    var cb = function(d){
+        child_process.removeListener('message',cb);
         res.send({
             code: 1,
-            data: results
+            data: d
         })
-        
-    }).catch(function(e){
-        res.send({
-            code: 1,
-            data: []
-        })
+    }
+    child_process.send({
+        category:category,
+        project:project,
+        page: page,
+        filter: filter,
+        startTime:startTime,
+        endTime:endTime,
+        type:'urlFilter'
     });
+    child_process.on('message',cb);
     
 }
