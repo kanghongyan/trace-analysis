@@ -58,8 +58,10 @@ router.get('/:route?', function(req, res, next) {
     }
     
     var child_process = global.child_computer;
+    var child_process_2 = global.child_computer_2;
+    var child_process_current;
     
-    if (child_process.isUsing) {
+    if (child_process.isUsing && child_process_2.isUsing) {
         res.send({
             code: 2,
             msg: '系统繁忙，请稍后再试'
@@ -67,18 +69,19 @@ router.get('/:route?', function(req, res, next) {
         return;
     }
     
-    child_process.isUsing = true;
+    child_process_current = child_process.isUsing ? child_process_2 : child_process;
+    child_process_current.isUsing = true;
     
     var _callback = function(d){
-        child_process.removeListener('message', _callback);
-        child_process.isUsing = false;
+        child_process_current.removeListener('message', _callback);
+        child_process_current.isUsing = false;
         res.send({
             code: 1,
             data: d
         })
     }
-    child_process.on('message', _callback);
-    child_process.send(composeParamObj(req, res));
+    child_process_current.on('message', _callback);
+    child_process_current.send(composeParamObj(req, res));
     
 })
 

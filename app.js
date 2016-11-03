@@ -97,6 +97,6 @@ app.use(function(err, req, res, next) {
  */
 var child_process = require('child_process');
 global.child_computer = child_process.fork('./bin/child_computer.js');
-
+global.child_computer_2 = child_process.fork('./bin/child_computer.js');
 
 module.exports = app;
