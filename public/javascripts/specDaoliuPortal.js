@@ -79,6 +79,7 @@ var specDaoliuPortal = Vue.extend({
             })
             .catch(function(e){
                 console.log(e);
+                alert(e);
             });
         }
     }

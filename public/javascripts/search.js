@@ -39,8 +39,6 @@ var search = Vue.extend({
                 if (res.code == 1) {
                     this.projects = res.data;
                     this.projectSelected = this.projects[0];
-                } else {
-                    alert('查找失败');
                 }
             })
             .catch(function(e){
