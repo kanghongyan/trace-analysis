@@ -75,18 +75,28 @@ function fetch_json(url, params) {
             'Cache-Control': 'no-cache'
         }
     })
+    
     .then( res => {
         // 关闭loading模态
         this.$dispatch && this.$dispatch('hideLoading');
         
         return res.ok ? res.json() : { code:res.status, msg:res.statusText }
+        /**
+        return new Promise(function(resolve, reject){
+            if (res.ok)
+                resolve(res.json())
+            else
+                reject({ code:res.status, msg:res.statusText })
+        })
+        **/
     })
+    
     .then( res => {
         if (res.code == -1) {
             location.href = '/login'
             throw 'Session expires!' // 不throw_err的话就没办法阻止promise链
         }
-        return res
+        return res;
     })
 }
 
