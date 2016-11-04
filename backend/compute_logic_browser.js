@@ -25,7 +25,7 @@ module.exports = function(results) {
                 return reArr[2]
             })
             .map(function(s){
-                return ['58app','uc','qqbrowser','wx'].indexOf(s) == -1 ? 'others' : s
+                return ['qianguiApp','58app','uc','qqbrowser','wx'].indexOf(s) == -1 ? 'others' : s
             })
             .countBy(function(s){
                 return s
