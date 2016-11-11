@@ -18,9 +18,14 @@ router.get('/login', function(req, res, next) {
 router.post('/login', function(req, res, next) {
     if (userInfo[req.body.name] && req.body.password == userInfo[req.body.name].password) {
         req.session.user = req.body.name;
-        res.send({
+        res.write('');
+        res.write('{"isLogin": "true"}');
+        res.end();
+        /*
+        res.write({
             isLogin: true
         });
+        */
     } else {
         res.send({
             isLogin: false,

@@ -32,27 +32,7 @@ router.get('/projectList', function(req, res, next) {
 
 
 
-function composeParamObj(req, res) {
-    var totalParams = {
-        category:  'infoData',
-        project:   req.query.project,
-        page:      req.query.page,
-        filter:    req.query.filter,
-        startTime: req.query.startTime,
-        endTime:   req.query.endTime,
-        route:     req.params.route
-    }
-    
-    if (req.params.route==='totalV')
-        totalParams.route = 'pageV'
-    else if (req.params.route==='pageT')
-        totalParams.category = 'traceData'
-    
-    return totalParams
-}
-
 router.get('/:route?', function(req, res, next) {
-    
     if (!req.params.route) {
         next();
     }
@@ -75,6 +55,7 @@ router.get('/:route?', function(req, res, next) {
     var _callback = function(d){
         child_process_current.removeListener('message', _callback);
         child_process_current.isUsing = false;
+        
         res.send({
             code: 1,
             data: d
@@ -82,10 +63,28 @@ router.get('/:route?', function(req, res, next) {
     }
     child_process_current.on('message', _callback);
     child_process_current.send(composeParamObj(req, res));
-    
 })
 
 
+
+function composeParamObj(req, res) {
+    var totalParams = {
+        category:  'infoData',
+        project:   req.query.project,
+        page:      req.query.page,
+        filter:    req.query.filter,
+        startTime: req.query.startTime,
+        endTime:   req.query.endTime,
+        route:     req.params.route
+    }
+    
+    if (req.params.route==='totalV')
+        totalParams.route = 'pageV'
+    else if (req.params.route==='pageT')
+        totalParams.category = 'traceData'
+    
+    return totalParams
+}
 
 ///*公用--获取项目页面列表*/
 //router.get('/pageList', route_pageList)
