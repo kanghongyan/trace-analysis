@@ -12,8 +12,7 @@ var computeMap = {
     performance: require('../backend/compute_logic_performance'),
     platform: require('../backend/compute_logic_platform'),
     screenSize: require('../backend/compute_logic_screenSize'),
-    urlFilter: require('../backend/compute_logic_urlFilter'),
-    specDaoliuPortal: require('../backend/compute_logic_specDaoliuPortal')
+    urlFilter: require('../backend/compute_logic_urlFilter')
 }
 
 
@@ -36,33 +35,6 @@ process.on('message', function(settings) {
     
     else if (route==='urlFilter')
         compute_logic_callback = compute_logic_callback(page, filter);
-    
-    else if (route==='specDaoliuPortal') {
-        var analysis_callback_1 = compute_logic_callback.analysis_callback_1;
-        var analysis_callback_2 = compute_logic_callback.analysis_callback_2;
-        
-        var cb_1 = _util_fs_async( 'specData', project, startTime, endTime ).then(function(results){
-               return analysis_callback_1(results);
-            }),
-            cb_2 = _util_fs_async( 'traceData', project, startTime, endTime ).then(function(results){
-               return analysis_callback_2(results);
-            });
-        
-        Promise
-            .all([ cb_1, cb_2 ])
-            .then(function(resultsArr){
-                var rtn = {};
-                rtn.data1 = resultsArr[0][0].data1;
-                rtn.data2 = resultsArr[0][0].data2;
-                rtn.data3 = resultsArr[1][0].data3;
-                
-                process.send([rtn])
-            }).catch(function(e){
-                process.send([])
-            });
-        
-        return;
-    }
         
     
     _util_fs_async( category, project, startTime, endTime )

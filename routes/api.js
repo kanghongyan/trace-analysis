@@ -6,10 +6,8 @@ var Promise = require("bluebird");
 var _ = require('lodash');
 
 var userInfo = require('../config/userConfig');
-var _util = require('../backend/_util');
-var _util_fs_async = require('../backend/_util_fs_async');
 
-
+var routeSpecDaoliuPortal = require('../backend/route_specDaoliuPortal');
 
 
 
@@ -22,6 +20,7 @@ router.get('/*', function(req, res, next) {
     }
 })
 
+
 /*公用--获取项目列表*/
 router.get('/projectList', function(req, res, next) {
     res.send({
@@ -31,7 +30,13 @@ router.get('/projectList', function(req, res, next) {
 })
 
 
+/*特殊--导流portal页*/
+router.get('/specDaoliuPortal', function(req, res, next) {
+    return routeSpecDaoliuPortal(req, res);
+})
 
+
+/*其他全部--使用全局process*/
 router.get('/:route?', function(req, res, next) {
     if (!req.params.route) {
         next();
