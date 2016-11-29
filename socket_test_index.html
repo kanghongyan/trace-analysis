@@ -10,3 +10,56 @@ socket.on('connect', function(data) {
     socket.emit('join', 'Hello World from client');
 });
 </script>
+
+
+
+
+<input type="file" id="file" />
+
+<script>
+var fileEl = document.getElementById('file');
+fileEl.onchange = function() {
+    var file = fileEl.files[0];
+    if(!file) return;
+
+    var socket = io('http://localhost/upload');
+
+    socket.on('connect', function() {
+        var fileReader = new FileReader();
+        fileReader.onloadend = function() {
+            var bin = fileReader.result;
+            var chunkSize = 10240;
+            var sent = 0;
+
+            // make server knows the name and size of the file
+            socket.once('serverGrantFileTransfer', () => {
+                function beginTransfer() {
+                    if(sent >= bin.byteLength) {
+                        console.log('Transmission complete!');
+                        socket.emit('clientFinishTransmission');
+                        return;
+                    }
+
+                    var chunk = bin.slice(sent, sent + chunkSize);
+
+                    socket.once('serverRequestContinue', beginTransfer);
+                    socket.emit('clientSentChunk', chunk);
+
+                    sent += chunk.byteLength;
+                    console.log('Sent: ' + sent);
+                }
+
+                beginTransfer();
+            });
+            socket.emit('clientRequestFileTransfer', {
+                name: file.name,
+                size: file.size
+            });
+
+        };
+
+        fileReader.readAsArrayBuffer(file);
+    });
+};
+
+</script>
