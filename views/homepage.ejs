@@ -269,7 +269,6 @@ var socket = io('http://localhost');
 socket.on('news', function (data) {
     console.log(data);
 });
-
 socket.on('connect', function(data) {
     socket.emit('join', 'Hello World from client');
 });

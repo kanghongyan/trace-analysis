@@ -13,6 +13,7 @@ var http = require('http');
  */
 
 var port = normalizePort(process.env.PORT || '3000');
+port = 80;
 app.set('port', port);
 
 /**
@@ -93,10 +94,8 @@ function onListening() {
 
 
 
-var fs = require('fs');
+
 var io = require('socket.io').listen(server);
-
-
 io.on('connection', function(client) {
     setInterval(function() {
         client.emit('news', 'news from server');
