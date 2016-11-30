@@ -88,3 +88,18 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+
+
+
+
+var fs = require('fs');
+var io = require('socket.io').listen(server);
+
+
+io.on('connection', function(client) {
+    setInterval(function() {
+        client.emit('news', 'news from server');
+    }, 10000)
+    client.emit('news', 'news from server');
+});

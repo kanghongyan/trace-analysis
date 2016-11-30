@@ -1,10 +1,7 @@
 var express = require('express');
 var app     = express();
 var server  = app.listen(80);
-var io = require('socket.io');
 var fs = require('fs');
-
-io = io.listen(server);
 
 
 app.use(express.static(__dirname + '/public'));
@@ -16,6 +13,9 @@ app.use(function(req, res, next) {
 
 
 
+
+
+var io = require('socket.io').listen(server);
 
 io.on('connection', function(client) {
     //console.log('Client connected...', client);
@@ -38,10 +38,8 @@ io.of('/upload', function(client){
 
 
 
-function logic(socket) {
-    
-    
 
+function logic(socket) {
     var writeStream = null;
     var fileSize = 0;
     var wrote = 0;
