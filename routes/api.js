@@ -7,8 +7,6 @@ var _ = require('lodash');
 
 var userInfo = require('../config/userConfig');
 
-var routeSpecDaoliuPortal = require('../backend/route_specDaoliuPortal');
-
 
 
 
@@ -32,7 +30,26 @@ router.get('/projectList', function(req, res, next) {
 
 /*特殊--导流portal页*/
 router.get('/specDaoliuPortal', function(req, res, next) {
-    return routeSpecDaoliuPortal(req, res);
+    var child_process_current = global.child_computer_spec;
+    
+    if (child_process_current.isUsing) {
+        res.send({
+            code: 2,
+            msg: '系统繁忙，请稍后再试'
+        })
+        return;
+    }
+    child_process_current.isUsing = true;
+    
+    var _callback = function(d){
+        child_process_current.removeListener('message', _callback);
+        child_process_current.isUsing = false;
+        
+        res.send(d)
+    }
+    child_process_current.on('message', _callback);
+    
+    child_process_current.send(composeParamObj(req, res));
 })
 
 

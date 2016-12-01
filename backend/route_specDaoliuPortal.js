@@ -173,11 +173,15 @@ function analysis_callback_2(results) {
 
 
 
-module.exports = function(req, res) {
-    
+module.exports = function(/*req, res*/settings) {
+    /*
     var project = req.query.project,
         startTime = req.query.startTime,
         endTime = req.query.endTime;
+    */
+    var project = settings.project,
+        startTime = settings.startTime,
+        endTime = settings.endTime;
     
     var cb_1 = _util_fs_async( 'specData', project, startTime, endTime ).then(function(results){
            return analysis_callback_1(results);
@@ -186,23 +190,34 @@ module.exports = function(req, res) {
            return analysis_callback_2(results);
         });
     
-    Promise
+    return Promise
         .all([ cb_1, cb_2 ])
         .then(function(resultsArr){
             var rtn = {};
             rtn.data1 = resultsArr[0][0].data1;
             rtn.data2 = resultsArr[0][0].data2;
             rtn.data3 = resultsArr[1][0].data3;
-            
+            /*
             res.send({
                 code: 1,
                 data: [rtn]
             })
+            */
+            return {
+                code: 1,
+                data: [rtn]
+            }
         }).catch(function(e){
+            /*
             res.send({
                 code: 1,
                 data: []
             })
+            */
+            return {
+                code: 1,
+                data: []
+            }
         });
 }
 
