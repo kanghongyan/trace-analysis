@@ -19,6 +19,8 @@ router.get('/*', function(req, res, next) {
 })
 
 
+
+
 /*公用--获取项目列表*/
 router.get('/projectList', function(req, res, next) {
     res.send({
@@ -28,29 +30,16 @@ router.get('/projectList', function(req, res, next) {
 })
 
 
-/*特殊--导流portal页*/
-router.get('/specDaoliuPortal', function(req, res, next) {
-    var child_process_current = global.child_computer_spec;
-    
-    if (child_process_current.isUsing) {
-        res.send({
-            code: 2,
-            msg: '系统繁忙，请稍后再试'
-        })
-        return;
-    }
-    child_process_current.isUsing = true;
-    
-    var _callback = function(d){
-        child_process_current.removeListener('message', _callback);
-        child_process_current.isUsing = false;
-        
-        res.send(d)
-    }
-    child_process_current.on('message', _callback);
-    
-    child_process_current.send(composeParamObj(req, res));
-})
+
+
+/*特殊--导流portal页
+ * 已改为socket.io
+ * jiajianrong
+ * 2016-12-02
+ * */
+
+
+
 
 
 /*其他全部--使用全局process*/
@@ -59,37 +48,36 @@ router.get('/:route?', function(req, res, next) {
         next();
     }
     
-    var child_process = global.child_computer;
-    var child_process_2 = global.child_computer_2;
-    var child_process_current;
-    
-    if (child_process.isUsing && child_process_2.isUsing) {
-        res.send({
-            code: 2,
-            msg: '系统繁忙，请稍后再试'
-        })
+    // 可用进程池
+    var cp_factory = global.CP_COMPUTE_FACTORY;
+    // 取出空闲进程
+    var cp_curr = cp_factory.filter(function(cp){
+        return !cp.isUsing
+    }) [0];
+    // 不存在空闲进程，向浏览器返回信息，结束会话
+    if (!cp_curr) {
+        res.send({ code: 2, msg: '系统繁忙，请稍后再试' })
         return;
     }
+    // 标识进程为工作状态
+    cp_curr.isUsing = true;
+    // 向进程发送任务
+    cp_curr.send( _parseParams(req, res) );
+    // 注册结果钩子，标识进程为空闲状态，并将数据返回至浏览器，结束会话
+    cp_curr.on('message', function _m(d){
+        cp_curr.removeListener('message', _m);
+        cp_curr.isUsing = false;
+        // 向浏览器返回信息，结束会话
+        res.send({ code: 1, data: d });
+    });
     
-    child_process_current = child_process.isUsing ? child_process_2 : child_process;
-    child_process_current.isUsing = true;
-    
-    var _callback = function(d){
-        child_process_current.removeListener('message', _callback);
-        child_process_current.isUsing = false;
-        
-        res.send({
-            code: 1,
-            data: d
-        })
-    }
-    child_process_current.on('message', _callback);
-    child_process_current.send(composeParamObj(req, res));
 })
 
 
 
-function composeParamObj(req, res) {
+
+
+function _parseParams(req, res) {
     var totalParams = {
         category:  'infoData',
         project:   req.query.project,

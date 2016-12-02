@@ -220,8 +220,3 @@ module.exports = function(/*req, res*/settings) {
             }
         });
 }
-
-
-
-//exports.analysis_callback_1 = analysis_callback_1;
-//exports.analysis_callback_2 = analysis_callback_2;

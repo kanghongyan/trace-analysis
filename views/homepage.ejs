@@ -265,11 +265,15 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-var socket = io('//localhost:3000');
-socket.on('news', function (data) {
-    console.log(data);
-});
-socket.on('connect', function(data) {
-    socket.emit('join', 'Hello World from client');
-});
+function __beginSocket() {
+    var socket = io('/');
+    socket.on('news', function (data) {
+        console.log(data);
+    });
+    socket.on('connect', function(data) {
+        socket.emit('join', 'Hello World from client');
+    });
+}
+
+//setTimeout(__beginSocket, 5000)
 </script>

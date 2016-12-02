@@ -46,15 +46,30 @@
 }
  */
 
+
 var specDaoliuPortal = Vue.extend({
     template: '#specDaoliuPortal-template',
     data: function() {
         return {
+            socket: null,
             okFun: this.getData
         }
     },
     components: {
         'search': search
+    },
+    created: function() {
+        var initSocket = function() {
+            this.socket = io('/spec');
+            this.socket.on('result', this.onSocketRtn);
+            //this.socket.on('connect', function(data) {});
+        }.bind(this);
+        
+        // socket.io client js后置
+        if (document.readyState=='loading')
+            document.addEventListener('DOMContentLoaded', initSocket);
+        else
+            initSocket()
     },
     methods: {
         getData: function(startTime, endTime, project) {
@@ -63,24 +78,25 @@ var specDaoliuPortal = Vue.extend({
                 return;
             }
             
-            fetch_json.bind(this)('/api/specDaoliuPortal', {
-                project: project,
-                startTime: startTime,
-                endTime: endTime
-            })
-            .then( res => {
-                if (res.code == 1) {
-                    renderPie(res.data, document.getElementById('spec-chart-main-1'), 'data1');
-                    renderPie(res.data, document.getElementById('spec-chart-main-2'), 'data2');
-                    renderPie(res.data, document.getElementById('spec-chart-main-3'), 'data3');
-                } else {
-                    alert(res.msg);
-                }
-            })
-            .catch(function(e){
-                console.log(e);
-                alert(e);
-            });
+            // 展示loading模态
+            this.$dispatch && this.$dispatch('showLoading');
+            // 发送socket请求
+            this.socket.emit('params', {startTime:startTime, endTime:endTime, project:project});
+        },
+        
+        onSocketRtn: function(result) {
+            // 关闭loading模态
+            this.$dispatch && this.$dispatch('hideLoading');
+            
+            if (result.code == 1) {
+                renderPie(result.data, document.getElementById('spec-chart-main-1'), 'data1');
+                renderPie(result.data, document.getElementById('spec-chart-main-2'), 'data2');
+                renderPie(result.data, document.getElementById('spec-chart-main-3'), 'data3');
+            } else {
+                alert(result.msg);
+            }
+            //socket.disconnect()
+            //socket.close()
         }
     }
     
