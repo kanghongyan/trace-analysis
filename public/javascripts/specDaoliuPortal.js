@@ -62,7 +62,11 @@ var specDaoliuPortal = Vue.extend({
         var initSocket = function() {
             this.socket = io('/spec');
             this.socket.on('result', this.onSocketRtn);
-            //this.socket.on('connect', function(data) {});
+            this.socket.on('connect', (data)=>{
+                setInterval(()=>{
+                    this.socket.emit('heartbeat', '1', (s)=>console.log(s))
+                }, 50000)
+            });
         }.bind(this);
         
         // socket.io client js后置
