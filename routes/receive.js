@@ -6,7 +6,13 @@ var _ = require('lodash');
 var _util = require('../backend/_util');
 // var _util = require( path.join(__dirname, '..', 'backend', '_util') );
 
+var TYPE_MAP = {
+    'info': 'infoData',
+    'trace': 'traceData',
+    'spec': 'specData'
+};
 
+/*
 router.get('/trace', function(req, res, next) {
     res.send('');
     saveData(req, res, 'traceData');
@@ -19,6 +25,17 @@ router.get('/spec', function(req, res, next) {
     res.send('');
     saveData(req, res, 'specData');
 })
+*/
+
+router.get('/:type?', function(req, res, next) {
+    var type = TYPE_MAP[req.params.type];
+    if (type) {
+        saveData(req, res, type);
+        res.send('');
+    } else {
+        next();
+    }
+})
 
 
 
@@ -26,7 +43,7 @@ function saveData(req, res, categoryName) {
     var ip = getClientIp(req);
     
     if (!filterIp(ip)) {
-        //return;
+        return;
     }
     
     var data = _
@@ -73,15 +90,15 @@ function filterIp(ip) {
         if (RegExp.$1 >= 97 && RegExp.$1 <= 110) {
             return '';
         }
-    } else if (/36\.110\.35\.(\d+)/.test(ip)) {
+    } else if (/^36\.110\.35\.(\d+)/.test(ip)) {
         if (RegExp.$1 >= 77 && RegExp.$1 <= 78) {
             return '';
         }
-    } else if (/223\.72\.148\.(\d+)/.test(ip)) {
+    } else if (/^223\.72\.148\.(\d+)/.test(ip)) {
         if (RegExp.$1 >= 161 && RegExp.$1 <= 162) {
             return '';
         }
-    } else if (/123\.125\.250\.(\d+)/.test(ip)) {
+    } else if (/^123\.125\.250\.(\d+)/.test(ip)) {
         if (RegExp.$1 >= 164 && RegExp.$1 <= 174) {
             return '';
         }
