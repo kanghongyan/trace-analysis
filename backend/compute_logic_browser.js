@@ -30,7 +30,7 @@ module.exports = function(results) {
                         'uc',
                         'qqbrowser',
                         'wx',
-                        'sougoubrowser',
+                        'sogoumobilebrowser',
                         'samsungbrowser',
                         'miuibrowser',
                         'baidubrowser',
