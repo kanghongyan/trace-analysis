@@ -27,7 +27,22 @@ router.get('/spec', function(req, res, next) {
 })
 */
 
-router.get('/:type?', function(req, res, next) {
+// router.get('/:type?', function(req, res, next) {
+//     var type = TYPE_MAP[req.params.type];
+//     if (type) {
+//         saveData(req, res, type);
+//         res.send('');
+//     } else {
+//         next();
+//     }
+// })
+
+
+router.route('/:type?')
+    .get(getHandler)
+    .post(postHandler)
+
+function getHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
     if (type) {
         saveData(req, res, type);
@@ -35,7 +50,17 @@ router.get('/:type?', function(req, res, next) {
     } else {
         next();
     }
-})
+}
+
+function postHandler(req, res, next) {
+    var type = TYPE_MAP[req.params.type];
+    if (type) {
+        saveData(req, res, type);
+        res.status(204).end();
+    } else {
+        next();
+    }
+}
 
 
 
