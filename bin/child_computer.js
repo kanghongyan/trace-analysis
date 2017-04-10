@@ -12,7 +12,8 @@ var computeMap = {
     performance: require('../backend/compute_logic_performance'),
     platform: require('../backend/compute_logic_platform'),
     screenSize: require('../backend/compute_logic_screenSize'),
-    urlFilter: require('../backend/compute_logic_urlFilter')
+    urlFilter: require('../backend/compute_logic_urlFilter'),
+    refer: require('../backend/compute_logic_refer')
 }
 
 

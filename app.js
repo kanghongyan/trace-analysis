@@ -97,11 +97,11 @@ app.use(function(err, req, res, next) {
  */
 var child_process = require('child_process');
 
-global.CP_COMPUTE_FACTORY = [ child_process.fork('./bin/child_computer.js'),
-                              child_process.fork('./bin/child_computer.js'),
-                              child_process.fork('./bin/child_computer.js') ];
+global.CP_COMPUTE_FACTORY = [ child_process.fork('./bin/child_computer.js', [], {execArgv: ['--debug=5859']}),
+                              child_process.fork('./bin/child_computer.js', [], {execArgv: ['--debug=5869']}),
+                              child_process.fork('./bin/child_computer.js', [], {execArgv: ['--debug=5879']}) ];
 
-global.CP_COMPUTE_SPEC_FACTORY = [ child_process.fork('./bin/child_computer_spec.js'),
-                                   child_process.fork('./bin/child_computer_spec.js') ];
+global.CP_COMPUTE_SPEC_FACTORY = [ child_process.fork('./bin/child_computer_spec.js', [], {execArgv: ['--debug=5889']}),
+                                   child_process.fork('./bin/child_computer_spec.js', [], {execArgv: ['--debug=5899']}) ];
 
 module.exports = app;
