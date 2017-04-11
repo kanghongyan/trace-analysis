@@ -212,6 +212,52 @@ function renderPie(strippedData, el, KEY='data') {
     _renderPie(el,legendArr,seriesArr)
 }
 
+/**
+ * 柱状图
+ * @param strippedData
+ * @param el
+ * @param KEY
+ */
+function renderBar(strippedData, el, KEY='data') {
+
+    var legendArr = _
+        .chain(strippedData)
+        .map(KEY)
+        .compact()
+        .map( v => Object.keys(v) )
+        .flatten()
+        .uniq()
+        .value();
+
+    var countMap = legendArr.reduce( (map, legend) => {
+        map[legend] = 0
+        return map
+    }, {} );
+
+    console.log(legendArr);
+
+    var seriesArr = _
+        .chain(strippedData)
+        .map(KEY)
+        .reduce(function(map,c){
+            for(k in c) {
+                if (c[k])
+                    map[k] = c[k] + map[k]
+            }
+            return map
+        }, countMap)
+        .map( (v,k) => v )
+        .value();
+
+    console.log(seriesArr);
+
+    _renderLineStack(el,[],legendArr,[{
+        name: '',
+        type: 'bar',
+        data: seriesArr
+    }])
+}
+
 
 
 

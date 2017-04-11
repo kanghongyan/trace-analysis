@@ -22,7 +22,9 @@ var refer = Vue.extend({
             })
             .then( res => {
                 if (res.code == 1) {
-                    renderLineStack(res.data, document.getElementById('pvchart-main'))
+                    console.log(_);
+                    console.log(res.data);
+                    renderBar(res.data, document.getElementById('pvchart-main'))
                 } else {
                     alert(res.msg);
                 }

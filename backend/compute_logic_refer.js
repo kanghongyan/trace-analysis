@@ -8,38 +8,49 @@ var _util_fs_async = require('./_util_fs_async');
 
 module.exports = function(results) {
 
-    var test = 'os=iphone|browser=Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1|scrsize=1024*768*2|dns=0|conn=0|req=22|res=3|rt=37|intr=531|referrer=http://127.0.0.1:8080/v5/user/bankcardui?from=58jinrong|page=http://127.0.0.1:8080/v5/user/baseinfoui?from=58jinrong|_=1491817458759|uid=1270018080.14918174586350.3576773710031458|ip=127.0.0.1';
-    console.log(test.match(/(^|\|)referrer\=([^|]*)/)
-        .filter(function(reArr){
-            return reArr && reArr[2]
-        })
-        .map(function(reArr){
-            return reArr[2]
-        }));
-
     function analy_data(data) {
         if (!data) {
             return [];
         }
 
-        return _
+
+        var referrerObj = _
             .chain(data.split('\r\n'))
-            .map(function(item){
+            .map(function (item) {
                 return item.match(/(^|\|)referrer\=([^|]*)/)
             })
-            .filter(function(reArr){
-                return reArr && reArr[2]
+            .filter(function (reArr) {
+                return reArr;
             })
-            .map(function(reArr){
+            .map(function (reArr) {
                 return reArr[2]
             })
-            .map(function(s){
-                return ['android','iphone'].indexOf(s) == -1 ? 'others' : s
-            })
-            .countBy(function(s){
-                return s
+            .countBy(function (s) {
+                return s ? s.match(/.*:\/\/([^\/]*)/)[0] : 'null';
             })
             .value();
+
+        // var referrerArr = [];
+        // var result = {};
+        //
+        // for (var i in referrerObj) {
+        //     referrerArr.push([i, referrerObj[i]]);
+        // }
+        // referrerArr = _
+        //     .orderBy(referrerArr, function (el) {
+        //         return el[1];
+        //     }, 'desc')
+        //     .filter(function (value, key) {
+        //         return key < 10;
+        //     });
+        //
+        // _.map(referrerArr, function (el) {
+        //     return result[el[0]] = el[1];
+        // });
+        //
+        // console.log(result);
+        return referrerObj;
+
     }
 
     results.forEach(function(result){
