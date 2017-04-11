@@ -234,8 +234,6 @@ function renderBar(strippedData, el, KEY='data') {
         return map
     }, {} );
 
-    console.log(legendArr);
-
     var seriesArr = _
         .chain(strippedData)
         .map(KEY)
@@ -248,8 +246,6 @@ function renderBar(strippedData, el, KEY='data') {
         }, countMap)
         .map( (v,k) => v )
         .value();
-
-    console.log(seriesArr);
 
     _renderLineStack(el,[],legendArr,[{
         name: '',

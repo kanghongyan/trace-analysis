@@ -44,7 +44,6 @@ module.exports = function(results) {
     
     results.forEach(function(result){
         result.data = analy_data(result.data);
-        console.log(result.data);
     });
     
     return results;

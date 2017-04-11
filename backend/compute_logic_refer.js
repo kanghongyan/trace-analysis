@@ -5,8 +5,7 @@ var _util = require('./_util');
 var _util_fs_async = require('./_util_fs_async');
 
 
-
-module.exports = function(results) {
+module.exports = function (results) {
 
     function analy_data(data) {
         if (!data) {
@@ -14,19 +13,19 @@ module.exports = function(results) {
         }
 
 
-        var referrerObj = _
+        return _
             .chain(data.split('\r\n'))
             .map(function (item) {
-                return item.match(/(^|\|)referrer\=([^|]*)/)
+                return item.match(/(^|\|)referrer=([^|]*)/)
             })
             .filter(function (reArr) {
                 return reArr;
             })
             .map(function (reArr) {
-                return reArr[2]
+                return reArr[2];
             })
             .countBy(function (s) {
-                return s ? s.match(/.*:\/\/([^\/]*)/)[0] : 'null';
+                return s ? s.match(/[^\/]*:\/\/([^\/]*)/)[0] : 'null';
             })
             .value();
 
@@ -49,11 +48,11 @@ module.exports = function(results) {
         // });
         //
         // console.log(result);
-        return referrerObj;
+        // return referrerObj;
 
     }
 
-    results.forEach(function(result){
+    results.forEach(function (result) {
         result.data = analy_data(result.data);
 
     });

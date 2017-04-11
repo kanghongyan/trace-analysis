@@ -22,8 +22,19 @@ var refer = Vue.extend({
             })
             .then( res => {
                 if (res.code == 1) {
-                    console.log(_);
                     console.log(res.data);
+                    var sourceData = [];
+                    _.map(res.data, function (item) {
+                        sourceData.push(item.data);
+                    })
+                    console.log(sourceData);
+                    var data = {};
+                    _.mergeWith(data, ...sourceData, function (objValue, srcValue) {
+                        if(objValue && srcValue) {
+                            return objValue + srcValue;
+                        }
+                    })
+                    console.log(data);
                     renderBar(res.data, document.getElementById('pvchart-main'))
                 } else {
                     alert(res.msg);
