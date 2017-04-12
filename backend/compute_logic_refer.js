@@ -5,7 +5,32 @@ var _util = require('./_util');
 var _util_fs_async = require('./_util_fs_async');
 
 
-module.exports = function (results) {
+function analysis_callback(results, _PAGE) {
+
+    function getKey(dataItem, key) {
+        var reg = new RegExp('(^|\|)'+key+'=([^|]*)'),
+            arr = dataItem.match(reg);
+
+        return (arr && arr[2]) ? arr[2] : null;
+    }
+
+    function is_curr_page(dataItem) {
+        var page = getKey(dataItem, 'page');
+
+        if(!page) {
+            return false;
+        }
+
+        page = decodeURIComponent(page);
+        page = page.replace(/\/*((\?|#).*|$)/g, '');
+
+        if(page != _PAGE) {
+            return false;
+        }
+
+        return true;
+
+    }
 
     function analy_data(data) {
         if (!data) {
@@ -13,8 +38,20 @@ module.exports = function (results) {
         }
 
 
+        var dataArr = data.split('\r\n');
+
+        dataArr = dataArr.filter(function (dataItem) {
+            // 过滤指定页面
+            if(_PAGE && !is_curr_page(dataItem)) {
+                return false;
+            }
+
+            return true;
+        })
+
+
         return _
-            .chain(data.split('\r\n'))
+            .chain(dataArr)
             .map(function (item) {
                 return item.match(/(^|\|)referrer=([^|]*)/)
             })
@@ -25,30 +62,10 @@ module.exports = function (results) {
                 return reArr[2];
             })
             .countBy(function (s) {
-                return s ? s.match(/[^\/]*:\/\/([^\/]*)/)[0] : 'null';
+                return s ? s.match(/[^\/]*:\/\/([^\?#\|]*)/)[0] : 'null';
             })
             .value();
 
-        // var referrerArr = [];
-        // var result = {};
-        //
-        // for (var i in referrerObj) {
-        //     referrerArr.push([i, referrerObj[i]]);
-        // }
-        // referrerArr = _
-        //     .orderBy(referrerArr, function (el) {
-        //         return el[1];
-        //     }, 'desc')
-        //     .filter(function (value, key) {
-        //         return key < 10;
-        //     });
-        //
-        // _.map(referrerArr, function (el) {
-        //     return result[el[0]] = el[1];
-        // });
-        //
-        // console.log(result);
-        // return referrerObj;
 
     }
 
@@ -59,5 +76,16 @@ module.exports = function (results) {
 
     return results;
 }
+
+
+function analysis_callback_proxy(page) {
+    return page ?
+        function(results) {
+            return analysis_callback(results, page);
+        } :
+        analysis_callback
+}
+
+module.exports = analysis_callback_proxy;
 
 

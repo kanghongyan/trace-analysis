@@ -265,8 +265,14 @@
     描述：TOP 10 Refer
 -->
 
-<script type='x/template' id='refer-template'>
+<script type="x/template" id='refer-template'>
     <search :okfun='okFun'></search>
+    <form class='form-inline' style='margin-top:20px' v-show='showForm'>
+        <label class="form-label">页面</label>
+        <select class="form-control" v-model='currentPage' >
+            <option v-for='page in pageList' track-by="$index">{{page}}</option>
+        </select>
+    </form>
     <div id='pvchart-main'></div>
 </script>
 
