@@ -40,7 +40,11 @@
     <script src='javascripts/urlFilter.js'></script>
     
     <script src='javascripts/specDaoliuPortal.js'></script>
-    
+
+    <script src='javascripts/refer.js'></script>
+
+    <script src='javascripts/sendBeacon.js'></script>
+
     <script src='javascripts/router.js'></script>
 </head>
 
@@ -61,6 +65,8 @@
                 <li v-link="{ path: '/hourPeak'}" v-bind:class="{ 'active': $route.hourPeak}" >基初-时峰值</li>
                 <li v-link="{ path: '/urlFilter'}" v-bind:class="{ 'active': $route.urlFilter}" >*特殊*-URL参数过滤</li>
                 <li v-link="{ path: '/specDaoliuPortal'}" v-bind:class="{ 'active': $route.specDaoliuPortal}" >*特殊*-导流-portal</li>
+                <li v-link="{ path: '/refer'}" v-bind:class="{ 'active': $route.refer}" >TOP 10 Referrer</li>
+                <li v-link="{ path: '/sendBeacon'}" v-bind:class="{ 'active': $route.sendBeacon}" >sendBeacon统计</li>
             </ul>
         </div>
         <div class='page-right'>
@@ -253,6 +259,34 @@
     <div id='spec-chart-main-2' class="spec-chart-main-x"></div>
     各机构点击次数
     <div id='spec-chart-main-3' class="spec-chart-main-x"></div>
+</script>
+
+
+
+
+<!--
+    描述：TOP 10 Refer
+-->
+
+<script type="x/template" id='refer-template'>
+    <search :okfun='okFun'></search>
+    <form class='form-inline' style='margin-top:20px' v-show='showForm'>
+        <label class="form-label">页面</label>
+        <select class="form-control" v-model='currentPage' >
+            <option v-for='page in pageList' track-by="$index">{{page}}</option>
+        </select>
+    </form>
+    <div id='pvchart-main'></div>
+</script>
+
+
+<!--
+    描述：sendBeacon统计
+-->
+
+<script type="x/template" id='sendBeacon-template'>
+    <search :okfun='okFun'></search>
+    <div id='pvchart-main'></div>
 </script>
 
 

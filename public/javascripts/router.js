@@ -52,5 +52,17 @@ router.map({
     '/specDaoliuPortal':{
         component:specDaoliuPortal,
         specDaoliuPortal:true
+    },
+
+
+    '/refer': {
+        component: refer,
+        refer: true
+    },
+
+
+    '/sendBeacon': {
+        component: sendBeacon,
+        sendBeacon: true
     }
 })

@@ -12,7 +12,9 @@ var computeMap = {
     performance: require('../backend/compute_logic_performance'),
     platform: require('../backend/compute_logic_platform'),
     screenSize: require('../backend/compute_logic_screenSize'),
-    urlFilter: require('../backend/compute_logic_urlFilter')
+    urlFilter: require('../backend/compute_logic_urlFilter'),
+    refer: require('../backend/compute_logic_refer'),
+    sendBeacon: require('../backend/compute_logic_sendBeacon')
 }
 
 
@@ -25,18 +27,18 @@ process.on('message', function(settings) {
     var endTime = settings.endTime
     var page = settings.page
     var filter = settings.filter
-    
-    
+
+
     var compute_logic_callback = computeMap[route];
-    
-    
-    if (route==='pageV' || route==='performance')
+
+
+    if (route==='pageV' || route==='performance' || route==='refer')
         compute_logic_callback = compute_logic_callback(page);
-    
+
     else if (route==='urlFilter')
         compute_logic_callback = compute_logic_callback(page, filter);
-        
-    
+
+
     _util_fs_async( category, project, startTime, endTime )
     .then(function(results){
         return compute_logic_callback(results)
