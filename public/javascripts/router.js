@@ -58,5 +58,11 @@ router.map({
     '/refer': {
         component: refer,
         refer: true
+    },
+
+
+    '/sendBeacon': {
+        component: sendBeacon,
+        sendBeacon: true
     }
 })

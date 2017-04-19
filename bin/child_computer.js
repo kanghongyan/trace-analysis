@@ -13,7 +13,8 @@ var computeMap = {
     platform: require('../backend/compute_logic_platform'),
     screenSize: require('../backend/compute_logic_screenSize'),
     urlFilter: require('../backend/compute_logic_urlFilter'),
-    refer: require('../backend/compute_logic_refer')
+    refer: require('../backend/compute_logic_refer'),
+    sendBeacon: require('../backend/compute_logic_sendBeacon')
 }
 
 
