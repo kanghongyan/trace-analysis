@@ -3,6 +3,8 @@ var fs = require('fs');
 var path = require('path');
 var router = express.Router();
 var _ = require('lodash');
+
+var userInfo = require('../config/userConfig');
 var _util = require('../backend/_util');
 // var _util = require( path.join(__dirname, '..', 'backend', '_util') );
 
@@ -11,6 +13,8 @@ var TYPE_MAP = {
     'trace': 'traceData',
     'spec': 'specData'
 };
+
+var ALL_PROJECTS = userInfo.superUser.project;
 
 /*
 router.get('/trace', function(req, res, next) {
@@ -45,8 +49,8 @@ router.route('/:type?')
 function getHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
     if (type) {
-        saveData(req, res, type);
-        res.send('');
+        var r = saveData(req, res, type);
+        res.send(r);
     } else {
         next();
     }
@@ -55,8 +59,8 @@ function getHandler(req, res, next) {
 function postHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
     if (type) {
-        saveData(req, res, type);
-        res.status(204).end();
+        var r = saveData(req, res, type);
+        res.status(204).end(r);
     } else {
         next();
     }
@@ -68,7 +72,16 @@ function saveData(req, res, categoryName) {
     var ip = getClientIp(req);
     
     if (!filterIp(ip)) {
-        return;
+        return 'ip blacklist';
+    }
+    
+    var projName = req.query.project,
+        fileName = _util.stringifyDate() + '.txt',
+        full_path = path.join( categoryName, projName ),
+        full_file = path.join( categoryName, projName, fileName );
+    
+    if (ALL_PROJECTS.indexOf(projName)==-1) {
+        return 'project blacklist';
     }
     
     var data = _
@@ -82,10 +95,7 @@ function saveData(req, res, categoryName) {
         .join('|');
     
     
-    var projName = req.query.project,
-        fileName = _util.stringifyDate() + '.txt',
-        full_path = path.join( categoryName, projName ),
-        full_file = path.join( categoryName, projName, fileName );
+    
     
     fs.exists(full_path, function(exists){
         if (exists) {
@@ -100,6 +110,8 @@ function saveData(req, res, categoryName) {
     function append() {
         fs.appendFile(full_file, data + '\r\n', 'utf8', function() {});
     }
+    
+    return '';
 }
 
 

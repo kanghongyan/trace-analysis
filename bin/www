@@ -96,8 +96,6 @@ global.io = require('socket.io').listen(server);
 global.io.of('/spec').on('connection', function(client) {
     
     client.on('params', function(params){
-        
-        console.error(params)
         // 可用进程池
         var cp_factory = global.CP_COMPUTE_SPEC_FACTORY;
         // 取出空闲进程
@@ -119,19 +117,18 @@ global.io.of('/spec').on('connection', function(client) {
             cp_curr.isUsing = false;
             // 向浏览器返回信息，结束会话
             client.emit('result', d);
-            console.error(d)
         });
     })
     
     client.on('heartbeat', function(data, f){
-        console.error('client heartbeat', client.id)
-        f('confirm: server received heartbeat')
+        //console.error('client heartbeat', client.id)
+        f && f('confirm: server received heartbeat')
     });
     
     client.on('disconnect', function(){
-        console.error('client disconnect', client.id)
+        //console.error('client disconnect', client.id)
     })
     
-    console.error('client connected', client.id)
+    //console.error('client connected', client.id)
 });
 
