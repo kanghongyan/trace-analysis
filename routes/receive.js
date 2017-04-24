@@ -49,8 +49,8 @@ router.route('/:type?')
 function getHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
     if (type) {
-        var r = saveData(req, res, type);
-        res.send(r);
+        var rtn = saveData(req, res, type);
+        res.end(rtn);
     } else {
         next();
     }
@@ -59,8 +59,8 @@ function getHandler(req, res, next) {
 function postHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
     if (type) {
-        var r = saveData(req, res, type);
-        res.status(204).end(r);
+        var rtn = saveData(req, res, type);
+        res.status(204).end(rtn);
     } else {
         next();
     }
@@ -71,8 +71,8 @@ function postHandler(req, res, next) {
 function saveData(req, res, categoryName) {
     var ip = getClientIp(req);
     
-    if (!filterIp(ip)) {
-        return 'ip blacklist';
+    if (!isValidIP(ip)) {
+        return 'console.log("ip invalid - intranet ip detected")';
     }
     
     var projName = req.query.project,
@@ -80,8 +80,8 @@ function saveData(req, res, categoryName) {
         full_path = path.join( categoryName, projName ),
         full_file = path.join( categoryName, projName, fileName );
     
-    if (ALL_PROJECTS.indexOf(projName)==-1) {
-        return 'project blacklist';
+    if (!isValidProj(projName)) {
+        return 'console.log("project invalid - project name invalid")';
     }
     
     var data = _
@@ -95,28 +95,22 @@ function saveData(req, res, categoryName) {
         .join('|');
     
     
-    
-    
     fs.exists(full_path, function(exists){
         if (exists) {
-            append()
+            fs.appendFile(full_file, data + '\r\n', 'utf8', function() {});
         } else {
             fs.mkdir(full_path, function(){
-                append()
+                fs.appendFile(full_file, data + '\r\n', 'utf8', function() {});
             });
         }
     });
-    
-    function append() {
-        fs.appendFile(full_file, data + '\r\n', 'utf8', function() {});
-    }
     
     return '';
 }
 
 
 
-function filterIp(ip) {
+function isValidIP(ip) {
     /*过滤
         36.110.51.97-110
         36.110.35.77-78
@@ -143,6 +137,11 @@ function filterIp(ip) {
         return '';
     }
     return ip;
+}
+
+
+function isValidProj(projName) {
+    return ALL_PROJECTS.indexOf(projName) != -1
 }
 
 
