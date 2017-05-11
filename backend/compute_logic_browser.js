@@ -34,7 +34,9 @@ module.exports = function(results) {
                         'samsungbrowser',
                         'miuibrowser',
                         'baidubrowser',
-                        'baiduapp'].indexOf(s) == -1 ? 'others' : s
+                        'baiduapp',
+                        'vivo',
+                        'ganji_app'].indexOf(s) == -1 ? 'others' : s
             })
             .countBy(function(s){
                 return s
