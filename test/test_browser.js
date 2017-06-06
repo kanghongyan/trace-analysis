@@ -1,3 +1,6 @@
+/**
+ * 统计浏览器类型
+ */
 var fs = require('fs');
 var Promise = require("bluebird");
 var _ = require('lodash');

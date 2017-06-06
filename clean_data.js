@@ -1,3 +1,10 @@
+/**
+ * 2017-4-20
+ * jiajianrong@58.com
+ * 公司xss扫描时，由于程序漏洞产生很大无效目录和文件
+ * 清理
+ */
+
 var path = require('path');
 var fs = require('fs');
 var config = require('./config/userConfig');
