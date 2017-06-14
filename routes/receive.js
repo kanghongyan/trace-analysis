@@ -48,6 +48,11 @@ router.route('/:type?')
 
 function getHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
+    // 2017-6-14 增加js执行时间
+    if (req.query.type == 'jsLoad') {
+        type = 'jsLoadData'
+    }
+    // end
     if (type) {
         var rtn = saveData(req, res, type);
         res.end(rtn);
@@ -58,6 +63,11 @@ function getHandler(req, res, next) {
 
 function postHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
+    // 2017-6-14 增加js执行时间
+    if (req.query.type == 'jsLoad') {
+        type = 'jsLoadData'
+    }
+    // end
     if (type) {
         var rtn = saveData(req, res, type);
         res.status(204).end(rtn);
@@ -93,7 +103,6 @@ function saveData(req, res, categoryName) {
         })
         .value()
         .join('|');
-    
     
     fs.exists(full_path, function(exists){
         if (exists) {
@@ -147,17 +156,23 @@ function isValidProj(projName) {
 
 
 function getClientIp(req) {
-    var ipAddress;
-    var forwardedIpsStr = req.header('x-forwarded-for');
-    if (forwardedIpsStr) {
-        var forwardedIps = forwardedIpsStr.split(',');
-        ipAddress = forwardedIps[0];
+    try {
+        var ipAddress;
+        var forwardedIpsStr = req.header('x-forwarded-for');
+        if (forwardedIpsStr) {
+            var forwardedIps = forwardedIpsStr.split(',');
+            ipAddress = forwardedIps[0];
+        }
+        if (!ipAddress) {
+            ipAddress = req.connection.remoteAddress;
+        }
+        ipAddress = ipAddress.match(/((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))))/);
+        return ipAddress[0];
+    } catch(err) {
+        console.log(err);
+        return '127.0.0.1'
     }
-    if (!ipAddress) {
-        ipAddress = req.connection.remoteAddress;
-    }
-    ipAddress = ipAddress.match(/((?:(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(?:25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d))))/);
-    return ipAddress[0];
+    
 };
 
 

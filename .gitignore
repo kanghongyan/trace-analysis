@@ -2,6 +2,7 @@ node_modules
 infoData
 traceData
 specData
+jsLoadData
 config/userConfig.js
 /dataBase
 .project
