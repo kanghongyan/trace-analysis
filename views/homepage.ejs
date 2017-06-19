@@ -45,6 +45,8 @@
 
     <script src='javascripts/sendBeacon.js'></script>
 
+    <script src="javascripts/loadAverage.js"></script>
+
     <script src='javascripts/router.js'></script>
 </head>
 
@@ -67,6 +69,7 @@
                 <li v-link="{ path: '/specDaoliuPortal'}" v-bind:class="{ 'active': $route.specDaoliuPortal}" >*特殊*-导流-portal</li>
                 <li v-link="{ path: '/refer'}" v-bind:class="{ 'active': $route.refer}" >TOP 10 Referrer</li>
                 <li v-link="{ path: '/sendBeacon'}" v-bind:class="{ 'active': $route.sendBeacon}" >sendBeacon统计</li>
+                <li v-link="{ path: '/loadAverage' }" v-bind:class="{ 'active': $route.loadAverage }">js平均加载时间</li>
             </ul>
         </div>
         <div class='page-right'>
@@ -289,6 +292,13 @@
     <div id='pvchart-main'></div>
 </script>
 
+
+<script type="x/template" id="loadAverage-template">
+    <search :okfun='okFun'></search>
+    <div class="page-load-average">
+        <p>平均值: {{ value }}</p>
+    </div>
+</script>
 
 
 

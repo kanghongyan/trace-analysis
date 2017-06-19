@@ -14,7 +14,8 @@ var computeMap = {
     screenSize: require('../backend/compute_logic_screenSize'),
     urlFilter: require('../backend/compute_logic_urlFilter'),
     refer: require('../backend/compute_logic_refer'),
-    sendBeacon: require('../backend/compute_logic_sendBeacon')
+    sendBeacon: require('../backend/compute_logic_sendBeacon'),
+    loadAverage: require('../backend/compute_logic_loadAverage')
 }
 
 

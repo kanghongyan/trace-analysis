@@ -64,5 +64,10 @@ router.map({
     '/sendBeacon': {
         component: sendBeacon,
         sendBeacon: true
+    },
+    
+    '/loadAverage': {
+        component: loadAverage,
+        loadAverage: true
     }
 })
