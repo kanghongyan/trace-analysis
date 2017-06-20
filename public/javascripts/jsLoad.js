@@ -24,7 +24,7 @@ var jsLoad = Vue.extend({
                 })
                 .then( res => {
                     if (res.code === 1) {
-                        this.value = res.data.time ? res.data.time.toFixed(2) : '';
+                        this.value = res.data ? JSON.stringify(res.data) : '';
                     } else {
                         alert(res.msg);
                     }

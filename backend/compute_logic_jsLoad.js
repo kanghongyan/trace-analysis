@@ -1,30 +1,50 @@
+var _ = require('lodash');
+
 module.exports = function (results) {
     
-    var count = 0;
-    var allTime = 0;
-    var dirtyData = {
-        max: 3000,
-        min: 0
-    };
     
-    var dataArr, value;
-    
-    results.forEach(function (ret, index) {
+    function average(items) {
+        if (!items.length)
+            return 0;
         
-        dataArr = !(ret.data === null) ? ret.data.split('/r/n') : [];
-        
-        dataArr.forEach(function (d, i) {
-            value = Number(d.split('|')[1].split('=')[1]);
-            if (value <= dirtyData.max && value >= dirtyData.min) {
-                count ++;
-                allTime += value
-            }
+        var sum = _.reduce(items, function(result, item){
+            return result + item;
         })
         
+        return (sum/items.length).toFixed(2)
+    }
+    
+    
+    
+    function analy_data(data) {
+        if (!data) {
+            return;
+        }
+        
+        var items = _
+            .chain(data.split('\r\n'))
+            .map(function(item){
+                return item.match(/(^|\|)value\=([^|]*)/)
+            })
+            .filter(function(reArr){
+                return reArr && reArr[2]
+            })
+            .map(function(reArr){
+                return +reArr[2]
+            })
+            .filter(function(n){
+                return n>0 && n<5000
+            })
+            .value();
+        
+        return average(items);
+    }
+    
+    
+    
+    results.forEach(function(result){
+        result.data = analy_data(result.data);
     });
     
-    // 整数加减相除
-    return count === 0 ? {} : {
-        time: allTime / count
-    }
+    return results;
 };
