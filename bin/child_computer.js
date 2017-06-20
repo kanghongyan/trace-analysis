@@ -15,7 +15,7 @@ var computeMap = {
     urlFilter: require('../backend/compute_logic_urlFilter'),
     refer: require('../backend/compute_logic_refer'),
     sendBeacon: require('../backend/compute_logic_sendBeacon'),
-    loadAverage: require('../backend/compute_logic_loadAverage')
+    jsLoad: require('../backend/compute_logic_jsLoad')
 }
 
 

@@ -99,7 +99,7 @@ var child_process = require('child_process');
 
 global.CP_COMPUTE_FACTORY = [ child_process.fork('./bin/child_computer.js'),
                               child_process.fork('./bin/child_computer.js'),
-                              child_process.fork('./bin/child_computer.js')];
+                              child_process.fork('./bin/child_computer.js') ];
 
 global.CP_COMPUTE_SPEC_FACTORY = [ child_process.fork('./bin/child_computer_spec.js'),
                                    child_process.fork('./bin/child_computer_spec.js') ];

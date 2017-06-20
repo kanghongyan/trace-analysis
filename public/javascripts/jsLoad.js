@@ -1,5 +1,5 @@
-var loadAverage = Vue.extend({
-    template: '#loadAverage-template',
+var jsLoad = Vue.extend({
+    template: '#jsLoad-template',
     components: {
         'search': search,
     },
@@ -17,7 +17,7 @@ var loadAverage = Vue.extend({
                 return;
             }
     
-            fetch_json.bind(this)('/api/loadAverage', {
+            fetch_json.bind(this)('/api/jsLoad', {
                     project: project,
                     startTime: startTime,
                     endTime: endTime

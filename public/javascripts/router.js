@@ -66,8 +66,8 @@ router.map({
         sendBeacon: true
     },
     
-    '/loadAverage': {
-        component: loadAverage,
-        loadAverage: true
+    '/jsLoad': {
+        component: jsLoad,
+        jsLoad: true
     }
 })

@@ -149,7 +149,7 @@ select{
 }
 #countMain, #pointMian, .pageTChart-chart, #pvchart-main, 
 #allNumber, #browser-main, .spec-chart-main-x, 
-#screenChart-main, #screenCake-main{
+#screenChart-main, #screenCake-main, .page-jsLoad{
     padding-top: 20px;
     width: 80%;
     height:500px;
@@ -162,8 +162,4 @@ select{
     margin-top: 20px;
     margin-left:32%;
     margin-bottom: 10px;
-}
-
-.page-load-average {
-    padding: 20px 0;
 }
