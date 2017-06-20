@@ -163,3 +163,7 @@ select{
     margin-left:32%;
     margin-bottom: 10px;
 }
+
+.page-load-average {
+    padding: 20px 0;
+}

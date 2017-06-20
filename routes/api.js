@@ -89,9 +89,11 @@ function _parseParams(req, res) {
     }
     
     if (req.params.route==='totalV')
-        totalParams.route = 'pageV'
+        totalParams.route = 'pageV';
     else if (req.params.route==='pageT')
-        totalParams.category = 'traceData'
+        totalParams.category = 'traceData';
+    else if (req.params.route === 'loadAverage')
+        totalParams.category = 'jsLoadData';
     
     return totalParams
 }
