@@ -149,7 +149,7 @@ select{
 }
 #countMain, #pointMian, .pageTChart-chart, #pvchart-main, 
 #allNumber, #browser-main, .spec-chart-main-x, 
-#screenChart-main, #screenCake-main{
+#screenChart-main, #screenCake-main, .page-jsLoad{
     padding-top: 20px;
     width: 80%;
     height:500px;
