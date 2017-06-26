@@ -4,14 +4,20 @@ var path = require('path');
 var router = express.Router();
 var _ = require('lodash');
 
+var toSaveData = require('child_process').fork('./backend/save_data.js');
+
 var userInfo = require('../config/userConfig');
 var _util = require('../backend/_util');
 // var _util = require( path.join(__dirname, '..', 'backend', '_util') );
 
+var CACHE_SIZE = 1000;
+var cacheData = [];
+
 var TYPE_MAP = {
     'info': 'infoData',
     'trace': 'traceData',
-    'spec': 'specData'
+    'spec': 'specData',
+    'jsLoad': 'jsLoadData'
 };
 
 var ALL_PROJECTS = userInfo.superUser.project;
@@ -80,40 +86,46 @@ function postHandler(req, res, next) {
 
 function saveData(req, res, categoryName) {
     var ip = getClientIp(req);
+    var projName = req.query.project;
     
-    if (!isValidIP(ip)) {
-        return 'console.log("ip invalid - intranet ip detected")';
-    }
-    
-    var projName = req.query.project,
-        fileName = _util.stringifyDate() + '.txt',
-        full_path = path.join( categoryName, projName ),
-        full_file = path.join( categoryName, projName, fileName );
+    // if (!isValidIP(ip)) {
+    //     return 'console.log("ip invalid - intranet ip detected")';
+    // }
     
     if (!isValidProj(projName)) {
         return 'console.log("project invalid - project name invalid")';
     }
     
+    var fileName = _util.stringifyDate() + '.txt';
     var data = _
         .chain(req.query)
         .omit('project')
-        .assign({'ip': ip})
+        .assign({
+            'ip': ip
+        })
         .map(function(v,k){
             return decodeURIComponent(k) + '=' + decodeURIComponent(v);
         })
         .value()
         .join('|');
     
-    fs.exists(full_path, function(exists){
-        if (exists) {
-            fs.appendFile(full_file, data + '\r\n', 'utf8', function() {});
-        } else {
-            fs.mkdir(full_path, function(){
-                fs.appendFile(full_file, data + '\r\n', 'utf8', function() {});
-            });
-        }
+    cacheData.push({
+        data: data + '\r\n',
+        fullPath: path.join(categoryName, projName, fileName)
     });
     
+    
+    if (cacheData.length >= CACHE_SIZE) {
+        
+        toSaveData.send({
+            operate: 'save',
+            cacheData: cacheData
+        });
+
+        cacheData = [];
+    }
+    
+
     return '';
 }
 
