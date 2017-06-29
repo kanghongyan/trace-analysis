@@ -11,10 +11,10 @@ var _util_fs_async = require('../backend/_util_fs_async');
 
 
 // 每日凌晨1点触发
-//var dailySchedule = schedule.scheduleJob('0 0 1 * * *', function() {
+var dailySchedule = schedule.scheduleJob('0 0 1 * * *', function() {
     
     readTrace().then(process)
-//});
+});
 
 
 
@@ -63,14 +63,10 @@ function readTrace() {
                         return s.split('.').length === 4
                     })
                     .map(function(s){
-                        return s.replace(/(\d+\.\d+\.\d+\.)\d+/,'$10')
+                        return s.replace(/(.*\.)(\d+)$/,'$10')
                     })
                     .compact()
                     .uniq()
-                    /*.filter(function (s) {
-                        return s !== '无参数'
-                    })*/
-                    //.chunk(5)
                     .value();
         
                 
@@ -78,6 +74,7 @@ function readTrace() {
             }
                 
         });
+        // end of _util_fs_async
         
     });
     // end of new promise
