@@ -1,12 +1,11 @@
 var fs = require('fs');
+var path = require('path');
 var Promise = require("bluebird");
 var _ = require('lodash');
 var _util = require('./_util');
 var _util_fs_async = require('./_util_fs_async');
-var request = require('request');
-var path = require('path');
 
-var _util_read_xlsx = require('./_util_read_xlsx');
+var CHANNEL_MAP = require('./_util_read_xlsx');
 
 
 
@@ -41,8 +40,7 @@ function analysis_callback(results, _PAGE) {
         if (!data) {
             return;
         }
-    
-        var channelMap = _util_read_xlsx(path.join(__dirname, '../config/cfq_channel.xlsx'));
+        
         var ipMap;
         try {
             ipMap = require('../config/ip_map.json');
@@ -68,7 +66,7 @@ function analysis_callback(results, _PAGE) {
             .map(function(s){
                 return {
                     ip: ipMap[get_url_param_key(s, 'ip').replace(/(\d+\.\d+\.\d+\.)\d+/,'$10')] || 'unknown_ip',
-                    channel: channelMap[get_url_param_key(s, 'channel')] || 'unknown_channel'
+                    channel: CHANNEL_MAP[get_url_param_key(s, 'channel')] || 'unknown_channel'
                 }
             })
             .groupBy(function (item) {
