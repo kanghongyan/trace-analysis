@@ -2,9 +2,9 @@ var fs = require('fs');
 var path = require('path');
 var Promise = require("bluebird");
 var _ = require('lodash');
+
 var _util = require('./_util');
 var _util_fs_async = require('./_util_fs_async');
-
 var CHANNEL_MAP = require('./_util_read_xlsx');
 
 
