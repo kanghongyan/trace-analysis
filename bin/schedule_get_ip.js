@@ -10,6 +10,7 @@ var path = require('path');
 
 var fileName = moment().add(-1, 'day').format('YYYY-MM-DD');
 var ipChunk = [];
+var gap = 2;
 
 _util_fs_async('infoData', 'chedai-cfq-m', fileName, fileName )
     .then(function(results){
@@ -28,6 +29,7 @@ _util_fs_async('infoData', 'chedai-cfq-m', fileName, fileName )
                 .filter(function (n) {
                     return n !== '无参数'
                 })
+                .chunk(gap)
                 .value();
     
     
@@ -35,7 +37,7 @@ _util_fs_async('infoData', 'chedai-cfq-m', fileName, fileName )
             var j = schedule.scheduleJob('* * * * * *', function () {
         
                 if (ipChunk.length !== 0) {
-                    getCityByIp(ipChunk.shift());
+                    getIps(ipChunk.shift());
                 } else {
                     j.cancel();
                 }
@@ -47,7 +49,19 @@ _util_fs_async('infoData', 'chedai-cfq-m', fileName, fileName )
     });
 
 
-
+function getIps(ips, failedIps) {
+    var pending = [];
+    
+    ips.forEach(function (ip) {
+        pending.push(getCityByIp(ip))
+    });
+    
+    Promise.all(pending)
+        .then(function (ret) {
+            saveToFile(ret.join(''));
+        })
+    
+}
 
 function get_url_param_key(s, key) {
     var reg = new RegExp('(&|\\?)' + key + '\=([^#&]*)'),
@@ -63,36 +77,37 @@ function get_key(s, key) {
 
 function getCityByIp(ip) {
     
-    request({
-        url: 'http://ip.taobao.com/service/getIpInfo.php?ip=' + ip,
-        // gzip: true
-    }, function (error, response, body) {
+    return new Promise(function (resolve, reject) {
+    
+        request({
+            url: 'http://ip.taobao.com/service/getIpInfo.php?ip=' + ip,
+            // gzip: true
+        }, function (error, response, body) {
         
-        var ret;
-        try {
-            ret = JSON.parse(body);
+            var ret;
+            try {
+                ret = JSON.parse(body);
             
-        } catch (e) {
-            ret = { code: -1 }
-        } finally {}
+            } catch (e) {
+                ret = { code: -1 }
+            } finally {}
         
-        if (ret.code === 0 && ret.data && ret.data.region && ret.data.city) {
-            saveToFile(ip, ret.data.region, ret.data.city);
-        } else {
-            ipChunk.push(ip); // 失败的ip重新push到ipchunk中
-        }
+            if (ret.code === 0 && ret.data && ret.data.region && ret.data.city) {
+                resolve(ip + '|' + ret.data.region + '|' + ret.data.city + '\r\n')
+            }
         
-    });
+        });
+        
+    })
+    
     
 }
 
-function saveToFile(ip, region, city) {
+function saveToFile(data) {
     
     var fileFolder = 'config';
     var fileName = 'ip_map.txt';
     var filePath = path.join(fileFolder, fileName);
-    var data = ip + '|' + region + '|' + city + '\r\n';
-    
     
     fs.exists(fileFolder, function(exists){
         if (exists) {
