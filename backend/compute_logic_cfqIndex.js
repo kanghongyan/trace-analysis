@@ -2,10 +2,71 @@ var fs = require('fs');
 var path = require('path');
 var Promise = require("bluebird");
 var _ = require('lodash');
+var moment = require('moment');
 
 var _util = require('./_util');
 var _util_fs_async = require('./_util_fs_async');
-var CHANNEL_MAP = require('./_util_read_xlsx');
+var CHANNEL_ID_NAME_MAP = require('./_util_read_xlsx');
+
+
+/**
+ * 日缓存
+ * 自动清理require.cache
+ */
+function GET_REALTIME_IP_CITY_MAP() {
+    
+    require('../config/ip_map.json');
+    
+    
+    var allCaches = require.cache;
+    
+    var cachedKey = _(allCaches)
+        .keys()
+        .filter(function(key){
+            var filePath = path.join( __dirname, '..', 'config', 'ip_map.json' );
+            return filePath == key;
+        })
+        .value()[0];
+    
+    var cachedItem = require.cache[cachedKey];
+    
+    var today = moment().format('YYYY-MM-DD');
+    
+    
+    //----------
+    // 第一次加载
+    //----------
+    if ( !cachedItem.lastModified ) {
+        
+        cachedItem.lastModified = today;
+        
+        return cachedItem.exports;
+    
+    
+    //----------
+    // 缓存过期
+    //----------
+    } else if ( cachedItem.lastModified && cachedItem.lastModified != today ) {
+        
+        delete require.cache[cachedKey];
+        
+        require('../config/ip_map.json');
+        
+        require.cache[cachedKey].lastModified == today;
+        
+        return require.cache[cachedKey].exports;
+    
+    
+    //----------
+    // 缓存有效
+    //----------
+    } else {
+        
+        return cachedItem.exports;
+    }
+    
+}
+
 
 
 
@@ -41,43 +102,46 @@ function analysis_callback(results, _PAGE) {
             return;
         }
         
-        var ipMap;
-        try {
-            ipMap = require('../config/ip_map.json');
-        } catch (e) {
-            ipMap = {}
-        }
-        
         /*
          * items
          * {
          *    '123.123.123.23': {
-         *        '11': 3,
-         *        '22': 2
+         *        'channel_1': 3,
+         *        'channel_2': 2
          *    },
          *    ...
          * }
          */
+        
+        var IP_CITY_MAP = GET_REALTIME_IP_CITY_MAP();
+        
+        
         var items =  _
             .chain(_.trim(data).split('\r\n'))
             .map(function(item){
                 return get_key(item, 'page')
             })
             .map(function(s){
+                var ip = get_url_param_key(s, 'ip').replace(/(\d+\.\d+\.\d+\.)\d+/,'$10');
+                var channelId = get_url_param_key(s, 'channel');
                 return {
-                    ip: ipMap[get_url_param_key(s, 'ip').replace(/(\d+\.\d+\.\d+\.)\d+/,'$10')] || 'unknown_ip',
-                    channel: CHANNEL_MAP[get_url_param_key(s, 'channel')] || 'unknown_channel'
+                    city: IP_CITY_MAP[ip] || 'unknown_city',
+                    channel: CHANNEL_ID_NAME_MAP[channelId] || 'unknown_channel'
                 }
             })
             .groupBy(function (item) {
-                return item.ip
+                return item.city
             })
-            .forEach(function (n, key, arr) {
-            
-                arr[key] =  _.countBy(n, function (l) {
-                    return l.channel
+            /*
+             * { a: [ { city: 'a', channel: 'ershou' },
+                      { city: 'a', channel: 'che' } ],
+                 b: [ { city: 'b', channel: 'che' } ]
+               }
+             */
+            .forEach(function (value, key, arr) {
+                arr[key] =  _.countBy(value, function (item) {
+                    return item.channel
                 })
-            
             })
             .value();
     
@@ -95,7 +159,7 @@ function analysis_callback(results, _PAGE) {
 
 
 
-function analysis_callback_proxy(page, filter) {
+function analysis_callback_proxy(page) {
     return function(results) {
         return analysis_callback(results, page);
     }

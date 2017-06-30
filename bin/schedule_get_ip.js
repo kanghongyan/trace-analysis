@@ -12,9 +12,9 @@ var _util_fs_async = require('../backend/_util_fs_async');
 
 // 每日凌晨1点触发
 var dailySchedule = schedule.scheduleJob('0 0 1 * * *', function() {
-    
     readTrace().then(process)
 });
+
 
 
 
@@ -94,6 +94,7 @@ function process(ipArr) {
         if (ipChunk.length > 0) {
             main(ipChunk.shift());
         } else {
+            setTimeout( text2json, 1000*60*10 )
             reqJob.cancel();
         }
 
@@ -148,17 +149,48 @@ function process(ipArr) {
      * 保存
      */
     function saveToFile(data) {
-        
-        var fileFolder = 'config';
-        var fileName = 'ip_map.txt';
-        var filePath = path.join(fileFolder, fileName);
-        
+        var filePath = path.join( __dirname, '..', 'config', 'ip_map.txt' );
         fs.appendFile(filePath, data, 'utf8', function() {});
     }
     
+    
+    /*
+     * 转换
+     */
+    function text2json() {
+        var fileFrom = path.join( __dirname, '..', 'config', 'ip_map.txt' );
+        var fileTo   = path.join( __dirname, '..', 'config', 'ip_map.json' );
+        
+        fs.readFile(fileFrom, 'utf8', function(err, content){
+            if (err)
+                throw err;
+            
+            if (!content)
+                return;
+            
+            var arr = content.trim().split('\r\n');
+            
+            var obj = arr.reduce(function(prev, next) {
+                
+                var tmpArr = next.split('|');
+                var ip = tmpArr[0];
+                var province = tmpArr[1];
+                var city = tmpArr[2];
+                
+                prev[ip] = province + '-' + city;
+                return prev;
+                
+            }, {});
+            
+            var originalObj = require('../config/ip_map.json');
+            obj = Object.assign(originalObj, obj);
+            
+            fs.writeFile( fileTo, JSON.stringify(obj), 'utf8', function(){} );
+        });
+    }
+    
+    
 
 }
-
-
 
 
