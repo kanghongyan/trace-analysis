@@ -85,17 +85,35 @@ function GET_REALTIME_IP_CITY_MAP() {
 
 function analysis_callback(results, _PAGE) {
     
+    
     function get_key(s, key) {
         var reg = new RegExp('(^|\|)' + key + '\=([^|]*)'),
             arr = s.match(reg);
         return (arr && arr[2]) ? arr[2] : null;
     }
     
+    
     function get_url_param_key(s, key) {
         var reg = new RegExp('(&|\\?)' + key + '\=([^#&]*)'),
             arr = s.match(reg);
         return (arr && arr[2]) ? arr[2] : '无参数';
     }
+    
+    
+    function is_curr_page(item) {
+        var page = get_key(item, 'page');
+        if (!page) {
+            return false;
+        }
+        page = decodeURIComponent(page);
+        page = page.replace(/\/*((\?|#).*|$)/g, '');
+        if (page!==_PAGE) {
+            return false;
+        }
+        return true;
+    }
+    
+    
     
     function analy_data(data) {
         if (!data) {
@@ -118,6 +136,7 @@ function analysis_callback(results, _PAGE) {
         
         var items =  _
             .chain(_.trim(data).split('\r\n'))
+            .filter(is_curr_page)
             .map(function(item){
                 return get_key(item, 'page')
             })
