@@ -105,7 +105,7 @@ function analysis_callback(results, _PAGE) {
         /*
          * items
          * {
-         *    '123.123.123.23': {
+         *    'city_a': {
          *        'channel_1': 3,
          *        'channel_2': 2
          *    },
@@ -152,8 +152,9 @@ function analysis_callback(results, _PAGE) {
     
     results.forEach(function (result) {
         result.data = analy_data(result.data)
+        result.columns = _.values(CHANNEL_ID_NAME_MAP);
     });
-    
+        
     return results;
 }
 

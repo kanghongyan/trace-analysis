@@ -274,26 +274,19 @@
 <script type="x/template" id="cfqIndex-template">
     <search :okfun='okFun'></search>
     <div class="page-cfqIndex">
-        <!--<div id='pvchart-main'></div>-->
-        <ul>
-            <li class="data-box" v-for="item in cfqIndex_value" track-by="$index">
-                <div v-if="item === null">暂无数据</div>
-                <div v-else>
-                    <p>日期:<span>{{ item.day }} </span></p>
-                    <div>
-                        <div class="city-box" v-for="(city, channelInfo) in item.data">
-                            <p>{{ city }}</p>
-                            <div class="channels">
-                                <p v-for="(channel, amount) in channelInfo">
-                                    <span>{{ channel }} : {{ amount }}</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </li>
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <td></td>
+                    <td v-for="column in columns" track-by="$index">{{column}}</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="row in rows" track-by="$index">
+                    <td v-for="item in row" track-by="$index">{{item}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </script>
 

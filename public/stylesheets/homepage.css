@@ -165,14 +165,7 @@ select{
 }
 
 
-.page-cfqIndex .city-box {
-    border-bottom: solid 1px #f2dede;
-    padding: 10px;
-}
-.page-cfqIndex .channels {
-    padding-left: 30px;
-}
-.page-cfqIndex .data-box {
-    margin: 20px;
-    padding: 10px 0;
+
+.page-cfqIndex td {
+    border: 1px solid dimgray;
 }

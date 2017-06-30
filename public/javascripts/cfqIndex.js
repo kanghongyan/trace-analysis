@@ -5,7 +5,8 @@ var cfqIndex = Vue.extend({
     },
     data: function () {
         return {
-            cfqIndex_value: '',
+            columns: [],
+            rows: [],
             okFun: this.getData
         }
     },
@@ -24,89 +25,28 @@ var cfqIndex = Vue.extend({
                     page: 'https://chefenqi.58.com/'
                 })
                 .then( res => {
-                    if (res.code === 1) {
-                        this.cfqIndex_value = res.data ? res.data : '';
-                        var data = res.data ? res.data[0].data : '';
-                        // todo: 只允许选择一天的数据
-                        var citys = [];
-                        var channels = [];
+                    if (res.code===1 && res.data.length) {
                         
-                        _.forEach(data, function (value, key) {
-                            citys.push(key);
-                            channels.push(value)
-                        });
-    
+                        this.columns = res.data[0].columns;
+                        this.rows = [];
                         
-                        citys.sort();
+                        var originalData = res.data[0].data;
                         
-                        var legend = _
-                            .chain(channels)
-                            .map(function (n) {
-                                return _.keys(n)
+                        
+                        for (var city in originalData) {
+                            
+                            var channelMap = originalData[city];
+                            
+                            var displayArr = this.columns.map(function(channelName){
+                                return channelMap[channelName] || ''
                             })
-                            .reduce(function (ret, cur) {
-                                return _.union(ret, cur)
-                            }, [])
-                            .value();
-                        
-                        var series = legend.map(function (value) {
                             
-                            var d = channels.map(function (n) {
-                                    return n[value] || ''
-                                });
+                            // 首位显示城市名
+                            displayArr.unshift(city);
                             
-                            return {
-                                name: value,
-                                type: 'bar',
-                                stack: '总量',
-                                label: {
-                                    normal: {
-                                        show: true,
-                                        position: 'insideRight'
-                                    }
-                                },
-                                data: d
-                            }
-                        });
-                        
-                        console.log(citys.length)
-                        
-                        if (citys.length > 20) {
-                            // 城市过多重新设置高度
-                            document.getElementById('pvchart-main').style.height = citys.length * 30 + Math.ceil(legend.length / 5)  * 30 + 'px';
-                        } else {
-                            document.getElementById('pvchart-main').style.height = '480px'
+                            this.rows.push(displayArr);
                         }
-    
-    
-                        // var myChart = echarts.init(document.getElementById('pvchart-main'));
-                        // var option = {
-                        //     tooltip : {
-                        //         trigger: 'axis',
-                        //         axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                        //             type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                        //         }
-                        //     },
-                        //     legend: {
-                        //         data: legend
-                        //     },
-                        //     grid: {
-                        //         left: '3%',
-                        //         right: '4%',
-                        //         bottom: '3%',
-                        //         top: Math.ceil(legend.length / 5) * 30,
-                        //         containLabel: true
-                        //     },
-                        //     xAxis:  {
-                        //         type: 'value'
-                        //     },
-                        //     yAxis: {
-                        //         type: 'category',
-                        //         data: citys
-                        //     },
-                        //     series: series
-                        // }
-                        // myChart.setOption(option);
+                        
                     } else {
                         alert(res.msg);
                     }
@@ -116,6 +56,8 @@ var cfqIndex = Vue.extend({
                 });
             
         },
+        
+        
         parseData: function (data) {
             
         }
