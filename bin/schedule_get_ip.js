@@ -94,7 +94,8 @@ function process(ipArr) {
         if (ipChunk.length > 0) {
             main(ipChunk.shift());
         } else {
-            setTimeout( text2json, 1000*60*10 )
+            // 半小时后更新ip库
+            setTimeout( text2json, 1000*60*30 )
             reqJob.cancel();
         }
 
@@ -182,8 +183,10 @@ function process(ipArr) {
                 
             }, {});
             
-            var originalObj = require('../config/ip_map.json');
-            obj = Object.assign(originalObj, obj);
+            // jiajianrong@58.com 2017-6-30
+            // 注释掉下面两行： ip_map.txt数据是全量的，不需要mixin到已有ip库，直接替换即可
+            // var originalObj = require('../config/ip_map.json');
+            // obj = Object.assign(originalObj, obj);
             
             fs.writeFile( fileTo, JSON.stringify(obj), 'utf8', function(){} );
         });
