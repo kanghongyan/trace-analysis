@@ -272,12 +272,12 @@
     描述：特殊统计 - 车分期首页来源
 -->
 <script type="x/template" id="cfqIndex-template">
-    <search :okfun='okFun'></search>
+    <search :okfun='okFun' single-mode='true'></search>
+    <br />
     <div class="page-cfqIndex">
         <table>
             <thead>
                 <tr>
-                    <td></td>
                     <td v-for="column in columns" track-by="$index">{{column}}</td>
                 </tr>
             </thead>

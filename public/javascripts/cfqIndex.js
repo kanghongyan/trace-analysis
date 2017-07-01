@@ -17,6 +17,7 @@ var cfqIndex = Vue.extend({
                 alert('选择开始结束日期');
                 return;
             }
+            
     
             fetch_json.bind(this)('/api/cfqIndex', {
                     project: project,
@@ -27,25 +28,32 @@ var cfqIndex = Vue.extend({
                 .then( res => {
                     if (res.code===1 && res.data.length) {
                         
-                        this.columns = res.data[0].columns;
-                        this.rows = [];
-                        
                         var originalData = res.data[0].data;
                         
+                        var columns = res.data[0].columns;
+                        var rows = [];
+                        
+                        columns = _.sortBy(columns, function(column){ return column; });
                         
                         for (var city in originalData) {
                             
                             var channelMap = originalData[city];
                             
-                            var displayArr = this.columns.map(function(channelName){
+                            var displayArr = columns.map(function(channelName){
                                 return channelMap[channelName] || ''
                             })
                             
-                            // 首位显示城市名
+                            // 首位显示城市名 - row
                             displayArr.unshift(city);
                             
-                            this.rows.push(displayArr);
+                            rows.push(displayArr);
                         }
+                        
+                        this.rows = _.sortBy(rows, function(row){ return row[0]; });
+                        
+                        // 首位显示城市名 - header
+                        columns.unshift('');
+                        this.columns = columns;
                         
                     } else {
                         alert(res.msg);
@@ -54,11 +62,6 @@ var cfqIndex = Vue.extend({
                 .catch(function(e){
                     console.log(e);
                 });
-            
-        },
-        
-        
-        parseData: function (data) {
             
         }
     }
