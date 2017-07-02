@@ -29,13 +29,14 @@ rtn_data = _
     .chain(sheetData)
     .slice(2, sheetData.length - 1)
     .map(function (n) {
-        return [n[2], n[1]]
+        return [n[2], n[1]] /* [channel_id, channel_name] */
     })
     .reduce(function (result, value, key) {
-        result[value[0]] = value[1];
+        var channel_id = value[0],
+            channel_name = value[1];
+        result[channel_id] = channel_name + ': ' + channel_id ;
         return result
     }, {})
     .value();
-
 
 module.exports = rtn_data;
