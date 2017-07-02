@@ -114,22 +114,16 @@ function analysis_callback(results, _PAGE) {
     }
     
     
+    function has_ip_and_channel(pageUrl) {
+        return /channel=/.test(pageUrl) && /ip=/.test(pageUrl);
+    }
+    
+    
     
     function analy_data(data) {
         if (!data) {
             return;
         }
-        
-        /*
-         * items
-         * {
-         *    'city_a': {
-         *        'channel_1': 3,
-         *        'channel_2': 2
-         *    },
-         *    ...
-         * }
-         */
         
         var IP_CITY_MAP = GET_REALTIME_IP_CITY_MAP();
         
@@ -140,15 +134,16 @@ function analysis_callback(results, _PAGE) {
             .map(function(item){
                 return get_key(item, 'page')
             })
+            .filter(has_ip_and_channel)
             .map(function(s){
-                var ip = get_url_param_key(s, 'ip').replace(/(\d+\.\d+\.\d+\.)\d+/,'$10');
+                var ip = get_url_param_key(s, 'ip').replace(/(.*\.)(\d+)$/,'$10');
                 var channelId = get_url_param_key(s, 'channel');
                 return {
                     city: IP_CITY_MAP[ip] || 'unknown_city',
                     channel: CHANNEL_ID_NAME_MAP[channelId] || 'unknown_channel'
                 }
             })
-            .groupBy(function (item) {
+            .groupBy(function(item){
                 return item.city
             })
             /*
@@ -157,14 +152,54 @@ function analysis_callback(results, _PAGE) {
                  b: [ { city: 'b', channel: 'che' } ]
                }
              */
-            .forEach(function (value, key, arr) {
-                arr[key] =  _.countBy(value, function (item) {
+            
+            //-----------------------
+            // 使用mapValues代替forEach
+            .mapValues(function(valueArr){
+                return _.countBy(valueArr, function (item) {
                     return item.channel
                 })
             })
+            /*.forEach(function (value, key, arr) {
+                arr[key] =  _.countBy(value, function (item) {
+                    return item.channel
+                })
+            })*/
+            //-----------------------
+            
+            /*
+             * {
+             *    'city_a': {
+             *        'channel_x': 3,
+             *        'channel_y': 2
+             *    },
+             *    'city_b': {
+             *        'channel_x': 3,
+             *        'channel_y': 2
+             *    },
+             *    ...
+             * }
+             */
             .value();
-    
-        return items
+        
+        
+        // 添加总和
+        function attachSumRow(obj) {
+            var rowSum = {};
+            var rows = _.values(obj);
+            _.forEach(rows, function(row){
+                _.forEach(row, function(value, key){
+                    rowSum[key] = (rowSum[key] || 0) + value;
+                })
+            })
+            
+            obj['total_sum'] = rowSum;
+        }
+        
+        
+        attachSumRow(items);
+        
+        return items;
         
     }
     

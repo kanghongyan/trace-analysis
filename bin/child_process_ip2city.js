@@ -65,7 +65,7 @@ function readTrace() {
                     .map(function(s){
                         return s.replace(/(.*\.)(\d+)$/,'$10')
                     })
-                    .compact()
+                    // decrease by 75%
                     .uniq()
                     .value();
         
@@ -85,8 +85,8 @@ function readTrace() {
 
 function process(ipArr) {
     
-    // 5次
-    var ipChunk = _.chunk(ipArr, 5);
+    // 2次
+    var ipChunk = _.chunk(ipArr, 2);
     
     // 每秒
     var reqJob = schedule.scheduleJob('* * * * * *', function () {
@@ -94,8 +94,8 @@ function process(ipArr) {
         if (ipChunk.length > 0) {
             main(ipChunk.shift());
         } else {
-            // 半小时后更新ip库
-            setTimeout( text2json, 1000*60*30 )
+            // 更新ip库
+            setTimeout( text2json, 1000*60*10 )
             reqJob.cancel();
         }
 
