@@ -88,9 +88,9 @@ function saveData(req, res, categoryName) {
     var ip = getClientIp(req);
     var projName = req.query.project;
     
-    // if (!isValidIP(ip)) {
-    //     return 'console.log("ip invalid - intranet ip detected")';
-    // }
+    if (!isValidIP(ip)) {
+        return 'console.log("ip invalid - intranet ip detected")';
+    }
     
     if (!isValidProj(projName)) {
         return 'console.log("project invalid - project name invalid")';
