@@ -163,3 +163,9 @@ select{
     margin-left:32%;
     margin-bottom: 10px;
 }
+
+
+
+.page-cfqIndex td {
+    border: 1px solid dimgray;
+}

@@ -46,7 +46,10 @@ router.map({
         component:urlFilter,
         urlFilter:true
     },
-    
+    '/cfqIndex':{
+        component:cfqIndex,
+        cfqIndex:true
+    },
     
     
     '/specDaoliuPortal':{

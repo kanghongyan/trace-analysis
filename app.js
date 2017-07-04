@@ -104,4 +104,10 @@ global.CP_COMPUTE_FACTORY = [ child_process.fork('./bin/child_computer.js'),
 global.CP_COMPUTE_SPEC_FACTORY = [ child_process.fork('./bin/child_computer_spec.js'),
                                    child_process.fork('./bin/child_computer_spec.js') ];
 
+/**
+ * 2017-7-1
+ * 增加独立进程将ip翻译成city
+ */
+child_process.fork('./bin/child_process_ip2city.js').disconnect();
+
 module.exports = app;

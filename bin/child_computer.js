@@ -13,6 +13,7 @@ var computeMap = {
     platform: require('../backend/compute_logic_platform'),
     screenSize: require('../backend/compute_logic_screenSize'),
     urlFilter: require('../backend/compute_logic_urlFilter'),
+    cfqIndex: require('../backend/compute_logic_cfqIndex'),
     refer: require('../backend/compute_logic_refer'),
     sendBeacon: require('../backend/compute_logic_sendBeacon'),
     jsLoad: require('../backend/compute_logic_jsLoad')
@@ -33,7 +34,7 @@ process.on('message', function(settings) {
     var compute_logic_callback = computeMap[route];
 
 
-    if (route==='pageV' || route==='performance' || route==='refer')
+    if (route==='pageV' || route==='performance' || route==='refer' || route==='cfqIndex')
         compute_logic_callback = compute_logic_callback(page);
 
     else if (route==='urlFilter')
@@ -46,6 +47,7 @@ process.on('message', function(settings) {
     }).then(function(d){
         process.send(d)
     }).catch(function(e){
+        console.log(e)
         process.send([])
     });
 })
