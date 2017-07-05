@@ -127,6 +127,21 @@ function process(ipArr) {
         return new Promise(function (resolve, reject) {
         
             request({
+                url: 'http://ip.58.service.58dns.org/?ip=' + ip
+            }, function (error, response, body) {
+                try {
+                    var ret = JSON.parse(body);
+                    
+                    if (ret.code === 0 && ret.data && ret.data.province) {
+                        resolve(ip + '|' + ret.data.province + '|' + (ret.data.city||ret.data.province) + '\r\n')
+                    } else {
+                        resolve('')
+                    }
+                } catch (e) {
+                    resolve('')
+                }
+            });
+            /*request({
                 url: 'http://ip.taobao.com/service/getIpInfo.php?ip=' + ip
             }, function (error, response, body) {
                 try {
@@ -140,7 +155,7 @@ function process(ipArr) {
                 } catch (e) {
                     resolve('')
                 }
-            });
+            });*/
             
         })
         
