@@ -134,6 +134,8 @@ function process(ipArr) {
                     
                     if (ret.code === 0 && ret.data && ret.data.region) {
                         resolve(ip + '|' + ret.data.region + '|' + (ret.data.city||ret.data.region) + '\r\n')
+                    } else {
+                        resolve('')
                     }
                 } catch (e) {
                     resolve('')
