@@ -132,10 +132,9 @@ function process(ipArr) {
                 try {
                     var ret = JSON.parse(body);
                     
-                    if (ret.code === 0 && ret.data && ret.data.region && ret.data.city) {
-                        resolve(ip + '|' + ret.data.region + '|' + ret.data.city + '\r\n')
+                    if (ret.code === 0 && ret.data && ret.data.region) {
+                        resolve(ip + '|' + ret.data.region + '|' + (ret.data.city||ret.data.region) + '\r\n')
                     }
-                
                 } catch (e) {
                     resolve('')
                 }
