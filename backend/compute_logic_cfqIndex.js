@@ -139,8 +139,8 @@ function analysis_callback(results, _PAGE) {
                 var ip = get_url_param_key(s, 'ip').replace(/(.*\.)(\d+)$/,'$10');
                 var channelId = get_url_param_key(s, 'channel');
                 return {
-                    city: IP_CITY_MAP[ip] || 'unknown_city',
-                    channel: CHANNEL_ID_NAME_MAP[channelId] || 'unknown_channel'
+                    city: IP_CITY_MAP[ip] || '_unknown_city',
+                    channel: CHANNEL_ID_NAME_MAP[channelId] || '_unknown_channel'
                 }
             })
             .groupBy(function(item){
@@ -193,7 +193,7 @@ function analysis_callback(results, _PAGE) {
                 })
             })
             
-            obj['total_sum'] = rowSum;
+            obj['_total_sum'] = rowSum;
         }
         
         
