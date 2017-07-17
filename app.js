@@ -94,14 +94,20 @@ app.use(function(err, req, res, next) {
 /**
  * 2016-10-31
  * 增加子进程
+ * 
+ * 2017-07-17
+ * 限制子进程个数
+ * 增加内存
+ * 
+ * jiajianrong@58.com
  */
 var child_process = require('child_process');
 
-global.CP_COMPUTE_FACTORY = [ child_process.fork('./bin/child_computer.js'),
-                              child_process.fork('./bin/child_computer.js'),
-                              child_process.fork('./bin/child_computer.js' /*, {execArgv: ['--debug-brk']}*/) ];
+global.CP_COMPUTE_FACTORY = [ /*child_process.fork('./bin/child_computer.js'),
+                              child_process.fork('./bin/child_computer.js'),*/
+                              child_process.fork('./bin/child_computer.js', {execArgv: ['--max-old-space-size=4096'/*, '--debug-brk'*/]} ) ];
 
-global.CP_COMPUTE_SPEC_FACTORY = [ child_process.fork('./bin/child_computer_spec.js'),
+global.CP_COMPUTE_SPEC_FACTORY = [ /*child_process.fork('./bin/child_computer_spec.js'),*/
                                    child_process.fork('./bin/child_computer_spec.js') ];
 
 /**
