@@ -23,7 +23,7 @@ var cfqIndex = Vue.extend({
                     project: project,
                     startTime: startTime,
                     endTime: endTime,
-                    page: 'http://chefenqi.58.com'
+                    page: 'http://chefenqi.58.com/register/base/page'
                 })
                 .then( res => {
                     if (res.code===1 && res.data.length) {
