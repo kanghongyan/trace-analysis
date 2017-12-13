@@ -46,6 +46,15 @@ router.route('/:type?')
     .get(getHandler)
     .post(postHandler)
 
+// 2017-6-14
+/*
+ * jsLoad计算方式:  业务js里执行
+ *  coretrace.send({
+        type: 'jsLoad',
+        value: +new Date()-performance.timing.navigationStart
+    })
+ */
+
 function getHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
     // 2017-6-14 增加js执行时间
