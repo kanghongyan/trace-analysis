@@ -1,6 +1,7 @@
 var fs = require('fs');
 var Promise = require("bluebird");
 var _util = require('./_util');
+var logger = require('../log');
 
 
 function isDir(path) {
@@ -38,7 +39,8 @@ module.exports = function(category, project, startTime, endTime) {
     
     .catch(function(err){
         console.log('_util_fs_async throws', err);
-        console.log(err.stack);
+        // console.log(err.stack);
+        logger.error(err.stack);
         return '';
     });
     

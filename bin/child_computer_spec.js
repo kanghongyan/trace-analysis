@@ -1,5 +1,5 @@
 var compute_logic_callback = require('../backend/route_specDaoliuPortal');
-
+var logger = require('../log');
 
 
 process.on('message', function(settings) {
@@ -9,6 +9,7 @@ process.on('message', function(settings) {
         process.send(d);
     })
     .catch(function(e){
+        logger.error(e.stack);
         process.send([])
     });
 })

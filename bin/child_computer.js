@@ -2,6 +2,7 @@ var fs = require('fs');
 var Promise = require("bluebird");
 var _ = require('lodash');
 var _util_fs_async = require('../backend/_util_fs_async');
+var logger = require('../log');
 
 var computeMap = {
     browser: require('../backend/compute_logic_browser'),
@@ -47,7 +48,8 @@ process.on('message', function(settings) {
     }).then(function(d){
         process.send(d)
     }).catch(function(e){
-        console.log(e)
+        // console.log(e);
+        logger.error(e.stack);
         process.send([])
     });
 })

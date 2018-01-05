@@ -3,6 +3,7 @@ var fs = require('fs');
 var path = require('path');
 var router = express.Router();
 var _ = require('lodash');
+var logger = require('../log');
 
 var userInfo = require('../config/userConfig');
 var _util = require('../backend/_util');
@@ -57,13 +58,18 @@ router.route('/:type?')
 
 function getHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
+    var rtn = '';
     // 2017-6-14 增加js执行时间
-    if (req.query.type == 'jsLoad') {
+    if (req.query.type === 'jsLoad') {
         type = 'jsLoadData'
     }
     // end
     if (type) {
-        var rtn = saveData(req, res, type);
+        try {
+            rtn = saveData(req, res, type)
+        } catch (e) {
+            logger.error(e.stack);
+        }
         res.end(rtn);
     } else {
         next();
@@ -72,13 +78,18 @@ function getHandler(req, res, next) {
 
 function postHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
+    var rtn = '';
     // 2017-6-14 增加js执行时间
-    if (req.query.type == 'jsLoad') {
+    if (req.query.type === 'jsLoad') {
         type = 'jsLoadData'
     }
     // end
     if (type) {
-        var rtn = saveData(req, res, type);
+        try {
+            rtn = saveData(req, res, type)
+        } catch (e) {
+            logger.error(e.stack);
+        }
         res.status(204).end(rtn);
     } else {
         next();
@@ -89,30 +100,36 @@ function postHandler(req, res, next) {
 
 function saveData(req, res, categoryName) {
     var ip = getClientIp(req);
-    
+
     if (!isValidIP(ip)) {
         return 'console.log("ip invalid - intranet ip detected")';
     }
-    
+
     var projName = req.query.project,
         fileName = _util.stringifyDate() + '.txt',
         full_path = path.join( categoryName, projName ),
         full_file = path.join( categoryName, projName, fileName );
-    
+
     if (!isValidProj(projName)) {
         return 'console.log("project invalid - project name invalid")';
     }
-    
+
     var data = _
         .chain(req.query)
         .omit('project')
         .assign({'ip': ip})
         .map(function(v,k){
-            return decodeURIComponent(k) + '=' + decodeURIComponent(v);
+            var str = decodeURIComponent(k) + '=';
+            try {
+                str += decodeURIComponent(v);
+            } catch (e) {
+                throw new Error('decodeURIComponent failed: ' + v)
+            }
+            return str;
         })
         .value()
         .join('|');
-    
+
     fs.exists(full_path, function(exists){
         if (exists) {
             fs.appendFile(full_file, data + '\r\n', 'utf8', function() {});
@@ -122,7 +139,7 @@ function saveData(req, res, categoryName) {
             });
         }
     });
-    
+
     return '';
 }
 
@@ -181,7 +198,7 @@ function getClientIp(req) {
         console.log(err);
         return '127.0.0.1'
     }
-    
+
 };
 
 
