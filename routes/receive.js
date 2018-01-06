@@ -58,7 +58,6 @@ router.route('/:type?')
 
 function getHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
-    var rtn = '';
     // 2017-6-14 增加js执行时间
     if (req.query.type === 'jsLoad') {
         type = 'jsLoadData'
@@ -66,11 +65,11 @@ function getHandler(req, res, next) {
     // end
     if (type) {
         try {
-            rtn = saveData(req, res, type)
+            saveData(req, res, type)
         } catch (e) {
             logger.error(e.stack);
         }
-        res.end(rtn);
+        res.end('');
     } else {
         next();
     }
@@ -78,7 +77,6 @@ function getHandler(req, res, next) {
 
 function postHandler(req, res, next) {
     var type = TYPE_MAP[req.params.type];
-    var rtn = '';
     // 2017-6-14 增加js执行时间
     if (req.query.type === 'jsLoad') {
         type = 'jsLoadData'
@@ -86,11 +84,11 @@ function postHandler(req, res, next) {
     // end
     if (type) {
         try {
-            rtn = saveData(req, res, type)
+            saveData(req, res, type)
         } catch (e) {
             logger.error(e.stack);
         }
-        res.status(204).end(rtn);
+        res.status(204).end('');
     } else {
         next();
     }

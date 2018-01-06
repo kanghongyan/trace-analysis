@@ -1,9 +1,19 @@
 var winston = require('winston');
+var fs = require( 'fs' );
+require('winston-daily-rotate-file');
+
+var logDir = 'logs';
+if ( !fs.existsSync( logDir ) ) {
+    fs.mkdirSync( logDir );
+}
+
 var logger = new (winston.Logger)({
     transports: [
-        new (winston.transports.File)({
+        new (winston.transports.DailyRotateFile)({
             name: 'error-file',
-            filename: 'error.log',
+            filename: logDir + '/error.log',
+            datePattern: 'yyyy-MM-dd.', // eg:2018-01-06.error.log
+            prepend: true,
             level: 'error',
             json: true,
             handleExceptions: true,
@@ -11,7 +21,7 @@ var logger = new (winston.Logger)({
             timestamp: function () {
                 return new Date().toLocaleString()
             }
-        }),
+        })
         // new (winston.transports.File)({
         //     name: 'info-file',
         //     filename: 'normal.log',
