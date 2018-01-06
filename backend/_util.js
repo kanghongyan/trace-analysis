@@ -81,6 +81,19 @@ function getDaysBetween(start, end) {
 }
 
 
+/**
+ * 从log中取到value
+ * eg: s: xxx=1123|page=1|refer=444
+ *     key: page
+ * @param s
+ * @param key
+ * @return {null}
+ */
+function getValueFromTraceData(s, key) {
+    var reg = new RegExp('(^|\\|)' + key + '=([^|]*)'),
+        arr = s.match(reg);
+    return (arr && arr[2]) ? arr[2] : null;
+}
 
 Date.prototype.format=function(){
     var _0=function(){
@@ -138,5 +151,6 @@ module.exports = {
     json2query   :  json2query,
     mixin        :  mixin,
     stringifyDate:  stringifyDate,
-    getDaysBetween: getDaysBetween
+    getDaysBetween: getDaysBetween,
+    getValueFromTraceData: getValueFromTraceData
 };

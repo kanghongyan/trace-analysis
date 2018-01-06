@@ -7,3 +7,4 @@ config
 /dataBase
 .project
 .idea
+logs/

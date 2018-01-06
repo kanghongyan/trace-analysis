@@ -7,6 +7,9 @@ var moment = require('moment');
 var request = require('request');
 
 var _util_fs_async = require('../backend/_util_fs_async');
+var _util = require('../backend/_util');
+
+var get_key = _util.getValueFromTraceData;
 
 
 
@@ -37,13 +40,6 @@ function readTrace() {
                 var reg = new RegExp('(&|\\?)' + key + '\=([^#&]*)'),
                     arr = s.match(reg);
                 return (arr && arr[2]) ? arr[2] : '无参数';
-            }
-            
-            
-            function get_key(s, key) {
-                var reg = new RegExp('(^|\|)' + key + '\=([^|]*)'),
-                    arr = s.match(reg);
-                return (arr && arr[2]) ? arr[2] : null;
             }
             
             

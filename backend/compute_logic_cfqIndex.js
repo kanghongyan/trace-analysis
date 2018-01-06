@@ -9,6 +9,7 @@ var _util_fs_async = require('./_util_fs_async');
 var CHANNEL_ID_NAME_MAP = require('./_util_read_xlsx');
 
 
+var get_key = _util.getValueFromTraceData;
 /**
  * 日缓存
  * 自动清理require.cache
@@ -84,13 +85,7 @@ function GET_REALTIME_IP_CITY_MAP() {
  */
 
 function analysis_callback(results, _PAGE) {
-    
-    
-    function get_key(s, key) {
-        var reg = new RegExp('(^|\|)' + key + '\=([^|]*)'),
-            arr = s.match(reg);
-        return (arr && arr[2]) ? arr[2] : null;
-    }
+
     
     
     function get_url_param_key(s, key) {

@@ -6,15 +6,15 @@ var _util_fs_async = require('./_util_fs_async');
 
 
 
-
+var get_key = _util.getValueFromTraceData;
 
 function analysis_callback(results, _PAGE) {
     
-    function get_key(s, key) {
-        var reg = new RegExp('(^|\|)' + key + '\=([^|]*)'),
-            arr = s.match(reg);
-        return (arr && arr[2]) ? arr[2] : null;
-    }
+    // function get_key(s, key) {
+    //     var reg = new RegExp('(^|\|)' + key + '\=([^|]*)'),
+    //         arr = s.match(reg);
+    //     return (arr && arr[2]) ? arr[2] : null;
+    // }
     
     
     function is_curr_page(dataItem) {
