@@ -36,20 +36,41 @@ function analysis_callback(results, _PAGE, _FILTER) {
         if (!data) {
             return;
         }
-        
-        return _
+
+        var resData, pv, uv;
+
+        resData = _
             .chain(data.split('\r\n'))
             .filter(is_curr_page)
             .map(function(item){
-                return get_key(item, 'page')
+                return {
+                    from: get_url_param_key(get_key(item, 'page'), _FILTER),
+                    uid: get_key(item, 'uid')
+                }
             })
-            .map(function(s){
-                return get_url_param_key(s, _FILTER)
-            })
-            .countBy(function(s){
-                return s
+            .groupBy(function (item) {
+                return item.from
+            });
+
+        uv = resData
+            .mapValues(function(valueArr){
+                return _.uniqBy(valueArr, function (item) {
+                    return item.uid
+                }).length
             })
             .value();
+
+        pv = resData
+            .mapValues(function (valueArr) {
+                return valueArr.length
+            })
+            .value();
+
+
+        return {
+            pv: pv || {},
+            uv: uv || {}
+        }
     }
     
     results.forEach(function(result){

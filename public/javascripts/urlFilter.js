@@ -26,8 +26,28 @@ var urlFilter = Vue.extend({
                 endTime:   this.endTime
             })
             .then( res => {
+
+                var resData = res.data ? res.data : [];
+
+                var pvData = resData.map(function (item) {
+                    return {
+                        data: item.data.pv,
+                        day: item.day
+                    }
+                });
+
+
+                var uvData = resData.map(function (item) {
+                    return {
+                        data: item.data.uv,
+                        day: item.day
+                    }
+                })
+
+
                 if (res.code == 1) {
-                    renderPie(res.data, document.getElementById('pvchart-main'))
+                    renderPie(pvData, document.getElementById('pvchart-main'));
+                    renderPie(uvData, document.getElementById('uvchart-main'))
                 } else {
                     alert(res.msg);
                 }
