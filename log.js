@@ -1,8 +1,10 @@
 var winston = require('winston');
 var fs = require( 'fs' );
+var path = require('path');
 require('winston-daily-rotate-file');
 
-var logDir = 'logs';
+var logDir = path.resolve(__dirname, './logs');
+
 if ( !fs.existsSync( logDir ) ) {
     fs.mkdirSync( logDir );
 }
